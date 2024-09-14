@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const Header = () => {
   const [listDisplayed, setListDisplayed] = useState(false);
@@ -7,6 +7,12 @@ const Header = () => {
   const location = useLocation();
 
   console.log("The location we are in is "+location.pathname);
+
+  useEffect(() => {
+    navbar.current.classList.add('top-[-100vh]');
+    navbar.current.classList.remove('top-[8vh]');
+    setListDisplayed(false);
+  }, [location.pathname])
 
   const linkStyle = "my-2 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0";
   const loginLinkStyle="p-2 px-5 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-gray-500 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50";
