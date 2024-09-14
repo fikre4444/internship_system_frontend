@@ -19,14 +19,14 @@ const Footer = () => {
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                         <div>
                             <h3 className="text-gray-700 uppercase">About</h3>
-                            <a href="#" className="block mt-2 text-sm text-gray-600">The Developers</a>
-                            <a href="#" className="block mt-2 text-sm text-gray-600">The Webapp</a>
+                            <Link to="/contact" className="block mt-2 text-sm text-gray-600">The Developers</Link>
+                            <Link to="/about" className="block mt-2 text-sm text-gray-600">The Webapp</Link>
                         </div>
 
                         <div>
                             <h3 className="text-gray-700 uppercase">Used By</h3>
-                            <a href="#" className="block mt-2 text-sm text-gray-600">Students</a>
-                            <a href="#" className="block mt-2 text-sm text-gray-600">University Staff</a>
+                            <p href="#" className="block mt-2 text-sm text-gray-600">Students</p>
+                            <p href="#" className="block mt-2 text-sm text-gray-600">University Staff</p>
                         </div>
 
                         <div>
