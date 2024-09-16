@@ -25,9 +25,6 @@ const AdminDashboard = () => {
         sidebarItems={sidebarItems}
       />
       <div className="h-[calc(100vh-9vh)] w-full overflow-auto scrollbar-hide">
-        <button className="hidden md:block" onClick={() => setCollapsed(!collapsed)}>
-          collapse
-        </button>
         <button className="block md:hidden" onClick={() => setToggled(!toggled)}>
           toggle
         </button>
