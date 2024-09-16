@@ -14,6 +14,9 @@ import NotFound from './pages/NotFound';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Layout from './HOCS/Layout';
+import SidebarComp from './components/Sidebar';
+import UserRegister from './pages/dashboards/AdminPages/UserRegister';
+import SecondAdmin from './pages/dashboards/AdminPages/SecondAdmin';
 
 function App() {
 
@@ -25,7 +28,10 @@ function App() {
           <Route path="*" element={<NotFound />} />
           <Route path="/login" element={<Login />} />
           <Route path="/student" element={<StudentDashboard />} />
-          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin" element={<AdminDashboard />}>
+            <Route path="userRegister" element={<UserRegister />} />
+            <Route path="secondAdmin" element={<SecondAdmin />} />
+          </Route>
           <Route path="/login-options" element={<LoginOptions />} />
           <Route path="/advisor" element={<AdvisorDashboard />} />
           <Route path="/head-coordinator" element={<HeadCoordinator />} />
