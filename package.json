@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.1.5",
+    "@json2csv/plainjs": "^7.0.6",
+    "@material-tailwind/react": "^2.1.10",
     "axios": "^1.7.7",
     "front-end": "file:",
     "jwt-decode": "^4.0.0",

@@ -14,9 +14,6 @@ import NotFound from './pages/NotFound';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Layout from './HOCS/Layout';
-import SidebarComp from './components/Sidebar';
-import UserRegister from './pages/dashboards/AdminPages/UserRegister';
-import SecondAdmin from './pages/dashboards/AdminPages/SecondAdmin';
 import StudentPage1 from './pages/dashboards/StudentPages/StudentPage1';
 import StudentPage2 from './pages/dashboards/StudentPages/StudentPage2';
 import StudentPage3 from './pages/dashboards/StudentPages/StudentPage3';
@@ -29,6 +26,8 @@ import HeadCoordinatorPage3 from './pages/dashboards/HeadCoordinatorPages/HeadCo
 import DepartmentCoordinatorPage1 from './pages/dashboards/DepartmentCoordinatorPages/DepartmentCoordinatorPage1';
 import DepartmentCoordinatorPage3 from './pages/dashboards/DepartmentCoordinatorPages/DepartmentCoordinatorPage3';
 import DepartmentCoordinatorPage2 from './pages/dashboards/DepartmentCoordinatorPages/DepartmentCoordinatorPage2';
+import RegisterUser from './pages/dashboards/AdminPages/RegisterUser';
+import AdminPage2 from './pages/dashboards/AdminPages/SecondAdmin';
 
 function App() {
 
@@ -40,8 +39,8 @@ function App() {
           <Route path="*" element={<NotFound />} />
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<AdminDashboard />}>
-            <Route path="userRegister" element={<UserRegister />} />
-            <Route path="secondAdmin" element={<SecondAdmin />} />
+            <Route path="registerUser" element={<RegisterUser />} />
+            <Route path="adminPage2" element={<AdminPage2 />} />
           </Route>
           <Route path="/student" element={<StudentDashboard />}>
             <Route path="studentPage1" element={<StudentPage1 />} />

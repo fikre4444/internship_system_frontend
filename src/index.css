@@ -13,3 +13,29 @@
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+@keyframes scaleUpDown {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.animate-scaleUpDown {
+  animation: scaleUpDown 3s ease-in-out infinite;
+}
+
+@keyframes moveUpDown {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px); /* Adjust the distance as needed */
+  }
+}
+
+.animate-moveUpDown {
+  animation: moveUpDown 800ms ease-in-out infinite;
+}

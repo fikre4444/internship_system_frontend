@@ -10,8 +10,8 @@ const AdminDashboard = () => {
   const [toggled, setToggled] = useState(false);
 
   const sidebarItems = [
-    {itemId: 1, itemTitle: "Second Admin Page", itemLink: "secondAdmin", itemIcon: FaUserCog},
-    {itemId: 2, itemTitle: "User Register", itemLink: "userRegister", itemIcon: FaRegistered},
+    {itemId: 1, itemTitle: "Register User", itemLink: "registerUser", itemIcon: FaUserCog},
+    {itemId: 2, itemTitle: "User Register", itemLink: "adminPage2", itemIcon: FaRegistered},
   ];
 
 

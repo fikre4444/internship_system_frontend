@@ -1,4 +1,4 @@
-const SecondAdmin = () => {
+const AdminPage2 = () => {
   return (
     <div>
         This will be the second admin page.
@@ -6,4 +6,4 @@ const SecondAdmin = () => {
   )
 }
 
-export default SecondAdmin;
+export default AdminPage2;
