@@ -28,6 +28,7 @@ import DepartmentCoordinatorPage3 from './pages/dashboards/DepartmentCoordinator
 import DepartmentCoordinatorPage2 from './pages/dashboards/DepartmentCoordinatorPages/DepartmentCoordinatorPage2';
 import RegisterUser from './pages/dashboards/AdminPages/RegisterUser';
 import AdminPage2 from './pages/dashboards/AdminPages/SecondAdmin';
+import DeleteUser from './pages/dashboards/AdminPages/DeleteUser';
 
 function App() {
 
@@ -41,6 +42,7 @@ function App() {
           <Route path="/admin" element={<AdminDashboard />}>
             <Route path="registerUser" element={<RegisterUser />} />
             <Route path="adminPage2" element={<AdminPage2 />} />
+            <Route path="deleteUser" element={<DeleteUser />} />
           </Route>
           <Route path="/student" element={<StudentDashboard />}>
             <Route path="studentPage1" element={<StudentPage1 />} />

@@ -10,9 +10,12 @@ import { Parser } from '@json2csv/plainjs';
 
  
 const checkArrayIntegrity = (arr) => {
+  console.log("checking integrity");
   if(arr?.length > 0){
+    console.log("Integrity is fine");
     return true;
   }
+  console.log("Integrity is bad");
   return false;
 }
 

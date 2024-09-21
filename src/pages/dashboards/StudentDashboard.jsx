@@ -15,7 +15,7 @@ const StudentDashboard = () => {
 
 
   return (
-    <div className="flex w-full">
+    <div className="md:flex w-full">
       <SidebarComp 
         className="bg-blue-500"
         collapsed={collapsed} setCollapsed={setCollapsed} 
@@ -23,9 +23,6 @@ const StudentDashboard = () => {
         sidebarItems={sidebarItems}
       />
       <div className="h-[calc(100vh-9vh)] w-full overflow-auto scrollbar-hide">
-        <button className="block md:hidden" onClick={() => setToggled(!toggled)}>
-          toggle
-        </button>
         <Outlet />
       </div>
     </div>

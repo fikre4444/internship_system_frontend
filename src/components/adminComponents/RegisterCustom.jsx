@@ -4,9 +4,18 @@ import { Radio } from "@material-tailwind/react";
 import { useState } from 'react';
 import { validateCourseLoad, validateDepartment, validateEmail, validateFirstName, validateGrade, validateLastName, validateStream, validateUsername } from "../../utils/formatting";
 import { useRef } from "react";
+import axios from 'axios';
+import AccountsTable from "../AccountsTable";
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const RegisterCustom = () => {
-  const [submitting, setSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [registeredUser, setRegisteredUser] = useState([]);
+  const [gotResponse, setGotResponse] = useState(false);
+  const TABLE_HEAD = ["Member", "Username", "Department", "Status", "Gender"];
+
 
   //registration refs
   const firstNameRef = useRef(null);
@@ -181,7 +190,7 @@ const RegisterCustom = () => {
     return requestObject;
   }
 
-  const handleCustomRegister = () => {
+  const handleCustomRegister = async () => {
     if(!validateInputs()){  //if the input are not valid
       return;
     }
@@ -192,14 +201,82 @@ const RegisterCustom = () => {
     });
 
     const requestObject = getRequestObject();
-    console.log("The request object is ");
-    console.log(requestObject);
 
-    //here will be the registration stuff
+    try{
+      setIsSubmitting(true);
+      const response = await axios.post('/api/admin/registerCustom', requestObject, {
+        timeout: 10000  //waits ten seconds
+      });
+      console.log("we got the response and it is");
+      console.log(response.data);
+      const data = response.data;
+      if(!data.errorResponse && !data.incorrectBody){
+        if(typeUser === 'STUDENT' && data.registeredStudents != null) {
+          console.log(data.registeredStudents)
+          setGotResponse(true);
+          setRegisteredUser(data.registeredStudents)
+        } else if( typeUser === 'STAFF' && data.registeredStaffs != null) {
+          console.log(data.registeredStaffs)
+          setGotResponse(true);
+          setRegisteredUser(data.registeredStaffs)
+        } else if( data.existingStudents != null){
+          toast.error(() => <div>
+            A user by that username already exists. Either change the username or check the user.
+            <Button className="bg-red-500">
+              Go to user
+            </Button>
+          </div>, {
+            position: "top-center",
+            style: {
+              backgroundColor: '#fee'
+            }
+          });
+        } else if( data.existingStaffs != null){
+          toast.error(() => <div>
+            A user by that username already exists. Either change the username or check the user.
+            <Button className="bg-red-500">
+              Go to user
+            </Button>
+          </div>, {
+            position: "top-center",
+            pauseOnFocusLoss: false,
+            style: {
+              backgroundColor: '#fee'
+            }
+          });
+        } else {
+          toast.error("An Unknown error has occured. Please Try again later.")
+        }
+      }
+    }catch(e){
+      toast.error("An Unknown error has occured. Please Try again later.")
+      console.log(e);
+    }finally {
+      setIsSubmitting(false);
+    }    
+  }
 
-    setSubmitting(true);
-    setTimeout(() => setSubmitting(false), 5000);
-    
+  const handleReturnToRegistration = () => {
+    setGotResponse(false);
+    setRegisteredUser([])
+    clearStates();
+  }
+
+  const clearStates = () => {
+    setTypeUser('STUDENT');
+    setFirstName('');
+    setLastName('');
+    setUsername('');
+    setEmail('');
+    setDepartment('');
+    setGender('MALE');
+    setStream('');
+    setGrade('');
+    setCourseLoad('');
+    setErrors({
+      firstName: '', lastName: '', username: '', email: '', department: '',
+      stream: '', grade: '', courseLoad: ''
+    });
   }
 
 
@@ -207,141 +284,156 @@ const RegisterCustom = () => {
 
   return (
     <div className="m-4"> {/* for custom registration*/}
-      <h1 className="text-xl text-blue-gray-700 font-extrabold">Custom Registration</h1>
-      <div className="">
-        <h3 className="text-md text-gray-800 font-extrabold">Type Of User</h3>
-        <div className="flex gap-10">
-          <Radio name="typeUser" checked={typeUser === 'STUDENT'} 
-            label="Student" onChange={() => handleTypeUserChange('STUDENT')}
-          />
-          <Radio name="typeUser" checked={typeUser === 'STAFF' } 
-            label="Staff" onChange={() => handleTypeUserChange('STAFF')}
-          />
-        </div>
-      </div>
-      <div className="flex flex-wrap gap-9">
-        <div> {/* column 1 */}
-          <div className="">
-            <h3 className="text-md text-gray-800 font-extrabold">First Name</h3>
-            <div className="flex w-72 flex-col gap-2 m-2 my-4">
-              <Input
-                color="blue" label="Input First Name" value={firstName} 
-                onChange={handleFirstNameChange}
-                inputRef={firstNameRef}
-              />
-              {errors.firstName && <span className="text-red-500 m-0 p-0 text-sm">{errors.firstName}</span>}
-            </div>
-          </div>
-          <div className="">
-            <h3 className="text-md text-gray-800 font-extrabold">Last Name</h3>
-            <div className="flex w-72 flex-col gap-2 m-2 my-4">
-              <Input
-                color="blue" label="Input Last Name" value={lastName}
-                onChange={handleLastNameChange}
-                inputRef = {lastNameRef}
-              />
-              {errors.lastName && <span className="text-red-500 m-0 p-0 text-sm">{errors.lastName}</span>}
-            </div>
-          </div>
-          <div className="">
-            <h3 className="text-md text-gray-800 font-extrabold">Username</h3>
-            <div className="flex w-72 flex-col gap-2 m-2 my-4">
-              <Input
-                color="blue" label="Input Username" value={username}
-                onChange={handleUsernameChange}
-                inputRef = {usernameRef}
-              />
-              {errors.username && <span className="text-red-500 m-0 p-0 text-sm">{errors.username}</span>}
-            </div>
-          </div>
-          <div className="">
-            <h3 className="text-md text-gray-800 font-extrabold">Email</h3>
-            <div className="flex w-72 flex-col gap-2 m-2 my-4">
-              <Input label="Input Email Address" icon={<EnvelopeIcon />} value={email}
-                onChange={handleEmailChange}
-                inputRef = {emailRef}
-              />
-              {errors.email && <span className="text-red-500 m-0 p-0 text-sm">{errors.email}</span>}
-            </div>
+    { !gotResponse ?
+      <>
+        <ToastContainer />
+        <h1 className="text-xl text-blue-gray-700 font-extrabold">Custom Registration</h1>
+        <div className="">
+          <h3 className="text-md text-gray-800 font-extrabold">Type Of User</h3>
+          <div className="flex gap-10">
+            <Radio name="typeUser" checked={typeUser === 'STUDENT'} 
+              label="Student" onChange={() => handleTypeUserChange('STUDENT')}
+            />
+            <Radio name="typeUser" checked={typeUser === 'STAFF' } 
+              label="Staff" onChange={() => handleTypeUserChange('STAFF')}
+            />
           </div>
         </div>
+        <div className="flex flex-wrap gap-9">
+          <div> {/* column 1 */}
+            <div className="">
+              <h3 className="text-md text-gray-800 font-extrabold">First Name</h3>
+              <div className="flex w-72 flex-col gap-2 m-2 my-4">
+                <Input
+                  color="blue" label="Input First Name" value={firstName} 
+                  onChange={handleFirstNameChange}
+                  inputRef={firstNameRef}
+                />
+                {errors.firstName && <span className="text-red-500 m-0 p-0 text-sm">{errors.firstName}</span>}
+              </div>
+            </div>
+            <div className="">
+              <h3 className="text-md text-gray-800 font-extrabold">Last Name</h3>
+              <div className="flex w-72 flex-col gap-2 m-2 my-4">
+                <Input
+                  color="blue" label="Input Last Name" value={lastName}
+                  onChange={handleLastNameChange}
+                  inputRef = {lastNameRef}
+                />
+                {errors.lastName && <span className="text-red-500 m-0 p-0 text-sm">{errors.lastName}</span>}
+              </div>
+            </div>
+            <div className="">
+              <h3 className="text-md text-gray-800 font-extrabold">Username</h3>
+              <div className="flex w-72 flex-col gap-2 m-2 my-4">
+                <Input
+                  color="blue" label="Input Username" value={username}
+                  onChange={handleUsernameChange}
+                  inputRef = {usernameRef}
+                />
+                {errors.username && <span className="text-red-500 m-0 p-0 text-sm">{errors.username}</span>}
+              </div>
+            </div>
+            <div className="">
+              <h3 className="text-md text-gray-800 font-extrabold">Email</h3>
+              <div className="flex w-72 flex-col gap-2 m-2 my-4">
+                <Input label="Input Email Address" icon={<EnvelopeIcon />} value={email}
+                  onChange={handleEmailChange}
+                  inputRef = {emailRef}
+                />
+                {errors.email && <span className="text-red-500 m-0 p-0 text-sm">{errors.email}</span>}
+              </div>
+            </div>
+          </div>
 
-        <div> {/* column 2 */}
-          <div className="">
-            <h3 className="text-md text-gray-800 font-extrabold">Department</h3>
-            <div className="w-72 m-2">
-              <div className="relative group my-4">
-                <Select ref={departmentRef}  label="Select department" value={department} onChange={handleDepartmentChange}>
-                  <Option value="Chemical Engineering">Chemical Engineering</Option>
-                  <Option value="Mechanical Engineering">Mechanical Engineering</Option>
-                  <Option value="Industrial Engineering">Industrial Engineering</Option>
-                  <Option value="Civil Engineering">Civil Engineering</Option>
-                  <Option value="Electrical Engineering">Electrical Engineering</Option>
-                </Select>
-              </div>
-              {errors.department && <span className="text-red-500 m-0 p-0 text-sm">{errors.department}</span>}
-            </div>
-          </div>
-          <div className="my-5">
-            <h3 className="text-md text-gray-800 font-extrabold">Gender</h3>
-            <div className="flex gap-10 m-[5px]">
-              <Radio name="gender" label="Male" 
-                checked={gender === 'MALE'} onChange={() => setGender('MALE')}
-              />
-              <Radio name="gender" label="Female" 
-                checked={gender === 'FEMALE'} onChange={() => setGender('FEMALE')}
-              />
-            </div>
-          </div>
-          { typeUser === 'STUDENT' &&
-            <div>
-              <div className="">
-                <h3 className="text-md text-gray-800 font-extrabold">Stream (For Student Only)</h3>
-                <div className="flex w-72 flex-col gap-2 m-2 my-4">
-                  <Input
-                    color="blue" label="Input Stream of Student" value={stream}
-                    onChange={handleStreamChange}
-                    inputRef={streamRef}
-                  />
-                  {errors.stream && <span className="text-red-500 m-0 p-0 text-sm">{errors.stream}</span>}
+          <div> {/* column 2 */}
+            <div className="">
+              <h3 className="text-md text-gray-800 font-extrabold">Department</h3>
+              <div className="w-72 m-2">
+                <div className="relative group my-4">
+                  <Select ref={departmentRef}  label="Select department" value={department} onChange={handleDepartmentChange}>
+                    <Option value="Chemical Engineering">Chemical Engineering</Option>
+                    <Option value="Mechanical Engineering">Mechanical Engineering</Option>
+                    <Option value="Industrial Engineering">Industrial Engineering</Option>
+                    <Option value="Civil Engineering">Civil Engineering</Option>
+                    <Option value="Electrical Engineering">Electrical Engineering</Option>
+                  </Select>
                 </div>
+                {errors.department && <span className="text-red-500 m-0 p-0 text-sm">{errors.department}</span>}
               </div>
+            </div>
+            <div className="my-5">
+              <h3 className="text-md text-gray-800 font-extrabold">Gender</h3>
+              <div className="flex gap-10 m-[5px]">
+                <Radio name="gender" label="Male" 
+                  checked={gender === 'MALE'} onChange={() => setGender('MALE')}
+                />
+                <Radio name="gender" label="Female" 
+                  checked={gender === 'FEMALE'} onChange={() => setGender('FEMALE')}
+                />
+              </div>
+            </div>
+            { typeUser === 'STUDENT' &&
               <div>
-                <h3 className="text-md text-gray-800 font-extrabold">Grade (For Student Only)</h3>
-                <div className="flex w-72 flex-col gap-2 m-2 my-4">
-                  <Input label="Input Grade of Student" placeholder="Input value between 0.00 and 4.00" type="number" 
-                    value={grade} step="0.01" onChange={handleGradeChange}
-                    inputRef={gradeRef}
-                  />
-                  {errors.grade && <span className="text-red-500 m-0 p-0 text-sm">{errors.grade}</span>}
+                <div className="">
+                  <h3 className="text-md text-gray-800 font-extrabold">Stream (For Student Only)</h3>
+                  <div className="flex w-72 flex-col gap-2 m-2 my-4">
+                    <Input
+                      color="blue" label="Input Stream of Student" value={stream}
+                      onChange={handleStreamChange}
+                      inputRef={streamRef}
+                    />
+                    {errors.stream && <span className="text-red-500 m-0 p-0 text-sm">{errors.stream}</span>}
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-md text-gray-800 font-extrabold">Grade (For Student Only)</h3>
+                  <div className="flex w-72 flex-col gap-2 m-2 my-4">
+                    <Input label="Input Grade of Student" placeholder="Input value between 0.00 and 4.00" type="number" 
+                      value={grade} step="0.01" onChange={handleGradeChange}
+                      inputRef={gradeRef}
+                    />
+                    {errors.grade && <span className="text-red-500 m-0 p-0 text-sm">{errors.grade}</span>}
+                  </div>
                 </div>
               </div>
-            </div>
-          }
-          { typeUser === 'STAFF' &&
-            <div>
+            }
+            { typeUser === 'STAFF' &&
               <div>
-                <h3 className="text-md text-gray-800 font-extrabold">Course Load (For Staff Only)</h3>
-                <div className="flex w-72 flex-col gap-2 m-2 my-4">
-                  <Input label="Input Course Load" type="number" placeholder="Input a value between 0 and 12"
-                    value={courseLoad} onChange={handleCourseLoadChange}
-                    inputRef={courseLoadRef}
-                  />
-                  {errors.courseLoad && <span className="text-red-500 m-0 p-0 text-sm">{errors.courseLoad}</span>}
+                <div>
+                  <h3 className="text-md text-gray-800 font-extrabold">Course Load (For Staff Only)</h3>
+                  <div className="flex w-72 flex-col gap-2 m-2 my-4">
+                    <Input label="Input Course Load" type="number" placeholder="Input a value between 0 and 12"
+                      value={courseLoad} onChange={handleCourseLoadChange}
+                      inputRef={courseLoadRef}
+                    />
+                    {errors.courseLoad && <span className="text-red-500 m-0 p-0 text-sm">{errors.courseLoad}</span>}
+                  </div>
                 </div>
               </div>
-            </div>
-          }
-          
+            }
+            
+          </div>
         </div>
-      </div>
-      <div className="m-2">
-        <div className="flex w-max gap-4 m-2 mt-6">
-          <Button loading={submitting} onClick={handleCustomRegister} className="bg-blue-gray-500" >
-            {!submitting ? <>Register User</> : <>Registering User</>}
-          </Button>
+        <div className="m-2">
+          <div className="flex w-max gap-4 m-2 mt-6">
+            <Button loading={isSubmitting} onClick={handleCustomRegister} className="bg-blue-gray-500" >
+              {!isSubmitting ? <>Register User</> : <>Registering User</>}
+            </Button>
+          </div>
         </div>
-      </div>
+      </>
+      :
+      <>
+        <h1 className="text-xl font-bold text-green-500">Successfully Registered!</h1>
+        <Button onClick={handleReturnToRegistration} className="bg-blue-gray-500" >
+            Back to Custom Registration
+        </Button>
+        <AccountsTable TABLE_HEAD={TABLE_HEAD} TABLE_ROWS={registeredUser} />
+
+        
+      </>
+    }
     </div>
   );
 }

@@ -3,16 +3,19 @@ import { Link } from 'react-router-dom';
 import { PiChalkboardTeacherFill } from "react-icons/pi";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useState, useEffect } from 'react';
+import { IconButton } from '@material-tailwind/react';
 
 
 const SidebarComp = ({className, collapsed, setCollapsed, toggled, setToggled, sidebarItems}) => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [key, setKey] = useState(0);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width:768px)');
     setIsSmallScreen(mediaQuery.matches);
     const handleResize = () => {
       setIsSmallScreen(mediaQuery.matches);
+      setKey(prevKey => prevKey + 1);
     }
     mediaQuery.addEventListener('change', handleResize);
     return () => {mediaQuery.removeEventListener('change', handleResize)};
@@ -28,29 +31,35 @@ const SidebarComp = ({className, collapsed, setCollapsed, toggled, setToggled, s
   
   
   return (
-      <Sidebar 
-        className={sidebarStyle}
-        onBackdropClick={isSmallScreen ?  () => { setToggled(false) } : undefined } 
-        breakPoint={ isSmallScreen ? "md" : undefined } 
-        toggled={isSmallScreen ? toggled : undefined } 
-        collapsed={ !isSmallScreen ? collapsed : undefined} 
-      >
-        <Menu>
-          <MenuItem 
-            onClick={() => isSmallScreen ? setToggled(!toggled) : setCollapsed(!collapsed)} 
-            icon={isSmallScreen ? <div>X</div> : <RxHamburgerMenu />}
-          >
-              Menu
-          </MenuItem>
-          {sidebarItems.map(item => {
-            return (
-              <Link key={item.itemId} to={item.itemLink}>
-                <MenuItem icon={item.itemIcon ? <item.itemIcon /> : undefined }>{item.itemTitle}</MenuItem>
-              </Link>
-            );
-          })}
-        </Menu>
-      </Sidebar>
+      <>
+        <IconButton className="m-1 rounded-full bg-blue-gray-500 block md:hidden" onClick={() => setToggled(!toggled)}>
+          <RxHamburgerMenu size={25} />
+        </IconButton>
+        <Sidebar 
+          className={sidebarStyle}
+          onBackdropClick={isSmallScreen ?  () => { setToggled(false) } : undefined } 
+          breakPoint={ isSmallScreen ? "md" : undefined } 
+          toggled={isSmallScreen ? toggled : undefined } 
+          collapsed={ !isSmallScreen ? collapsed : undefined} 
+          key={key}
+        >
+          <Menu>
+            <MenuItem 
+              onClick={() => isSmallScreen ? setToggled(!toggled) : setCollapsed(!collapsed)} 
+              icon={isSmallScreen ? <div>X</div> : <RxHamburgerMenu />}
+            >
+                Menu
+            </MenuItem>
+            {sidebarItems.map(item => {
+              return (
+                <Link key={item.itemId} to={item.itemLink}>
+                  <MenuItem icon={item.itemIcon ? <item.itemIcon /> : undefined }>{item.itemTitle}</MenuItem>
+                </Link>
+              );
+            })}
+          </Menu>
+        </Sidebar>
+      </>
   );
 }
 

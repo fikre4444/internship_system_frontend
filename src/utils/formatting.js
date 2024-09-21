@@ -41,7 +41,7 @@ export const validateUsername = (username) => {
   let valid = false;
 
   const minLength = 3;
-  const maxLength = 16;
+  const maxLength = 28;
   const usernameRegex = /^[a-zA-Z][a-zA-Z0-9_/@]*$/
 
   if (!username) { 

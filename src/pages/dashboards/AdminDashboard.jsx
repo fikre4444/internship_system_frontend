@@ -3,6 +3,11 @@ import SidebarComp from '../../components/Sidebar';
 import { Outlet } from 'react-router-dom';
 import { FaUserCog } from "react-icons/fa";
 import { FaRegistered } from "react-icons/fa";
+import { HiOutlineUserRemove } from "react-icons/hi";
+import { IconButton } from '@material-tailwind/react';
+import { RxHamburgerMenu } from "react-icons/rx";
+
+
 
 
 const AdminDashboard = () => {
@@ -12,12 +17,13 @@ const AdminDashboard = () => {
   const sidebarItems = [
     {itemId: 1, itemTitle: "Register User", itemLink: "registerUser", itemIcon: FaUserCog},
     {itemId: 2, itemTitle: "User Register", itemLink: "adminPage2", itemIcon: FaRegistered},
+    {itemId: 3, itemTitle: "Delete User", itemLink: "deleteUser", itemIcon: HiOutlineUserRemove},
   ];
 
 
 
   return (
-    <div className="flex w-full">
+    <div className="md:flex w-full">
       <SidebarComp 
         className="bg-blue-500"
         collapsed={collapsed} setCollapsed={setCollapsed} 
@@ -25,9 +31,6 @@ const AdminDashboard = () => {
         sidebarItems={sidebarItems}
       />
       <div className="h-[calc(100vh-9vh)] w-full overflow-auto scrollbar-hide">
-        <button className="block md:hidden" onClick={() => setToggled(!toggled)}>
-          toggle
-        </button>
         <Outlet />
       </div>
     </div>
