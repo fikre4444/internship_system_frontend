@@ -178,7 +178,8 @@ const RegisterCustom = () => {
     const trimmedEmail = email.trim();
     let requestObject = {
       typeUser, firstName, lastName, username, 
-      email: trimmedEmail, department, gender,
+      email: trimmedEmail, 
+      department, gender,
     };
     if(typeUser === 'STUDENT'){
       const trimmedStream = stream.trim();
@@ -210,6 +211,7 @@ const RegisterCustom = () => {
       console.log("we got the response and it is");
       console.log(response.data);
       const data = response.data;
+      
       if(!data.errorResponse && !data.incorrectBody){
         if(typeUser === 'STUDENT' && data.registeredStudents != null) {
           console.log(data.registeredStudents)
@@ -352,11 +354,12 @@ const RegisterCustom = () => {
               <div className="w-72 m-2">
                 <div className="relative group my-4">
                   <Select ref={departmentRef}  label="Select department" value={department} onChange={handleDepartmentChange}>
-                    <Option value="Chemical Engineering">Chemical Engineering</Option>
-                    <Option value="Mechanical Engineering">Mechanical Engineering</Option>
-                    <Option value="Industrial Engineering">Industrial Engineering</Option>
-                    <Option value="Civil Engineering">Civil Engineering</Option>
-                    <Option value="Electrical Engineering">Electrical Engineering</Option>
+                    <Option value="CHEMICAL">Chemical Engineering</Option>
+                    <Option value="MECHANICAL">Mechanical Engineering</Option>
+                    <Option value="INDUSTRIAL">Industrial Engineering</Option>
+                    <Option value="CIVIL">Civil Engineering</Option>
+                    <Option value="ELECTRICAL">Electrical Engineering</Option>
+                    <Option value="ARCHITECTURE">Architecture</Option>
                   </Select>
                 </div>
                 {errors.department && <span className="text-red-500 m-0 p-0 text-sm">{errors.department}</span>}

@@ -47,8 +47,14 @@ const handleExportTable = (accounts) => {
   document.body.removeChild(link);
 }
 
-const AccountsTable = ({TABLE_HEAD, TABLE_ROWS}) => {
-  
+const convertToAppropriateTitle = (str) => {
+  return str.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase(); }).trim();
+}
+
+const AccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle}) => {
+  if(TableTitle != null)
+    TableTitle = convertToAppropriateTitle(TableTitle);
+
   if(!(checkArrayIntegrity(TABLE_HEAD) && checkArrayIntegrity(TABLE_ROWS))){
     return <></>;
   }
@@ -60,7 +66,7 @@ const AccountsTable = ({TABLE_HEAD, TABLE_ROWS}) => {
           <div className="mb-0 flex items-center justify-between gap-8">
             <div>
               <Typography variant="h5" color="blue-gray">
-                Accounts list
+                {TableTitle ? TableTitle : <>Accounts list</>}
               </Typography>
               <Typography color="gray" className="mt-1 font-normal">
                 See information about all members
@@ -142,7 +148,7 @@ const AccountsTable = ({TABLE_HEAD, TABLE_ROWS}) => {
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {department}
+                            {department.name}
                           </Typography>
                         </div>
                       </td>

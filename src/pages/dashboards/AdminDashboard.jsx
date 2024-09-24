@@ -25,7 +25,7 @@ const AdminDashboard = () => {
   return (
     <div className="md:flex w-full">
       <SidebarComp 
-        className="bg-blue-500"
+        className="bg-blue-700"
         collapsed={collapsed} setCollapsed={setCollapsed} 
         toggled={toggled} setToggled={setToggled}
         sidebarItems={sidebarItems}
