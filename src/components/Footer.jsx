@@ -38,7 +38,7 @@ const Footer = () => {
                 </div>
             </div>
 
-            <hr className="h-px my-6 bg-gray-200 border-none" />
+            <hr className="h-px my-1 bg-gray-200 border-none" />
 
             <div>
                 <p className="text-center text-gray-500">© Internship Management System 2024 - All rights reserved</p>

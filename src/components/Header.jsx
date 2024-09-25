@@ -1,5 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useRef, useEffect } from 'react';
+import Logo from '../assets/logo.png';
+import LogoNb from '../assets/logo-nb.png';
 
 const Header = () => {
   const [listDisplayed, setListDisplayed] = useState(false);
@@ -38,9 +40,9 @@ const Header = () => {
       <nav className="relative bg-white shadow">
         <div className="container px-6 py-4 mx-auto md:flex md:justify-between md:items-center">
             <div className="flex items-center justify-between">
-                <a href="#">
-                    <img className="w-auto h-6 sm:h-7" src="https://merakiui.com/images/full-logo.svg" alt="" />
-                </a>
+                <Link to="/">
+                    <img className="w-auto h-6 sm:h-7" src={LogoNb} alt="" />
+                </Link>
 
                 <div className="flex md:hidden">
                     <button onClick={() => {setListDisplayed(!listDisplayed); handleNavbarToggle();}} style={listDisplayed ? {display: 'none'} : {display: 'block'}} type="button" className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600" aria-label="toggle menu">
