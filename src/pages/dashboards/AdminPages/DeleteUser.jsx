@@ -9,12 +9,15 @@ const DeleteUser = () => {
   const [haveDeletedUser, setHaveDeletedUser ] = useState(false);
   const [deletedUser, setDeletedUser] = useState(null);
 
+  const TABLE_HEAD = ["Member", "Username", "Department", "Generated Password", "Roles", "Status", "Gender"];
+
+
   const handleDeleteUser = async () => {
     setIsSending(true);
     console.log("The ruse rname is ");
     console.log(username);
 
-    const requestUrl = "/api/admin/delete-user?username="+username;
+    const requestUrl = "/api/admin/delete-account?username="+username;
     try{
       const response = await axios.delete(requestUrl);
       console.log(response.data);
@@ -54,7 +57,7 @@ const DeleteUser = () => {
           : 
           <div>
             <h1 className="text-3xl text-green-500">You have the deleted The Following user.</h1>
-            <AccountsTable TABLE_HEAD={['firstName', 'lastName', 'username', 'role']} TABLE_ROWS={[deletedUser]} />
+            <AccountsTable TABLE_HEAD={TABLE_HEAD} TABLE_ROWS={[deletedUser]} />
           </div>
         }
       </>

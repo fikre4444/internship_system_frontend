@@ -14,7 +14,7 @@ const RegisterCustom = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [registeredUser, setRegisteredUser] = useState([]);
   const [gotResponse, setGotResponse] = useState(false);
-  const TABLE_HEAD = ["Member", "Username", "Department", "Status", "Gender"];
+  const TABLE_HEAD = ["Member", "Username", "Department", "Generated Password", "Roles", "Status", "Gender"];
 
 
   //registration refs
