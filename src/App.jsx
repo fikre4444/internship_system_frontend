@@ -29,6 +29,7 @@ import DepartmentCoordinatorPage2 from './pages/dashboards/DepartmentCoordinator
 import RegisterUser from './pages/dashboards/AdminPages/RegisterUser';
 import AdminPage2 from './pages/dashboards/AdminPages/SecondAdmin';
 import DeleteUser from './pages/dashboards/AdminPages/DeleteUser';
+import CounterPage from './pages/CounterPage';
 
 function App() {
 
@@ -69,6 +70,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/counter" element={<CounterPage />} />
         </Routes>
       </Layout>
     </Router>
