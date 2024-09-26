@@ -100,13 +100,6 @@ const Login = () => {
     }).finally(() => {
       setIsSubmitting(false);
     })
-
-    // Display a toast during the login process
-    // toast.promise(loginPromise, {
-    //   pending: 'Logging in...',
-    //   success: 'Successfully logged in!',
-    //   error: 'Login failed. Please check your credentials.'
-    // });
   }
 
   return (

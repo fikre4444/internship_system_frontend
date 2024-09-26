@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import LogoNb from '../assets/logo-nb.png';
 
 const Footer = () => {
   return (
@@ -7,8 +8,8 @@ const Footer = () => {
             <div className="lg:flex">
                 <div className="w-full -mx-6 lg:w-2/5">
                     <div className="px-6">
-                        <Link href="/">
-                            <img className="w-auto h-7" src="https://merakiui.com/images/full-logo.svg" alt="" />
+                        <Link to="/">
+                            <img className="w-auto h-7" src={LogoNb} alt="" />
                         </Link>
 
                         <p className="max-w-sm mt-2 text-gray-500">The best place to streamline your Internship semester.</p>
