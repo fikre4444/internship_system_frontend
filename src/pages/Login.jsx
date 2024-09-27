@@ -94,6 +94,7 @@ const Login = () => {
         dispatch(setDefaultHome({
           defaultHome: link
         }))
+        localStorage.setItem("defaultHome", link);
         //after setting the account set the token and go to the intended page
         localStorage.setItem("jwt", token);
         navigate(link, { state: state });
@@ -104,6 +105,7 @@ const Login = () => {
           needPasswordChange: null
         }));
         localStorage.removeItem("jwt");
+        localStorage.removeItem("defaultHome");
         toast.error("Error while loading you're account, please login again.");
       }); 
     }).catch((error) => {
@@ -140,7 +142,6 @@ const Login = () => {
 
   return (
     <div className="w-full max-w-sm p-10 m-auto mx-auto my-8 bg-gray-50 rounded-lg shadow-lg border-2">
-      <ToastContainer />
       <div className="flex justify-center mx-auto">
           <img className="w-auto h-7 sm:h-8" src={LogoNb} alt=""/>
       </div>

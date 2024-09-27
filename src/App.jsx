@@ -1,6 +1,6 @@
 import './App.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 import Login from './pages/Login';
 import StudentDashboard from './pages/dashboards/StudentDashboard';
 import AdminDashboard from './pages/dashboards/AdminDashboard';
@@ -31,11 +31,21 @@ import RegisterUser from './pages/dashboards/AdminPages/RegisterUser';
 import AdminPage2 from './pages/dashboards/AdminPages/SecondAdmin';
 import DeleteUser from './pages/dashboards/AdminPages/DeleteUser';
 import NoRole from './pages/NoRole';
+import { checkAuthTokenAndFetchUser } from './utils/authUtils';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 
 function App() {
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    checkAuthTokenAndFetchUser(dispatch, navigate);
+  }, []);
+
+
   return (
-    <Router>
       <Layout>
         <Routes>
           <Route path="/" element={<Homepage />} />
@@ -74,7 +84,6 @@ function App() {
           <Route path="/no-role" element={<NoRole />} />
         </Routes>
       </Layout>
-    </Router>
   )
 }
 

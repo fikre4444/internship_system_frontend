@@ -111,6 +111,7 @@ const LoginOption = ({ role }) => {
           dispatch(setDefaultHome({
             defaultHome: roleDetailed.link
           }));
+          localStorage.setItem("defaultHome", roleDetailed.link);
           navigate(roleDetailed.link);
         }} className="capitalize text-sm bg-blue-gray-500" size="lg" fullWidth={true}>
           {roleDetailed.name}

@@ -89,25 +89,22 @@ const Header = () => {
 
   const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-  const handleLogout = () => {
-    console.log("hello")
-    toast.success("successfully logged out");
-    // const loadingToastId = toast.loading("Logging in...");
-    // await sleep(1000);
-    // toast.update(loadingToastId, { 
-    //   render: "Login successful!", 
-    //   type: "success", 
-    //   isLoading: false,
-    //   autoClose: 1000
-    // });
-    // dispatch(logoutSuccess());
-    // localStorage.removeItem("jwt");
-    // navigate("/login")
+  const handleLogout = async () => {
+    const loadingToastId = toast.loading("Logging Out...");
+    await sleep(1000);
+    toast.update(loadingToastId, { 
+      render: "Logout successful!", 
+      type: "success", 
+      isLoading: false,
+      closeButton: true
+    });
+    dispatch(logoutSuccess());
+    localStorage.removeItem("jwt");
+    navigate("/login")
   }
 
   return (
     <>
-      <ToastContainer />
       <nav className="relative bg-white shadow">
         <div className="container px-6 py-4 mx-auto md:flex md:justify-between md:items-center">
             <div className="flex items-center justify-between">
@@ -127,7 +124,6 @@ const Header = () => {
                     </button>
                 </div>
             </div>
-
             <div ref={navbar} className="absolute top-[-100vh] inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-linear bg-white md:mt-0 md:p-0 md:top-0 md:relative md:bg-transparent md:w-auto md:opacity-100 md:translate-x-0 md:flex md:items-center">
                 <div className="flex flex-col gap-3 md:flex-row items-center md:mx-6">
                     <Link to="/" className={linkStyle + (isActiveLink("/") ? activeLink : nonActiveLink)} href="#">Home</Link>
