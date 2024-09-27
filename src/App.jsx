@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import Login from './pages/Login';
 import StudentDashboard from './pages/dashboards/StudentDashboard';
@@ -32,10 +32,13 @@ import AdminPage2 from './pages/dashboards/AdminPages/SecondAdmin';
 import DeleteUser from './pages/dashboards/AdminPages/DeleteUser';
 import NoRole from './pages/NoRole';
 import { checkAuthTokenAndFetchUser } from './utils/authUtils';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
 function App() {
+
+  const isLoggedIn = useSelector(state => state.user.isLoggedIn);
+  const defaultHome = useSelector(state => state.user.defaultHome);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -48,9 +51,9 @@ function App() {
   return (
       <Layout>
         <Routes>
-          <Route path="/" element={<Homepage />} />
+          <Route path="/" element={!isLoggedIn ? <Homepage /> : <Navigate to={defaultHome} />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={!isLoggedIn ? <Login /> : <Navigate to={defaultHome} />} />
           <Route path="/admin" element={<AdminDashboard />}>
             <Route path="registerUser" element={<RegisterUser />} />
             <Route path="adminPage2" element={<AdminPage2 />} />

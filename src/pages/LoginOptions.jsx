@@ -6,7 +6,7 @@ import { MdOutlineSupervisorAccount, MdAdminPanelSettings } from "react-icons/md
 import { RiTeamLine } from "react-icons/ri";
 import { useSelector, useDispatch } from 'react-redux';
 import { setDefaultHome, setLoggedInAs } from '../redux/slices/userSlice';
-
+import { jwtDecode } from "jwt-decode";
 
 const LoginOptions = () => {
   // const currentUser = useSelector(state => state.user.currentUser);
@@ -17,7 +17,14 @@ const LoginOptions = () => {
   const navigate = useNavigate();
   const location = useLocation();
   //get the roles from the state of the location routing that i set in the login page
-  const roles = location.state.roles.filter(role => role !== "ROLE_STAFF");
+  let roles = location.state?.roles?.filter(role => role !== "ROLE_STAFF");
+
+  if(roles === null || roles === undefined){ // if the roles is empty fetch from localstroge
+    const jwt = localStorage.getItem('jwt');
+    const decodedToken = jwtDecode(jwt);
+    roles = decodedToken.roles;
+    roles = roles.filter(role => role !== "ROLE_STAFF");
+  }
 
   return (
     <div className="my-4 mb-7">

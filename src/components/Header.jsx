@@ -96,7 +96,8 @@ const Header = () => {
       render: "Logout successful!", 
       type: "success", 
       isLoading: false,
-      closeButton: true
+      closeButton: true,
+      autoClose: 2000
     });
     dispatch(logoutSuccess());
     localStorage.removeItem("jwt");
@@ -163,6 +164,12 @@ const Header = () => {
                                     onClick={() => { navigate("/edit-account"); setIsDropdownOpen(false);}}
                                   >
                                     Edit Account
+                                  </button>
+                                  <button 
+                                    className="px-4 py-2 w-full text-start hover:bg-blue-gray-300 duration-300 cursor-pointer"
+                                    onClick={() => { navigate("/login-options"); setIsDropdownOpen(false);}}
+                                  >
+                                    Switch Dashboard
                                   </button>
                                   <button 
                                     className="px-4 py-2 w-full text-start hover:bg-blue-gray-300 duration-300 cursor-pointer"
