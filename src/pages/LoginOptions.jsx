@@ -4,9 +4,16 @@ import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { FaChalkboardTeacher, FaUserGraduate } from "react-icons/fa";
 import { MdOutlineSupervisorAccount, MdAdminPanelSettings } from "react-icons/md";
 import { RiTeamLine } from "react-icons/ri";
+import { useSelector, useDispatch } from 'react-redux';
+import { setDefaultHome, setLoggedInAs } from '../redux/slices/userSlice';
 
 
 const LoginOptions = () => {
+  // const currentUser = useSelector(state => state.user.currentUser);
+  // const loggedInAs = useSelector(state => state.user.loggedInAs);
+  // console.log(currentUser);
+  // console.log("We are logged in as ", loggedInAs);
+
   const navigate = useNavigate();
   const location = useLocation();
   //get the roles from the state of the location routing that i set in the login page
@@ -31,6 +38,7 @@ const LoginOptions = () => {
     </div>
   )
 }
+
 
 const roleDetails = {
   "ROLE_ADVISOR" : {
@@ -70,7 +78,7 @@ const roleIcons = {
 
 const LoginOption = ({ role }) => {
   const navigate = useNavigate();
-  console.log(roleDetails[role]);
+  const dispatch = useDispatch();
   const roleDetailed = {...roleDetails[role]};
 
   const IconComponent = roleIcons[role];
@@ -96,7 +104,15 @@ const LoginOption = ({ role }) => {
         <h1 className="text-center text-md font-semibold">
           Login As
         </h1>
-        <Button onClick={() => navigate(roleDetailed.link)} className="capitalize text-sm bg-blue-gray-500" size="lg" fullWidth={true}>
+        <Button onClick={() => {
+          dispatch(setLoggedInAs({
+            loggedInAs: roleDetailed.name
+          }));
+          dispatch(setDefaultHome({
+            defaultHome: roleDetailed.link
+          }));
+          navigate(roleDetailed.link);
+        }} className="capitalize text-sm bg-blue-gray-500" size="lg" fullWidth={true}>
           {roleDetailed.name}
         </Button>
       </CardFooter>

@@ -11,7 +11,7 @@ const SidebarComp = ({className, collapsed, setCollapsed, toggled, setToggled, s
   const [key, setKey] = useState(0);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(max-width:768px)');
+    const mediaQuery = window.matchMedia('(max-width:720px)');
     setIsSmallScreen(mediaQuery.matches);
     const handleResize = () => {
       setIsSmallScreen(mediaQuery.matches);

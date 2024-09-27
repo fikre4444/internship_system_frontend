@@ -6,8 +6,12 @@ import LogoNb from '../assets/logo-nb.png';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button } from "@material-tailwind/react";
+import { useDispatch } from 'react-redux';
+import { loginSuccess, logoutSuccess, setDefaultHome, setLoggedInAs } from '../redux/slices/userSlice';
 
 const Login = () => {
+  const dispatch = useDispatch();
+
   const [IsSubmitting, setIsSubmitting] = useState(false);
 
   const [username, setUsername] = useState('');
@@ -36,6 +40,7 @@ const Login = () => {
     return true;
   }
 
+  //to create the delay loading effect when navigating to the user dashboard
   const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   const handleLogin = async () => {
@@ -63,13 +68,44 @@ const Login = () => {
       });
 
       await sleep(1000);
-      
+      // check where i need to navigate to here
+      toast.dismiss(loadingToastId);
       const token = response.data;
       const decodedToken = jwtDecode(token);
-
-      const linkAndState = getLinkAndState(decodedToken);
-      localStorage.setItem("jwt", token);
-      navigate(linkAndState.link, { state: linkAndState.state });
+      const {link, state} = getLinkAndState(decodedToken);
+      const signedInAs = getSignedInAs(link);
+      
+      //get the user account details here
+      axios.get("/api/account/get-account", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((response) => {
+        console.log(response.data);
+        const account = response.data;
+        dispatch(loginSuccess({
+          currentUser: account.account,
+          token: token,
+          needPasswordChange: account.needPasswordChange,
+        }));
+        dispatch(setLoggedInAs({
+          loggedInAs: signedInAs
+        }))
+        dispatch(setDefaultHome({
+          defaultHome: link
+        }))
+        //after setting the account set the token and go to the intended page
+        localStorage.setItem("jwt", token);
+        navigate(link, { state: state });
+      }).catch((error) => {
+        dispatch(logoutSuccess({
+          currentUser: null,
+          token: null,
+          needPasswordChange: null
+        }));
+        localStorage.removeItem("jwt");
+        toast.error("Error while loading you're account, please login again.");
+      }); 
     }).catch((error) => {
       const errorResponse = error.response.data;
       if(errorResponse.errorType === "INVALID_CREDENTIALS"){
@@ -148,18 +184,32 @@ const Login = () => {
   );
 }
 
-const getDashboardLinkBasedOnRole = (role) => {
-  const roleMap = {
-    "ROLE_ADVISOR" : "/advisor",
-    "ROLE_STUDENT" : "/student",
-    "ROLE_HEAD_INTERNSHIP_COORDINATOR" : "/head-coordinator",
-    "ROLE_DEPARTMENT_INTERNSHIP_COORDINATOR" : "/department-coordinator",
-    "ROLE_ADMIN" : "/admin", 
-    "ROLE_STAFF" : "/not-found"
-  }
+const roleMap = {
+  "ROLE_ADVISOR" : "/advisor",
+  "ROLE_STUDENT" : "/student",
+  "ROLE_HEAD_INTERNSHIP_COORDINATOR" : "/head-coordinator",
+  "ROLE_DEPARTMENT_INTERNSHIP_COORDINATOR" : "/department-coordinator",
+  "ROLE_ADMIN" : "/admin", 
+  "ROLE_STAFF" : "/no-role"
+}
 
+const roleNamesFromLink = {
+  "/advisor" : "Advisor",
+  "/student" : "Student",
+  "/head-coordinator" : "Head Coordinator",
+  "/department-coordinator" : "Department Coordinator",
+  "/admin" : "Administrator",
+  "/login-options" : "Undetermined-Yet",
+  "/no-role" : "Undetermined"
+}
+
+const getDashboardLinkBasedOnRole = (role) => {
   return roleMap[role];
 };
+
+const getSignedInAs = (linkName) => {
+  return roleNamesFromLink[linkName]; 
+}
 
 const getLinkAndState = (decodedToken) => {
   const linkAndState = {
@@ -171,7 +221,7 @@ const getLinkAndState = (decodedToken) => {
     if(roles.includes("ROLE_STUDENT")){
       linkAndState.link = getDashboardLinkBasedOnRole(roles[0]);
     } else if(roles.includes("ROLE_STAFF")){
-      linkAndState.link = getDashboardLinkBasedOnRole(roles[0]);
+      linkAndState.link = getDashboardLinkBasedOnRole(roles[0]); //assign the link no-role
     }
   }else if(roles.length == 2){
     if(roles.includes("ROLE_STAFF")){ //if it is a staff member and has another role
@@ -180,20 +230,20 @@ const getLinkAndState = (decodedToken) => {
       linkAndState.link = getDashboardLinkBasedOnRole(otherRole);
     }
     else {
-      linkAndState.link = "/not-found";
+      linkAndState.link = "/no-role";
     }
   } else if(roles.length > 2){
       if(roles.includes("ROLE_STAFF")){
         linkAndState.link = "/login-options";
         linkAndState.state = {roles: roles};
       }else { //might change later with a more better logic
-        linkAndState.link = "/not-found";
+        linkAndState.link = "/no-role";
       }
   }
-
   return linkAndState;
-  
 };
+
+
 
 export default Login;
 
