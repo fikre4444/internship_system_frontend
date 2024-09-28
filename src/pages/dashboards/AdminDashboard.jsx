@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import SidebarComp from '../../components/Sidebar';
 import { Outlet } from 'react-router-dom';
-import { FaUserCog } from "react-icons/fa";
+import { FaSearch, FaUserCog } from "react-icons/fa";
 import { FaRegistered } from "react-icons/fa";
 import { HiOutlineUserRemove } from "react-icons/hi";
 import { IconButton } from '@material-tailwind/react';
@@ -16,8 +16,9 @@ const AdminDashboard = () => {
 
   const sidebarItems = [
     {itemId: 1, itemTitle: "Register User", itemLink: "registerUser", itemIcon: FaUserCog},
-    {itemId: 2, itemTitle: "User Register", itemLink: "adminPage2", itemIcon: FaRegistered},
-    {itemId: 3, itemTitle: "Delete User", itemLink: "deleteUser", itemIcon: HiOutlineUserRemove},
+    {itemId: 2, itemTitle: "Search User", itemLink: "searchUser", itemIcon: FaSearch},
+    {itemId: 3, itemTitle: "User Register", itemLink: "adminPage2", itemIcon: FaRegistered},
+    {itemId: 4, itemTitle: "Delete User", itemLink: "deleteUser", itemIcon: HiOutlineUserRemove},
   ];
 
 

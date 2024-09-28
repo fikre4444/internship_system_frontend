@@ -35,6 +35,9 @@ import { checkAuthTokenAndFetchUser } from './utils/authUtils';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import ProtectedRoute from './HOCS/ProtectedRoute';
+import DashboardDefaultPage from './pages/DashboardDefaultPage';
+import AdminDefaultPage from './pages/dashboards/AdminPages/AdminDefaultPage';
+import SearchUser from './pages/dashboards/AdminPages/SearchUser';
 
 function App() {
 
@@ -64,26 +67,32 @@ function App() {
 
           
           <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>}>
+            <Route index element={<AdminDefaultPage />} />
             <Route path="registerUser" element={<RegisterUser />} />
+            <Route path="searchUser" element={<SearchUser />} />
             <Route path="adminPage2" element={<AdminPage2 />} />
             <Route path="deleteUser" element={<DeleteUser />} />
           </Route>
           <Route path="/student" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>}>
+            <Route index element={<DashboardDefaultPage />} />
             <Route path="studentPage1" element={<StudentPage1 />} />
             <Route path="studentPage2" element={<StudentPage2 />} />         
             <Route path="studentPage3" element={<StudentPage3 />} />  
           </Route>
           <Route path="/advisor" element={<ProtectedRoute><AdvisorDashboard /></ProtectedRoute>}>
+            <Route index element={<DashboardDefaultPage />} />
             <Route path="advisorPage1" element={<AdvisorPage1 />} />
             <Route path="advisorPage2" element={<AdvisorPage2 />} />         
             <Route path="advisorPage3" element={<AdvisorPage3 />} />         
           </Route>
           <Route path="/head-coordinator" element={<ProtectedRoute><HeadCoordinator /></ProtectedRoute>}>
+            <Route index element={<DashboardDefaultPage />} />
             <Route path="headCoordinatorPage1" element={<HeadCoordinatorPage1 />} />
             <Route path="headCoordinatorPage2" element={<HeadCoordinatorPage2 />} />         
             <Route path="headCoordinatorPage3" element={<HeadCoordinatorPage3 />} />  
           </Route>
           <Route path="/department-coordinator" element={<ProtectedRoute><DepartmentCoordinator /></ProtectedRoute>}>
+            <Route index element={<DashboardDefaultPage />} />
             <Route path="departmentCoordinatorPage1" element={<DepartmentCoordinatorPage1 />} />
             <Route path="departmentCoordinatorPage2" element={<DepartmentCoordinatorPage2 />} />         
             <Route path="departmentCoordinatorPage3" element={<DepartmentCoordinatorPage3 />} />  

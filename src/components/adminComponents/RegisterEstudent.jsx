@@ -12,7 +12,8 @@ const RegisterEstudent = () => {
     existingStaffs: null, existingStudents: null,
     registeredStaffs: null, registeredStudents: null
   });
-  const TABLE_HEAD = ["Member", "Username", "Department", "Status", "Gender"];
+  const TABLE_HEAD = ["Member", "Username", "Department", "Generated Password", "Roles", "Status", "Gender"];
+
 
   const amountRef = useRef(null);
   const departmentRef = useRef(null);
