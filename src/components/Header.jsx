@@ -25,6 +25,7 @@ const Header = () => {
   const loggedInAs = useSelector(state => state.user.loggedInAs);
   const firstName = useSelector(state => state.user.currentUser?.firstName || null);
   const lastName = useSelector(state => state.user.currentUser?.lastName || null);
+  const hasMultipleRoles = useSelector(state => state.user.currentUser?.roles.length > 2 || false);
 
   let IconComponent = roleIcons[loggedInAs];
   if(IconComponent === null || IconComponent === undefined){
@@ -101,6 +102,7 @@ const Header = () => {
     });
     dispatch(logoutSuccess());
     localStorage.removeItem("jwt");
+    localStorage.removeItem("defaultHome");
     navigate("/login")
   }
 
@@ -165,12 +167,14 @@ const Header = () => {
                                   >
                                     Edit Account
                                   </button>
-                                  <button 
-                                    className="px-4 py-2 w-full text-start hover:bg-blue-gray-300 duration-300 cursor-pointer"
-                                    onClick={() => { navigate("/login-options"); setIsDropdownOpen(false);}}
-                                  >
-                                    Switch Dashboard
-                                  </button>
+                                  {hasMultipleRoles && 
+                                    <button 
+                                      className="px-4 py-2 w-full text-start hover:bg-blue-gray-300 duration-300 cursor-pointer"
+                                      onClick={() => { navigate("/login-options"); setIsDropdownOpen(false);}}
+                                    >
+                                      Switch Dashboard
+                                    </button>
+                                  }
                                   <button 
                                     className="px-4 py-2 w-full text-start hover:bg-blue-gray-300 duration-300 cursor-pointer"
                                     onClick={() => {handleLogout(); setIsDropdownOpen(false);}}

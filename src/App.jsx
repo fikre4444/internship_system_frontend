@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
+import { useLocation, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import Login from './pages/Login';
 import StudentDashboard from './pages/dashboards/StudentDashboard';
@@ -34,19 +34,23 @@ import NoRole from './pages/NoRole';
 import { checkAuthTokenAndFetchUser } from './utils/authUtils';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import ProtectedRoute from './HOCS/ProtectedRoute';
 
 function App() {
 
   const isLoggedIn = useSelector(state => state.user.isLoggedIn);
   const defaultHome = useSelector(state => state.user.defaultHome);
+  console.log("is logged in is", isLoggedIn)
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
+
 
   useEffect(() => {
-    checkAuthTokenAndFetchUser(dispatch, navigate);
+    checkAuthTokenAndFetchUser(dispatch, navigate, location);
   }, []);
-
 
   return (
       <Layout>
@@ -54,37 +58,39 @@ function App() {
           <Route path="/" element={!isLoggedIn ? <Homepage /> : <Navigate to={defaultHome} />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/login" element={!isLoggedIn ? <Login /> : <Navigate to={defaultHome} />} />
-          <Route path="/admin" element={<AdminDashboard />}>
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+
+          
+          <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>}>
             <Route path="registerUser" element={<RegisterUser />} />
             <Route path="adminPage2" element={<AdminPage2 />} />
             <Route path="deleteUser" element={<DeleteUser />} />
           </Route>
-          <Route path="/student" element={<StudentDashboard />}>
+          <Route path="/student" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>}>
             <Route path="studentPage1" element={<StudentPage1 />} />
             <Route path="studentPage2" element={<StudentPage2 />} />         
             <Route path="studentPage3" element={<StudentPage3 />} />  
           </Route>
-          <Route path="/advisor" element={<AdvisorDashboard />}>
+          <Route path="/advisor" element={<ProtectedRoute><AdvisorDashboard /></ProtectedRoute>}>
             <Route path="advisorPage1" element={<AdvisorPage1 />} />
             <Route path="advisorPage2" element={<AdvisorPage2 />} />         
             <Route path="advisorPage3" element={<AdvisorPage3 />} />         
           </Route>
-          <Route path="/head-coordinator" element={<HeadCoordinator />}>
+          <Route path="/head-coordinator" element={<ProtectedRoute><HeadCoordinator /></ProtectedRoute>}>
             <Route path="headCoordinatorPage1" element={<HeadCoordinatorPage1 />} />
             <Route path="headCoordinatorPage2" element={<HeadCoordinatorPage2 />} />         
             <Route path="headCoordinatorPage3" element={<HeadCoordinatorPage3 />} />  
           </Route>
-          <Route path="/department-coordinator" element={<DepartmentCoordinator />}>
+          <Route path="/department-coordinator" element={<ProtectedRoute><DepartmentCoordinator /></ProtectedRoute>}>
             <Route path="departmentCoordinatorPage1" element={<DepartmentCoordinatorPage1 />} />
             <Route path="departmentCoordinatorPage2" element={<DepartmentCoordinatorPage2 />} />         
             <Route path="departmentCoordinatorPage3" element={<DepartmentCoordinatorPage3 />} />  
           </Route>
-          <Route path="/login-options" element={<LoginOptions />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/no-role" element={<NoRole />} />
+          <Route path="/login-options" element={<ProtectedRoute><LoginOptions /></ProtectedRoute>} />
+          <Route path="/reset-password" element={<ProtectedRoute><ResetPassword /></ProtectedRoute>} />
+          <Route path="/no-role" element={<ProtectedRoute><NoRole /></ProtectedRoute>} />
         </Routes>
       </Layout>
   )

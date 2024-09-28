@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { loginSuccess, logoutSuccess, setDefaultHome, setLoggedInAs } from '../redux/slices/userSlice';
 
 const Login = () => {
+  console.log("login runs")
   const dispatch = useDispatch();
 
   const [IsSubmitting, setIsSubmitting] = useState(false);

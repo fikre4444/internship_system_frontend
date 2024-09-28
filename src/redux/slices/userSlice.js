@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 //might need to fetch from local storage later ??
 const initialState = {
-  isLoggedIn: false,
+  isLoggedIn: null,
   currentUser: null,
   token: null,
   needPasswordChange: null,

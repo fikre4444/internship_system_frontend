@@ -3,7 +3,7 @@ import { loginSuccess, logoutSuccess, setLoggedInAs, setDefaultHome } from '../r
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
 
-const checkAuthTokenAndFetchUser = async (dispatch, navigate) => {
+const checkAuthTokenAndFetchUser = async (dispatch, navigate, location) => {
   const token = localStorage.getItem('jwt');
  
 
@@ -12,53 +12,76 @@ const checkAuthTokenAndFetchUser = async (dispatch, navigate) => {
 
   if (token) {
     const loadingToastId = toast.loading("Loading User...");
-    const decodedToken = jwtDecode(token);
-    let {link, state} = getLinkAndState(decodedToken);
-    let signedInAs = getSignedInAs(link);
-    
-    //get the user account details here
-    axios.get("/api/account/get-account", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then(async (response) => {
-      toast.update(loadingToastId, { 
-        render: "Loaded User!", 
-        type: "success", 
-        isLoading: false,
-        closeButton: true,
-        autoClose: 300
-      });
-      const account = response.data;
-      dispatch(loginSuccess({
-        currentUser: account.account,
-        token: token,
-        needPasswordChange: account.needPasswordChange,
-      }));
-
-      const defaultHomeLink = localStorage.getItem("defaultHome");
-      if(defaultHomeLink !== null){
-        link = defaultHomeLink;
-        signedInAs = roleNamesFromLink[link];
-      }
-      dispatch(setDefaultHome({
-        defaultHome: link
-      }))
-
-      dispatch(setLoggedInAs({
-        loggedInAs: signedInAs
-      }));
+    try{
+      const decodedToken = jwtDecode(token);
+      let {link, state} = getLinkAndState(decodedToken);
+      let signedInAs = getSignedInAs(link);
       
-      //after setting the account set the token and go to the intended page
-      localStorage.setItem("jwt", token);
-      navigate(link, { state: state });
-    }).catch((error) => {
+      //get the user account details here
+      axios.get("/api/account/get-account", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then(async (response) => {
+        console.log("auth utils runs");
+        toast.update(loadingToastId, { 
+          render: "Loaded User!", 
+          type: "success", 
+          isLoading: false,
+          closeButton: true,
+          autoClose: 300
+        });
+        const account = response.data;
+        console.log(account.account);
+        dispatch(loginSuccess({
+          currentUser: account.account,
+          token: token,
+          needPasswordChange: account.needPasswordChange,
+        }));
+
+        const defaultHomeLink = localStorage.getItem("defaultHome");
+        if(defaultHomeLink !== null){
+          link = defaultHomeLink;
+          signedInAs = roleNamesFromLink[link];
+        }
+        dispatch(setDefaultHome({
+          defaultHome: link
+        }))
+
+        dispatch(setLoggedInAs({
+          loggedInAs: signedInAs
+        }));
+        
+        //after setting the account set the token and go to the intended page
+        localStorage.setItem("jwt", token);
+        return;
+      }).catch((error) => {
+        dispatch(logoutSuccess({
+          currentUser: null,
+          token: null,
+          needPasswordChange: null,
+          defaultHome: null
+        }));
+        localStorage.removeItem("jwt");
+        localStorage.removeItem("defaultHome");
+        toast.update(loadingToastId, { 
+          render: "Error While loading user, please Login again!", 
+          type: "error", 
+          isLoading: false,
+          closeButton: true
+        });
+        navigate("/login");
+      }); 
+    } 
+    catch(error){
       dispatch(logoutSuccess({
         currentUser: null,
         token: null,
-        needPasswordChange: null
+        needPasswordChange: null,
+        defaultHome: null
       }));
       localStorage.removeItem("jwt");
+      localStorage.removeItem("defaultHome");
       toast.update(loadingToastId, { 
         render: "Error While loading user, please Login again!", 
         type: "error", 
@@ -66,8 +89,12 @@ const checkAuthTokenAndFetchUser = async (dispatch, navigate) => {
         closeButton: true
       });
       navigate("/login");
-    }); 
+    }
   }
+  else {
+    dispatch(logoutSuccess());
+  }
+    
 };
 
 export { checkAuthTokenAndFetchUser };
@@ -132,29 +159,3 @@ const getLinkAndState = (decodedToken) => {
   }
   return linkAndState;
 };
-
-  //     try {
-  //     // Fetch the user details using the token
-  //     const response = await axios.get('/api/getCurrentUser', { headers: { Authorization: `Bearer ${token}` } });
-  //     const { currentUser, needPasswordChange } = response.data;
-
-  //     // Dispatch login success and store user data in Redux
-  //     dispatch(loginSuccess({
-  //       currentUser,
-  //       token,
-  //       needPasswordChange,
-  //     }));
-  //   } catch (error) {
-  //     console.error('Error fetching user:', error);
-  //     // If token is invalid or expired, clear it and log out
-  //     localStorage.removeItem('jwt');
-  //     dispatch(logoutSuccess());
-  //     navigate('/login');
-  //   }
-  // } else {
-  //   // If no token, redirect to login
-  //   navigate('/login');
-  // }
-
-
-
