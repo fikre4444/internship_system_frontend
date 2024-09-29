@@ -3,6 +3,7 @@ import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter,
   Tabs, TabsHeader, Tab, Avatar, IconButton, Tooltip } from "@material-tailwind/react";
 import { FaTableCells } from "react-icons/fa6";
+import { useNavigate } from 'react-router-dom';
 
 import MaleAvatar from '../assets/male_avatar.png';
 import FemaleAvatar from '../assets/female_avatar.png';
@@ -52,6 +53,8 @@ const convertToAppropriateTitle = (str) => {
 }
 
 const AccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle}) => {
+  const navigate = useNavigate();
+  
   if(TableTitle != null)
     TableTitle = convertToAppropriateTitle(TableTitle);
 
@@ -66,7 +69,7 @@ const AccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle}) => {
           <div className="mb-0 flex items-center justify-between gap-8">
             <div>
               <Typography variant="h5" color="blue-gray">
-                {TableTitle ? TableTitle : <>Accounts list</>}
+                {TableTitle ? TableTitle : "Accounts List"}
               </Typography>
               <Typography color="gray" className="mt-1 font-normal">
                 See information about all members
@@ -108,7 +111,7 @@ const AccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle}) => {
                     : "p-4 border-b border-blue-gray-50";
   
                   return (
-                    <tr key={username}>
+                    <tr key={username} onClick={() => {navigate("/admin/viewAndEditAccount", { state: TABLE_ROWS[index] });}} className="hover:bg-blue-300 hover:bg-opacity-25 cursor-pointer hover:scale-[1.01] transition-all duration-[50ms]">
                       <AccountDetailsColumn classes={classes} firstName={firstName} 
                         lastName={lastName} gender={gender} email={email} />
                       <UsernameColumn classes={classes} username={username} />
@@ -117,7 +120,6 @@ const AccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle}) => {
                       <RolesColumn classes={classes} roles={roles} />
                       <UserEnabledColumn classes={classes} enabled={enabled} />
                       <GenderColumn classes={classes} gender={gender} />
-                      <EditUserColumn classes={classes} />
                     </tr>
                   );
                 },
@@ -252,19 +254,6 @@ const GenderColumn = ({ classes, gender }) => {
     </td>
   );
 }
-
-const EditUserColumn = ({ classes }) => {
-  return (
-    <td className={classes}>
-      <Tooltip content="Edit User">
-        <IconButton variant="text">
-          <PencilIcon className="h-4 w-4" />
-        </IconButton>
-      </Tooltip>
-    </td>
-  )
-}
-
 
 const isBcryptHash = (hash) => {
   // Bcrypt hashes start with "$2a$" or "$2b$" or "$2y$"

@@ -1,5 +1,5 @@
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { PiChalkboardTeacherFill } from "react-icons/pi";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useState, useEffect } from 'react';
@@ -9,6 +9,8 @@ import { IconButton } from '@material-tailwind/react';
 const SidebarComp = ({className, collapsed, setCollapsed, toggled, setToggled, sidebarItems}) => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [key, setKey] = useState(0);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width:720px)');
@@ -52,9 +54,13 @@ const SidebarComp = ({className, collapsed, setCollapsed, toggled, setToggled, s
             </MenuItem>
             {sidebarItems.map(item => {
               return (
-                <Link key={item.itemId} to={item.itemLink}>
-                  <MenuItem icon={item.itemIcon ? <item.itemIcon /> : undefined }>{item.itemTitle}</MenuItem>
-                </Link>
+                <MenuItem 
+                  key={item.itemId}
+                  onClick={() => {setToggled(!toggled); navigate(item.itemLink)}} 
+                  icon={item.itemIcon ? <item.itemIcon /> : undefined }
+                >
+                  {item.itemTitle}
+                </MenuItem>
               );
             })}
           </Menu>

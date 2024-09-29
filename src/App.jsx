@@ -38,6 +38,7 @@ import ProtectedRoute from './HOCS/ProtectedRoute';
 import DashboardDefaultPage from './pages/DashboardDefaultPage';
 import AdminDefaultPage from './pages/dashboards/AdminPages/AdminDefaultPage';
 import SearchUser from './pages/dashboards/AdminPages/SearchUser';
+import ViewAndEditAccount from './pages/dashboards/AdminPages/ViewAndEditAccount';
 
 function App() {
 
@@ -70,6 +71,7 @@ function App() {
             <Route index element={<AdminDefaultPage />} />
             <Route path="registerUser" element={<RegisterUser />} />
             <Route path="searchUser" element={<SearchUser />} />
+            <Route path="viewAndEditAccount" element={<ViewAndEditAccount />} />
             <Route path="adminPage2" element={<AdminPage2 />} />
             <Route path="deleteUser" element={<DeleteUser />} />
           </Route>
