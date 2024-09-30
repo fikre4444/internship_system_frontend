@@ -53,10 +53,10 @@ const SearchUser = () => {
     <div>
         { !response ?
           <>
-            <h1 className="m-3 text-md md:text-lg lg:text-xl font-semibold bg-blue-300 bg-opacity-20 rounded-xl shadow-lg text-blue-gray-700 p-2 inline-block">
+            <h1 className="m-3 mt-6 md:mt-3 p-5 text-sm md:text-lg lg:text-xl font-semibold bg-blue-300 bg-opacity-20 rounded-xl shadow-lg text-blue-gray-700 md:p-2 inline-block">
               Please Input a username or part of a username and click Search to see a result.
             </h1>
-            <div className="flex gap-3 items-center p-4">
+            <div className="flex gap-3 flex-wrap items-center p-4">
               <div className="flex w-72 flex-col gap-6 m-2">
                 <div className="relative group">
                   <Input
@@ -73,7 +73,9 @@ const SearchUser = () => {
                 </div>
               </div>
               <div>
-                <Button loading={isLoading} onClick={handleSearch} className="bg-blue-gray-500" >
+                <Button loading={isLoading} onClick={handleSearch} 
+                  className="bg-blue-gray-500 capitalize m-2 px-10"
+                >
                   {!isLoading ? <>Search Users</> : <>Searching</>}
                 </Button>
               </div>

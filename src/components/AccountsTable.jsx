@@ -234,7 +234,7 @@ const UserEnabledColumn = ({ classes, enabled }) => {
           variant="ghost"
           size="sm"
           value={enabled ? "Active" : "Disabled"}
-          color={enabled ? "green" : "blue-gray"}
+          color={enabled ? "green" : "red"}
         />
       </div>
     </td>
