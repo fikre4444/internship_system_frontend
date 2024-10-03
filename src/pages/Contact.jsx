@@ -14,7 +14,7 @@ const Contact = () => {
 
           <ContactComp name="Fikre Tesfay" email="fikretesfay4444@gmail.com" phoneNumber="+251939187245" />
           <hr />
-          <ContactComp name="Danay Halefom" email="Danay4444@gmail.com" phoneNumber="+25193918732425" />
+          <ContactComp name="Danay Hayelom" email="Danay4444@gmail.com" phoneNumber="+25193918732425" />
       </div>
     </section>
   )

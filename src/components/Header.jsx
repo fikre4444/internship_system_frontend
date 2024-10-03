@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectLoggedInState, logoutSuccess } from '../redux/slices/userSlice';
 import LogoNb from '../assets/logo-nb.png';
 import { Avatar, Badge, Button, Chip } from "@material-tailwind/react";
+import { IoLogOutOutline } from "react-icons/io5";
 
 import { FaChalkboardTeacher, FaUserGraduate } from "react-icons/fa";
 import { MdOutlineSupervisorAccount, MdAdminPanelSettings, MdAccountCircle } from "react-icons/md";
@@ -36,6 +37,7 @@ const Header = () => {
   const dropdownRef = useRef(null); // Ref for dropdown box
   // Function to toggle dropdown when avatar is clicked
   const handleAvatarClick = () => {
+    // #todo fix the drop down openning on any click
     setIsDropdownOpen(!isDropdownOpen);
   };
   useEffect(() => {
@@ -179,7 +181,7 @@ const Header = () => {
                                     className="px-4 py-2 w-full text-start hover:bg-blue-gray-300 duration-300 cursor-pointer"
                                     onClick={() => {handleLogout(); setIsDropdownOpen(false);}}
                                   >
-                                    Logout
+                                    <span className="flex gap-3 items-center">Logout</span>
                                   </button>
                                 </ul>
                               </div>

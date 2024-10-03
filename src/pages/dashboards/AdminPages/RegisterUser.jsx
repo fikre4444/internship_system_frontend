@@ -14,19 +14,6 @@ const RegisterUser = () => {
   const [accounts, setAccounts] = useState(null);
   const TABLE_HEAD = ["Member", "Username", "Department", "Status", "Gender"];
 
-  const handleGetting = () => {
-    setGetting(true);
-    setTimeout(checkSuccess, 5000);
-    console.log("getting");
-    const requestUrl = "/api/admin/get-students?department=Mechanical%20Engineering";
-    axios.get(requestUrl).then((response) => {
-      console.log(response.data);
-      setAccounts(response.data.existingStudents);
-      setGetting(false);
-      setGotRegistrationResponse(true);
-    });
-  }
-
   const checkSuccess = () => {
     if(!gotRegistrationResponse){ //if we didn't get response
       setGetting(false);
@@ -39,7 +26,6 @@ const RegisterUser = () => {
   }
 
   
-
   return (
     <div className="p-3">
       { !gotRegistrationResponse 
@@ -70,11 +56,6 @@ const RegisterUser = () => {
           }
           { location === "estudent" && <RegisterEstudent />}
           { location === "custom" && <RegisterCustom />}
-          <div> {/* this is where the table will be displayed*/}
-            <Button loading={getting} onClick={handleGetting} className="bg-blue-gray-500" >
-              {!getting ? <>Get User/s</> : <>Getting User/s</>}
-            </Button>
-          </div>
         </div>
         :<div>
           <Button onClick={handleReturnToRegistration} className="bg-blue-gray-500 m-2">

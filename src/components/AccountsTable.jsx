@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import MaleAvatar from '../assets/male_avatar.png';
 import FemaleAvatar from '../assets/female_avatar.png';
 import { Parser } from '@json2csv/plainjs';
+import Highlighter from "react-highlight-words";
 
  
 const checkArrayIntegrity = (arr) => {
@@ -52,7 +53,7 @@ const convertToAppropriateTitle = (str) => {
   return str.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase(); }).trim();
 }
 
-const AccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle}) => {
+const AccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle, searchTerms}) => {
   const navigate = useNavigate();
   
   if(TableTitle != null)
@@ -113,8 +114,8 @@ const AccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle}) => {
                   return (
                     <tr key={username} onClick={() => {navigate("/admin/viewAndEditAccount", { state: TABLE_ROWS[index] });}} className="hover:bg-blue-300 hover:bg-opacity-25 cursor-pointer hover:scale-[1.01] transition-all duration-[50ms]">
                       <AccountDetailsColumn classes={classes} firstName={firstName} 
-                        lastName={lastName} gender={gender} email={email} />
-                      <UsernameColumn classes={classes} username={username} />
+                        lastName={lastName} gender={gender} email={email} searchTerm={searchTerms.usernameSearchTerm}/>
+                      <UsernameColumn classes={classes} username={username} searchTerm={searchTerms.usernameSearchTerm} />
                       <DepartmentColumn classes={classes} department={department} />
                       <GenderatedPasswordColumn classes={classes} password={password} />
                       <RolesColumn classes={classes} roles={roles} />
@@ -133,7 +134,7 @@ const AccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle}) => {
   );
 }
 
-const AccountDetailsColumn = ({ classes, firstName, lastName, gender, email }) => {
+const AccountDetailsColumn = ({ classes, firstName, lastName, gender, email, searchTerm }) => {
   return (
     <td className={classes}>
       <div className="flex items-center gap-3">
@@ -144,7 +145,12 @@ const AccountDetailsColumn = ({ classes, firstName, lastName, gender, email }) =
             color="blue-gray"
             className="font-normal"
           >
-            {firstName + " " + lastName}
+            <Highlighter
+              highlightClassName="bg-yellow-400"
+              searchWords={[searchTerm]}
+              autoEscape={true}
+              textToHighlight={firstName + " " + lastName}
+            />
           </Typography>
           <Typography
             variant="small"
@@ -159,7 +165,7 @@ const AccountDetailsColumn = ({ classes, firstName, lastName, gender, email }) =
   )
 }
 
-const UsernameColumn = ({ classes, username }) => {
+const UsernameColumn = ({ classes, username, searchTerm }) => {
   return (
     <td className={classes}>
       <div className="flex flex-col">
@@ -168,7 +174,13 @@ const UsernameColumn = ({ classes, username }) => {
           color="blue-gray"
           className="font-normal"
         >
-          {username}
+          {/* Highlight the search term in the username */}
+          <Highlighter
+            highlightClassName="bg-yellow-200"
+            searchWords={[searchTerm]}
+            autoEscape={true}
+            textToHighlight={username}
+          />
         </Typography>
       </div>
     </td>
