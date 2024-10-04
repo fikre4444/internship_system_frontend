@@ -114,8 +114,8 @@ const AccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle, searchTerms}) => {
                   return (
                     <tr key={username} onClick={() => {navigate("/admin/viewAndEditAccount", { state: TABLE_ROWS[index] });}} className="hover:bg-blue-300 hover:bg-opacity-25 cursor-pointer hover:scale-[1.01] transition-all duration-[50ms]">
                       <AccountDetailsColumn classes={classes} firstName={firstName} 
-                        lastName={lastName} gender={gender} email={email} searchTerm={searchTerms.usernameSearchTerm}/>
-                      <UsernameColumn classes={classes} username={username} searchTerm={searchTerms.usernameSearchTerm} />
+                        lastName={lastName} gender={gender} email={email} searchTerms={searchTerms}/>
+                      <UsernameColumn classes={classes} username={username} searchTerms={searchTerms} />
                       <DepartmentColumn classes={classes} department={department} />
                       <GenderatedPasswordColumn classes={classes} password={password} />
                       <RolesColumn classes={classes} roles={roles} />
@@ -134,7 +134,7 @@ const AccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle, searchTerms}) => {
   );
 }
 
-const AccountDetailsColumn = ({ classes, firstName, lastName, gender, email, searchTerm }) => {
+const AccountDetailsColumn = ({ classes, firstName, lastName, gender, email, searchTerms }) => {
   return (
     <td className={classes}>
       <div className="flex items-center gap-3">
@@ -147,7 +147,7 @@ const AccountDetailsColumn = ({ classes, firstName, lastName, gender, email, sea
           >
             <Highlighter
               highlightClassName="bg-yellow-400"
-              searchWords={[searchTerm]}
+              searchWords={searchTerms}
               autoEscape={true}
               textToHighlight={firstName + " " + lastName}
             />
@@ -165,7 +165,7 @@ const AccountDetailsColumn = ({ classes, firstName, lastName, gender, email, sea
   )
 }
 
-const UsernameColumn = ({ classes, username, searchTerm }) => {
+const UsernameColumn = ({ classes, username, searchTerms }) => {
   return (
     <td className={classes}>
       <div className="flex flex-col">
@@ -177,7 +177,7 @@ const UsernameColumn = ({ classes, username, searchTerm }) => {
           {/* Highlight the search term in the username */}
           <Highlighter
             highlightClassName="bg-yellow-200"
-            searchWords={[searchTerm]}
+            searchWords={searchTerms}
             autoEscape={true}
             textToHighlight={username}
           />

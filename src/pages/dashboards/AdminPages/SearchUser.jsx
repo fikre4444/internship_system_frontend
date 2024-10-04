@@ -8,7 +8,7 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const SearchUser = () => {
   const [ response, setResponse ] = useState(null);
-  const [ usernameSearchTerm, setUsernameSearchTerm ] = useState('');
+  const [ searchTerms, setSearchTerms ] = useState([]);
   const [ searchType, setSearchType ] = useState('SIMPLE');
   
   const TABLE_HEAD = ["Member", "Username", "Department", "Generated Password", "Roles", "Status", "Gender"];
@@ -55,10 +55,10 @@ const SearchUser = () => {
             </div>
             { searchType === "SIMPLE" ? // for Rendering the different types of search
               <>
-                <SimpleSearch {...{setResponse, setUsernameSearchTerm}}/>
+                <SimpleSearch {...{setResponse, setSearchTerms}}/>
               </>
               : searchType === "COMPLEX" ?
-                <ComplexSearch />
+                <ComplexSearch {...{setResponse, setSearchTerms}}/>
               :
               <div>There is not a search type of that manner.</div>
             } 
@@ -76,7 +76,38 @@ const SearchUser = () => {
                   </h1>
                 </div>
                 :
-                <AccountsTable TABLE_HEAD={TABLE_HEAD} TABLE_ROWS={response} searchTerms={{usernameSearchTerm: usernameSearchTerm}}/>
+                <>
+                  <div> {/* this is where we write the search results */}
+                    <h1 className="mt-6 md:mt-3 mb-6 p-6 md:p-3 text-sm md:text-lg lg:text-xl font-semibold bg-green-400 bg-opacity-30 rounded-md shadow-lg text-blue-gray-700 max-w-max">
+                      Results Found: {response.length}
+                    </h1>
+                    { searchType === 'SIMPLE' ?
+                      <div className="my-3 p-2 bg-blue-gray-200 bg-opacity-50">
+                        <h1 className="text-sm md:text-md lg:text-lg font-semibold rounded-md">
+                          Search Term: 
+                          <span className="ml-2 underline p-o bg-blue-gray-300">{searchTerms[0]}</span>
+                        </h1>
+                      </div>
+                      :
+                      <div className="my-3 p-2 bg-blue-gray-200 bg-opacity-50">
+                        <h1 className="text-md md:text-lg lg:text-xl font-extrabold rounded-md">Search Terms</h1>
+                        <h1 className="text-sm md:text-md lg:text-lg font-semibold rounded-md">
+                          First Name = 
+                          <span className="ml-2 underline p-o bg-blue-gray-300">{searchTerms[0]}</span>
+                        </h1>
+                        <h1 className="text-sm md:text-md lg:text-lg font-semibold rounded-md">
+                          Last Name = 
+                          <span className="ml-2 underline p-o bg-blue-gray-300">{searchTerms[1]}</span>
+                        </h1>
+                        <h1 className="text-sm md:text-md lg:text-lg font-semibold rounded-md">
+                          Username = 
+                          <span className="ml-2 underline p-o bg-blue-gray-300">{searchTerms[2]}</span>
+                        </h1>
+                      </div>
+                    }
+                  </div>
+                  <AccountsTable TABLE_HEAD={TABLE_HEAD} TABLE_ROWS={response} searchTerms={searchTerms}/>
+                </>
               }
             </div>
           </>
@@ -88,7 +119,7 @@ const SearchUser = () => {
 export default SearchUser;
 
 
-const SimpleSearch = ({ setResponse, setUsernameSearchTerm }) => {
+const SimpleSearch = ({ setResponse, setSearchTerms }) => {
 
   const usernameRef = useRef(null);
   const [ username, setUsername ] = useState('');
@@ -116,7 +147,7 @@ const SimpleSearch = ({ setResponse, setUsernameSearchTerm }) => {
     axios.get(requestUrl).then((response) => {
       console.log(response.data);
       const result = response.data;
-      setUsernameSearchTerm(username);
+      setSearchTerms([username]);
       setResponse(result);
     }).catch(error => {
       console.log(error);
@@ -158,7 +189,7 @@ const SimpleSearch = ({ setResponse, setUsernameSearchTerm }) => {
 
 }
 
-const ComplexSearch = () => {
+const ComplexSearch = ({ setResponse, setSearchTerms }) => {
   const [helperInfoOpen, setHelperInfoOpen] = useState(true);
   const [searching, setSearching] = useState(false);
   
@@ -205,6 +236,8 @@ const ComplexSearch = () => {
           autoClose: 500,
           closeButton: true
         });
+        setSearchTerms([firstName, lastName, username]) //to show the highlighting
+        setResponse(response.data);
       }else {
         toast.update(searchingUsers, {
           render: "There was an error while Searching or either no account was found with those criteria.",
