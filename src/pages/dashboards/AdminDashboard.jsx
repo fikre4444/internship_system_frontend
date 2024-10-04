@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import SidebarComp from '../../components/Sidebar';
 import { Outlet } from 'react-router-dom';
-import { FaSearch, FaUserCog } from "react-icons/fa";
+import { FaSearch, FaUserPlus } from "react-icons/fa";
 import { FaRegistered } from "react-icons/fa";
 import { HiOutlineUserRemove } from "react-icons/hi";
 import { IconButton } from '@material-tailwind/react';
 import { RxHamburgerMenu } from "react-icons/rx";
+import { FaUserTimes } from "react-icons/fa";
+import { RiUserSearchFill } from "react-icons/ri";
 
 
 
@@ -15,10 +17,9 @@ const AdminDashboard = () => {
   const [toggled, setToggled] = useState(false);
 
   const sidebarItems = [
-    {itemId: 1, itemTitle: "Register User", itemLink: "registerUser", itemIcon: FaUserCog},
-    {itemId: 2, itemTitle: "Search User", itemLink: "searchUser", itemIcon: FaSearch},
-    {itemId: 3, itemTitle: "User Register", itemLink: "adminPage2", itemIcon: FaRegistered},
-    {itemId: 4, itemTitle: "Delete User", itemLink: "deleteUser", itemIcon: HiOutlineUserRemove},
+    {itemId: 1, itemTitle: "Register Users", itemLink: "registerUser", itemIcon: FaUserPlus},
+    {itemId: 2, itemTitle: "Search Users", itemLink: "searchUser", itemIcon: RiUserSearchFill},
+    {itemId: 3, itemTitle: "Delete Users", itemLink: "deleteUser", itemIcon: FaUserTimes},
   ];
 
 
