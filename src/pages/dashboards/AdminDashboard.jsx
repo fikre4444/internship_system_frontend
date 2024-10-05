@@ -7,7 +7,6 @@ import { HiOutlineUserRemove } from "react-icons/hi";
 import { IconButton } from '@material-tailwind/react';
 import { RxHamburgerMenu } from "react-icons/rx";
 import { FaUserTimes } from "react-icons/fa";
-import { RiUserSearchFill } from "react-icons/ri";
 
 
 
@@ -18,7 +17,7 @@ const AdminDashboard = () => {
 
   const sidebarItems = [
     {itemId: 1, itemTitle: "Register Users", itemLink: "registerUser", itemIcon: FaUserPlus},
-    {itemId: 2, itemTitle: "Search Users", itemLink: "searchUser", itemIcon: RiUserSearchFill},
+    {itemId: 2, itemTitle: "Search Users", itemLink: "searchUser", itemIcon: FaSearch},
     {itemId: 3, itemTitle: "Delete Users", itemLink: "deleteUser", itemIcon: FaUserTimes},
   ];
 

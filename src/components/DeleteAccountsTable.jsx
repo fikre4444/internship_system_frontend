@@ -4,11 +4,31 @@ import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter
   Tabs, TabsHeader, Tab, Avatar, IconButton, Tooltip } from "@material-tailwind/react";
 import { FaTableCells } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
+import { memo, useState } from 'react';
 
 import MaleAvatar from '../assets/male_avatar.png';
 import FemaleAvatar from '../assets/female_avatar.png';
-import { Parser } from '@json2csv/plainjs';
 import Highlighter from "react-highlight-words";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
+
+
+const createDeleteConfirmation = async () => {
+  const result = await MySwal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete!',
+    cancelButtonText: 'No, cancel!',
+    customClass: {
+      confirmButton: 'bg-red-300' // Apply your custom class here
+    }
+  });
+  return result.isConfirmed;
+}
 
  
 const checkArrayIntegrity = (arr) => {
@@ -21,40 +41,11 @@ const checkArrayIntegrity = (arr) => {
   return false;
 }
 
-const handleExportTable = (accounts) => {
-  const fields = [
-    { label: 'First Name', value: 'firstName' },
-    { label: 'Last Name', value: 'lastName' },
-    { label: 'Username', value: 'username' },
-    { label: 'Password', value: 'password' },
-    { label: 'Email', value: 'email' },
-    { label: 'Department', value: 'department' }
-  ];
-
-  
-  //create a new instance of the parser
-  const json2csvParser = new Parser({ fields });
-  const csv = json2csvParser.parse(accounts);
-
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = 'data.csv';
-
-  // Append to the document and click to trigger download
-  document.body.appendChild(link);
-  link.click();
-
-  // Clean up the link element
-  document.body.removeChild(link);
-}
-
 const convertToAppropriateTitle = (str) => {
   return str.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase(); }).trim();
 }
 
-const AccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle, searchTerms=[]}) => {
-  const navigate = useNavigate();
+const DeleteAccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle, searchTerms=[], deleteUser}) => {
   
   if(TableTitle != null)
     TableTitle = convertToAppropriateTitle(TableTitle);
@@ -63,6 +54,17 @@ const AccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle, searchTerms=[]}) => 
     return <></>;
   }
 
+  const handleDeleteUser = async (username) => {
+    const isConfirmed = await createDeleteConfirmation();
+    if(!isConfirmed){ // if the user clicks cancel then return
+      console.log("no we are not deleting it");
+      return;
+    }
+    deleteUser("SINGLE", username);        
+  }
+
+  console.log("creating the table here");
+
   return (
     <>
       <Card className="h-full w-full">
@@ -70,21 +72,13 @@ const AccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle, searchTerms=[]}) => 
           <div className="mb-0 flex items-center justify-between gap-8">
             <div>
               <Typography variant="h5" color="blue-gray">
-                {TableTitle ? TableTitle : "Accounts List"}
+                {TableTitle ? TableTitle : "Full Accounts List"}
               </Typography>
-              <Typography color="gray" className="mt-1 font-normal">
-                See information about all members
-              </Typography>
-            </div>
-            <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-              <Button className="flex items-center gap-3 bg-blue-gray-500 m-2" onClick={() => handleExportTable(TABLE_ROWS)} size="sm">
-                <FaTableCells size={20} /> Export to Excel Table
-              </Button>
             </div>
           </div>
         </CardHeader>
-        <CardBody className="overflow-scroll px-0">
-          <table className="mt-4 w-full min-w-max table-auto text-left">
+        <CardBody className="pt-0 mt-0 overflow-scroll px-0">
+          <table className="mt-0 w-full min-w-max table-auto text-left">
             <thead>
               <tr>
                 {TABLE_HEAD?.map((head) => (
@@ -112,15 +106,12 @@ const AccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle, searchTerms=[]}) => 
                     : "p-4 border-b border-blue-gray-50";
   
                   return (
-                    <tr key={username} onClick={() => {navigate("/admin/viewAndEditAccount", { state: TABLE_ROWS[index] });}} className="hover:bg-blue-300 hover:bg-opacity-25 cursor-pointer hover:scale-[1.01] transition-all duration-[50ms]">
+                    <tr key={username} className="hover:bg-blue-300 hover:bg-opacity-25 cursor-pointer hover:scale-[1.01] transition-all duration-[50ms]">
                       <AccountDetailsColumn classes={classes} firstName={firstName} 
                         lastName={lastName} gender={gender} email={email} searchTerms={searchTerms}/>
                       <UsernameColumn classes={classes} username={username} searchTerms={searchTerms} />
                       <DepartmentColumn classes={classes} department={department} />
-                      <GenderatedPasswordColumn classes={classes} password={password} />
-                      <RolesColumn classes={classes} roles={roles} />
-                      <UserEnabledColumn classes={classes} enabled={enabled} />
-                      <GenderColumn classes={classes} gender={gender} />
+                      <RemoveColumn {...{classes, username, handleDeleteUser}}/>
                     </tr>
                   );
                 },
@@ -136,7 +127,7 @@ const AccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle, searchTerms=[]}) => 
 
 const AccountDetailsColumn = ({ classes, firstName, lastName, gender, email, searchTerms }) => {
   return (
-    <td className={classes}>
+    <td className={classes+" w-80"}>
       <div className="flex items-center gap-3">
         <Avatar src={gender === 'MALE' ? MaleAvatar : FemaleAvatar} alt={firstName + lastName} size="sm" />
         <div className="flex flex-col">
@@ -203,73 +194,21 @@ const DepartmentColumn = ({ classes, department }) => {
   )
 }
 
-const GenderatedPasswordColumn = ({ classes, password }) => {
+const RemoveColumn = ({classes, handleDeleteUser, username}) => {
+
   return (
     <td className={classes}>
       <div className="flex flex-col">
-        <Typography
-          variant="small"
-          color="blue-gray"
-          className="font-normal"
+        <button onClick={() => {handleDeleteUser(username)}} 
+          className="text-gray-700 cursor-pointer hover:text-red-500 duration-100 hover:scale-110 py-1 border-2 border-gray-700 hover:border-red-500 rounded-lg"
         >
-          {password === null || password === "" || isBcryptHash(password) ? "Password is Set by User." : password }
-        </Typography>
-      </div>
-    </td>
-  )
-}
-
-const RolesColumn = ({ classes, roles }) => {
-  console.log("the roles are");
-  console.log(roles);
-  return (
-    <td className={classes}>
-      <div className="flex flex-col">
-        { roles.map(role => 
-            <div className="w-max m-1" key={role.role}>
-              <Chip variant="ghost" size="sm" value={role.name}
-                className="bg-deep-orange-300 bg-opacity-30 text-black text-opacity-70 capitalize"
-              />
-            </div>
-          )
-        }
-      </div>
-    </td>
-  )
-}
-
-const UserEnabledColumn = ({ classes, enabled }) => {
-  return (
-    <td className={classes}>
-      <div className="w-max">
-        <Chip
-          variant="ghost"
-          size="sm"
-          value={enabled ? "Active" : "Disabled"}
-          color={enabled ? "green" : "red"}
-        />
+          Remove
+        </button>
       </div>
     </td>
   );
 }
 
-const GenderColumn = ({ classes, gender }) => {
-  return (
-    <td className={classes}>
-      <Typography
-        variant="small"
-        color="blue-gray"
-        className="font-normal"
-      >
-        {gender === 'MALE' ? 'Male' : 'Female'}
-      </Typography>
-    </td>
-  );
-}
 
-const isBcryptHash = (hash) => {
-  // Bcrypt hashes start with "$2a$" or "$2b$" or "$2y$"
-  const bcryptPrefix = /^(\$2a\$|\$2b\$|\$2y\$)/;
-  return bcryptPrefix.test(hash);
-}
-export default AccountsTable;
+
+export default memo(DeleteAccountsTable);
