@@ -179,9 +179,9 @@ const DepartmentBarChart = ({ data }) => {
 }
 
 const StudentStaffChart = ({data}) => {
-  const COLORS = ['#0088FE', '#00C49F'];
+  const COLORS = ['#e57373', '#00C49F'];
   return (
-    <div className="bg-blue-300 bg-opacity-25 shadow-md p-2 rounded-lg">
+    <div className="bg-opacity-25 shadow-md p-2 rounded-lg">
       <ResponsiveContainer width={400} height={350}>
         <PieChart>
           <Pie
