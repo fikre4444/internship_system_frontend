@@ -51,7 +51,15 @@ const DeleteAccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle, searchTerms=[]
     TableTitle = convertToAppropriateTitle(TableTitle);
 
   if(!(checkArrayIntegrity(TABLE_HEAD) && checkArrayIntegrity(TABLE_ROWS))){
-    return <></>;
+    return (
+      <>
+        <div className="flex justify-center mt-6">
+          <h1 className="m-3 mt-6 md:mt-3 mb-6 p-6 md:p-4 text-sm md:text-lg lg:text-xl font-semibold bg-red-400 bg-opacity-30 rounded-xl shadow-lg text-blue-gray-700 max-w-max">
+            No Accounts Have been found.
+          </h1>
+        </div>
+      </>
+    );
   }
 
   const handleDeleteUser = async (username) => {

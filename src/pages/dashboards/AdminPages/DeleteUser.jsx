@@ -1,5 +1,5 @@
 import { Button, Input, Option, Radio, Select } from "@material-tailwind/react";
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 import axios from 'axios';
 import Loader from '../../../components/Loader';
 import DeleteAccountsTable from "../../../components/DeleteAccountsTable";
@@ -9,12 +9,16 @@ import { useCallback } from "react";
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const DeleteUser = () => {
+  const debouncingRef = useRef(null);
+
   const [ isLoading, setIsLoading ] = useState(false);
   const [ successfulResponse, setSuccessfulResponse] = useState(false);
+  const [ unchangeableAccountList, setUnchangeableAccountList] = useState([]);
   const [ accountsList, setAccountsList ] = useState([]);
+  const [ searchTerms, setSearchTerms ] = useState([]);
 
   const [ department, setDepartment ] = useState('');
-  const [ username, setUsername ] = useState('');
+  const [ filter, setFilter ] = useState('');
   const [ typeUserDelete, setTypeUserDelete ] = useState('BOTH');
   const [ errors, setErrors ] = useState({
     department: "", typeUser: ""
@@ -33,6 +37,7 @@ const DeleteUser = () => {
           const data = response.data;
           console.log(data);
           setAccountsList([...data]);
+          setUnchangeableAccountList([...data]);
           if(data.length > 0)
             setSuccessfulResponse(true);
         } else {
@@ -57,6 +62,27 @@ const DeleteUser = () => {
 
   const handleTypeUserChange = (newTypeUser) => {
     setTypeUserDelete(newTypeUser);
+  }
+
+  const changeAccountsList = (filterValue) => {
+    const newAccountList = unchangeableAccountList.filter((account) => {
+      if(account.firstName.toLowerCase().includes(filterValue.toLowerCase())) return true;
+      if(account.lastName.toLowerCase().includes(filterValue.toLowerCase())) return true;
+      if(account.username.toLowerCase().includes(filterValue.toLowerCase())) return true;
+      return false;
+    });
+    setSearchTerms([filterValue]);
+    setAccountsList(newAccountList);
+  }
+
+  const handleFilterChange = (filterValue) => {
+    console.log("doing something")
+    setFilter(filterValue);
+    if(debouncingRef.current){
+      clearTimeout(debouncingRef.current)
+    }
+    debouncingRef.current = setTimeout(() => changeAccountsList(filterValue) , 1000);
+    console.log("done");
   }
 
   const deleteUser = useCallback(async (type, username, department) => {
@@ -130,9 +156,9 @@ const DeleteUser = () => {
                   <Input
                     color="blue"
                     label="Input Firstname, Lastname or Username"
-                    value={username}
+                    value={filter}
                     onChange={(e) => {
-                      setUsername(e.target.value);
+                      handleFilterChange(e.target.value);
                     }}
                   />
                 </div>
@@ -177,7 +203,7 @@ const DeleteUser = () => {
               </Button>
             </div>
           </div>
-          <DeleteAccountsTable TABLE_ROWS = {accountsList} TABLE_HEAD={TABLE_HEAD} deleteUser={deleteUser}/>
+          <DeleteAccountsTable TABLE_ROWS = {accountsList} TABLE_HEAD={TABLE_HEAD} deleteUser={deleteUser} searchTerms={searchTerms}/>
         </div>
         :
         <div>
