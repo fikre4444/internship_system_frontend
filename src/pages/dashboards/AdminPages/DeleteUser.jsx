@@ -96,6 +96,7 @@ const DeleteUser = () => {
       if(account.firstName.toLowerCase().includes(filterValue.toLowerCase())) return true;
       if(account.lastName.toLowerCase().includes(filterValue.toLowerCase())) return true;
       if(account.username.toLowerCase().includes(filterValue.toLowerCase())) return true;
+      if(account.department.name.toLowerCase().includes(filterValue.toLowerCase())) return true;
       return false;
     });
     setSearchTerms([filterValue]);
@@ -202,8 +203,8 @@ const DeleteUser = () => {
           data: requestBody
         });
         if(response.status === 200){ //if the response is ok
-          const data = response.data;
-          removeAccounts([data]);
+          const data = response.data; //since data is an array we pass it directly
+          removeAccounts(data);
           toast.update(deletingAccountId, {
             render: "Successfully Deleted Department!",
             type: "success",
@@ -234,6 +235,7 @@ const DeleteUser = () => {
   }, [accountsList]);
 
   const removeAccounts = (deletedAccounts) => {
+    console.log(deletedAccounts);
     const newAccountsList = accountsList.filter((account) => {
       return !deletedAccounts.some((deletedAcc) => deletedAcc.username === account.username);
     });
@@ -267,7 +269,7 @@ const DeleteUser = () => {
               </div>
               <div className="max-w-72 bg-blue-200 bg-opacity-50 rounded-md shadow-sm p-2 m-2">
                 <p className="text-xs text-gray-700 font-semibold">
-                  Please Input a first name, last name or user name, to filter the table below.
+                  Please Input a first name, last name, username, or department to filter the table below.
                 </p>
               </div>
             </div>

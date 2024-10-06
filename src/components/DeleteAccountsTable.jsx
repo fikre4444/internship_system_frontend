@@ -118,7 +118,7 @@ const DeleteAccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle, searchTerms=[]
                       <AccountDetailsColumn classes={classes} firstName={firstName} 
                         lastName={lastName} gender={gender} email={email} searchTerms={searchTerms}/>
                       <UsernameColumn classes={classes} username={username} searchTerms={searchTerms} />
-                      <DepartmentColumn classes={classes} department={department} />
+                      <DepartmentColumn classes={classes} department={department} searchTerms={searchTerms}/>
                       <RemoveColumn {...{classes, username, handleDeleteUser}}/>
                     </tr>
                   );
@@ -186,7 +186,7 @@ const UsernameColumn = ({ classes, username, searchTerms }) => {
   )
 }
 
-const DepartmentColumn = ({ classes, department }) => {
+const DepartmentColumn = ({ classes, department, searchTerms }) => {
   return (
     <td className={classes}>
       <div className="flex flex-col">
@@ -195,8 +195,14 @@ const DepartmentColumn = ({ classes, department }) => {
           color="blue-gray"
           className="font-normal"
         >
-          {department.name}
+          <Highlighter
+            highlightClassName="bg-yellow-400"
+            searchWords={searchTerms}
+            autoEscape={true}
+            textToHighlight={department.name}
+          />
         </Typography>
+            
       </div>
     </td>
   )
