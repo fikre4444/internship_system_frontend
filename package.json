@@ -15,6 +15,7 @@
     "@material-tailwind/react": "^2.1.10",
     "@reduxjs/toolkit": "^2.2.7",
     "axios": "^1.7.7",
+    "framer-motion": "^11.11.1",
     "front-end": "file:",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",

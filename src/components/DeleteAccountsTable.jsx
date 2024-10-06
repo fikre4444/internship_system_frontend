@@ -6,6 +6,8 @@ import { FaTableCells } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
 import { memo, useState } from 'react';
 
+import { motion, AnimatePresence } from "framer-motion";
+
 import MaleAvatar from '../assets/male_avatar.png';
 import FemaleAvatar from '../assets/female_avatar.png';
 import Highlighter from "react-highlight-words";
@@ -106,24 +108,37 @@ const DeleteAccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle, searchTerms=[]
               </tr>
             </thead>
             <tbody>
-              {TABLE_ROWS?.map(
-                ({ firstName, lastName, email, username, department, password, enabled, gender, roles }, index) => {
-                  const isLast = index === TABLE_ROWS.length - 1;
-                  const classes = isLast
-                    ? "p-4"
-                    : "p-4 border-b border-blue-gray-50";
-  
-                  return (
-                    <tr key={username} className="hover:bg-blue-300 hover:bg-opacity-25 cursor-pointer hover:scale-[1.01] transition-all duration-[50ms]">
-                      <AccountDetailsColumn classes={classes} firstName={firstName} 
-                        lastName={lastName} gender={gender} email={email} searchTerms={searchTerms}/>
-                      <UsernameColumn classes={classes} username={username} searchTerms={searchTerms} />
-                      <DepartmentColumn classes={classes} department={department} searchTerms={searchTerms}/>
-                      <RemoveColumn {...{classes, username, handleDeleteUser}}/>
-                    </tr>
-                  );
-                },
-              )}
+              <AnimatePresence>
+                {TABLE_ROWS?.map(
+                  ({ firstName, lastName, email, username, department, password, enabled, gender, roles }, index) => {
+                    const isLast = index === TABLE_ROWS.length - 1;
+                    const classes = isLast
+                      ? "p-4"
+                      : "p-4 border-b border-blue-gray-50";
+    
+                    return (
+                      <motion.tr
+                        key={username}
+                        className="hover:bg-blue-300 hover:bg-opacity-25 cursor-pointer hover:scale-[1.01] transition-all duration-[50ms]"
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -50 }}
+                        transition={{
+                          scale: { duration: 0.05 }, // 50ms for scale transition
+                          opacity: { duration: 0.3 }, // 300ms for opacity transition
+                        }}
+                        whileHover={{ scale: 1.02 }}
+                      >
+                        <AccountDetailsColumn classes={classes} firstName={firstName} 
+                          lastName={lastName} gender={gender} email={email} searchTerms={searchTerms}/>
+                        <UsernameColumn classes={classes} username={username} searchTerms={searchTerms} />
+                        <DepartmentColumn classes={classes} department={department} searchTerms={searchTerms}/>
+                        <RemoveColumn {...{classes, username, handleDeleteUser}}/>
+                      </motion.tr>
+                    );
+                  },
+                )}
+              </AnimatePresence>
             </tbody>
           </table>
         </CardBody>
@@ -214,7 +229,7 @@ const RemoveColumn = ({classes, handleDeleteUser, username}) => {
     <td className={classes}>
       <div className="flex flex-col">
         <button onClick={() => {handleDeleteUser(username)}} 
-          className="text-gray-700 cursor-pointer hover:text-red-500 duration-100 hover:scale-110 py-1 border-2 border-gray-700 hover:border-red-500 rounded-lg"
+          className="text-gray-700 cursor-pointer hover:text-red-500 duration-100 hover:scale-105 py-1 border-2 border-gray-700 hover:border-red-500 rounded-lg"
         >
           Remove
         </button>
