@@ -55,7 +55,7 @@ const DeleteUser = () => {
   useEffect(() => {
     const fetchAllUsers = async () => {
       setIsLoading(true);
-      // await sleep(2000);
+      await sleep(2000);
       try{
         const response = await axios.get("/api/admin/get-all-accounts");
         if(response.status === 200){
@@ -241,6 +241,7 @@ const DeleteUser = () => {
     });
     console.log("the new length of the accounts list is "+newAccountsList.length);
     setAccountsList(newAccountsList);
+    setUnchangeableAccountList(newAccountsList);
   }
 
   return (

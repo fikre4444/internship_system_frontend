@@ -281,6 +281,47 @@ const RegisterCustom = () => {
     });
   }
 
+  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+  const handleEmailNotifications = async () => {
+    console.log(registeredUser);
+    const username = registeredUser[0].username;
+    const sendingRequestId = toast.loading("Sending Emails!");
+    toast.update(sendingRequestId, {
+      closeButton: true
+    });
+    await sleep(2000);
+    try{
+      const requestUrl = "/api/admin//notify-through-email";
+      const response = await axios.post(requestUrl, [username]);
+      if(response.status === 200){
+        console.log(response.data);
+        toast.update(sendingRequestId, {
+          render: response.data.message,
+          isLoading: false,
+          type: 'success',
+          autoClose: 2000,
+        });
+      }else {
+        console.log(response.data);
+        toast.update(sendingRequestId, {
+          render: response.data.message,
+          isLoading: false,
+          type: 'error',
+          autoClose: 2000,
+        });
+      }
+    }catch(error){
+      console.log(error);
+      toast.update(sendingRequestId, {
+        render: "there was an error while trying to send",
+        type: 'error',
+        isLoading: false,
+        autoClose: 2000,
+      });
+    }
+  }
+
 
 
 
@@ -288,7 +329,6 @@ const RegisterCustom = () => {
     <div className="m-4"> {/* for custom registration*/}
     { !gotResponse ?
       <>
-        <ToastContainer />
         <h1 className="text-xl text-blue-gray-700 font-extrabold">Custom Registration</h1>
         <div className="">
           <h3 className="text-md text-gray-800 font-extrabold">Type Of User</h3>
@@ -432,6 +472,12 @@ const RegisterCustom = () => {
         <Button onClick={handleReturnToRegistration} className="bg-blue-gray-500" >
             Back to Custom Registration
         </Button>
+        <Button 
+            className="bg-blue-gray-500 m-2"
+            onClick={() => handleEmailNotifications()}
+          >
+            Notify Accounts Through Email
+          </Button>
         <AccountsTable TABLE_HEAD={TABLE_HEAD} TABLE_ROWS={registeredUser} />
 
         

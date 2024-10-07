@@ -25,6 +25,17 @@ const RegisterUser = () => {
     setGotRegistrationResponse(false);
   }
 
+  const getRegisteredUsernames = () => {
+    return ['abcd', 'efgh'];
+  }
+
+  const handleEmailNotification = () => {
+    const registredUsernames = getRegisteredUsernames();
+    console.log(registredUsernames);
+  }
+
+
+
   
   return (
     <div className="p-3">
@@ -61,7 +72,12 @@ const RegisterUser = () => {
           <Button onClick={handleReturnToRegistration} className="bg-blue-gray-500 m-2">
             Return to Registration
           </Button>
-          <Button className="bg-blue-gray-500 m-2">Notify Accounts Through Email</Button>
+          <Button 
+            className="bg-blue-gray-500 m-2"
+            onClick={() => handleEmailNotification()}
+          >
+            Notify Accounts Through Email
+          </Button>
           <AccountsTable TABLE_HEAD={TABLE_HEAD} TABLE_ROWS={accounts}/>
         </div> 
       }      

@@ -5,6 +5,9 @@ import { validateUsername } from '../../utils/formatting';
 import { ToastContainer, toast } from 'react-toastify';
 import AccountsTable from '../AccountsTable';
 
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+
 const RegisterEstudent = () => {
   const [ IsSubmitting, setIsSubmitting ] = useState(false);
   const [ gotResponse, setGotResponse ] = useState(false);
@@ -94,7 +97,7 @@ const RegisterEstudent = () => {
       username: username.trim()
     }
     if(amount === 'SINGLE'){
-      requestObject.department = "";
+      requestObject.department = null;
     }
     if(amount === 'BATCH'){
       requestObject.username = "";
@@ -141,11 +144,66 @@ const RegisterEstudent = () => {
     }
   }
 
+  const getRegisteredUsernames = () => {
+    if(!gotResponse){
+      return;
+    }
+    let registeredUsernames = [];
+    returnedResponse.registeredStudents?.forEach(student => {
+      registeredUsernames.push(student.username);
+    })
+    returnedResponse.registeredStaffs?.forEach(staff => {
+      registeredUsernames.push(staff.username);
+    })
+    return registeredUsernames;
+  }
+
+  const handleEmailNotifications = async () => {
+    const registeredUsernames = getRegisteredUsernames();
+    if(registeredUsernames.length < 1) {
+      toast.error("There was an error there are no list of emails");
+    }
+    console.log(registeredUsernames);
+    const sendingRequestId = toast.loading("Sending Emails!");
+    toast.update(sendingRequestId, {
+      closeButton: true
+    });
+    await sleep(2000);
+    try{
+      const requestUrl = "/api/admin//notify-through-email";
+      const response = await axios.post(requestUrl, registeredUsernames);
+      if(response.status === 200){
+        console.log(response.data);
+        toast.update(sendingRequestId, {
+          render: response.data.message,
+          type: 'success',
+          isLoading: false,
+          autoClose: 2000,
+        });
+      }else {
+        console.log(response.data);
+        toast.update(sendingRequestId, {
+          render: response.data.message,
+          type: 'error',
+          isLoading: false,
+          autoClose: 2000,
+        });
+      }
+    }catch(error){
+      console.log(error);
+      toast.update(sendingRequestId, {
+        render: "there was an error while trying to send",
+        type: 'error',
+        isLoading: false,
+        autoClose: 2000,
+      });
+    }
+  }
+
   return (
     <div className="m-4"> {/* for from estudent registration*/}
       {!gotResponse ?
         <>
-          <ToastContainer />
           <h1 className="text-xl text-blue-gray-700 font-extrabold">Register From E-Student</h1>
           <div className="m-2">
             <h3 className="text-md text-gray-800 font-extrabold">Amount of Users</h3>
@@ -214,7 +272,7 @@ const RegisterEstudent = () => {
             </div>
           </div>
           <div className="m-2">
-            <h3 className="text-md text-gray-800 font-extrabold">Type Of User</h3>
+            <h3 className="text-md text-gray-800 font-extrabold">Username</h3>
             <div className="flex w-72 flex-col gap-6 m-2">
               <div className="relative group">
                 <Input
@@ -251,6 +309,12 @@ const RegisterEstudent = () => {
           <h1 className="text-xl font-bold text-green-500">Got Back Response!</h1>
           <Button onClick={handleReturnToRegistration} className="bg-blue-gray-500" >
               Back to Estudent Registration
+          </Button>
+          <Button 
+            className="bg-blue-gray-500 m-2"
+            onClick={() => handleEmailNotifications()}
+          >
+            Notify Accounts Through Email
           </Button>
           { Object.keys(returnedResponse).map(key => 
               (

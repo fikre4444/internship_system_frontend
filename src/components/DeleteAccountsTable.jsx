@@ -120,9 +120,9 @@ const DeleteAccountsTable = ({TABLE_HEAD, TABLE_ROWS, TableTitle, searchTerms=[]
                       <motion.tr
                         key={username}
                         className="hover:bg-blue-300 hover:bg-opacity-25 cursor-pointer hover:scale-[1.01] transition-all duration-[50ms]"
-                        initial={{ opacity: 0, y: 50 }}
+                        initial={{ opacity: 0, y: 80 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -50 }}
+                        exit={{ opacity: 0, y: 80 }}
                         transition={{
                           scale: { duration: 0.05 }, // 50ms for scale transition
                           opacity: { duration: 0.3 }, // 300ms for opacity transition

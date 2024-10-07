@@ -129,7 +129,7 @@ const SimpleSearch = ({ setResponse, setSearchTerms }) => {
 
   const validateInput = () => {
     if(username === null || username === ''){
-      setUsernameError("Please Input Username first.");
+      setUsernameError("Please Input something first.");
       usernameRef.current.focus();
       return false;
     }
@@ -143,7 +143,7 @@ const SimpleSearch = ({ setResponse, setSearchTerms }) => {
     setUsernameError("");
 
     setIsLoading(true);
-    const requestUrl = "/api/admin/get-accounts-by-username?username="+username;
+    const requestUrl = "/api/admin/simple-search?searchTerm="+username;
     axios.get(requestUrl).then((response) => {
       console.log(response.data);
       const result = response.data;
@@ -165,7 +165,7 @@ const SimpleSearch = ({ setResponse, setSearchTerms }) => {
           <div className="relative group">
             <Input
               color="blue"
-              label="Input part of a username"
+              label="Input a search term"
               value={username}
               onChange={(e) => {
                 setUsername(e.target.value);
@@ -183,6 +183,11 @@ const SimpleSearch = ({ setResponse, setSearchTerms }) => {
             {!isLoading ? <>Search Users</> : <>Searching</>}
           </Button>
         </div>
+      </div>
+      <div className="ml-5 max-w-72 bg-blue-200 bg-opacity-50 rounded-md shadow-sm p-2 m-2">
+        <p className="text-xs text-gray-700 font-semibold">
+          The search term can be first name, last name, username, or department.
+        </p>
       </div>
     </>
   )
