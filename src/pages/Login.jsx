@@ -87,15 +87,16 @@ const Login = () => {
         dispatch(loginSuccess({
           currentUser: account.account,
           token: token,
-          needPasswordChange: account.needPasswordChange,
+          needPasswordChange: account.passwordNeedChange,
         }));
         dispatch(setLoggedInAs({
           loggedInAs: signedInAs
         }))
+        //if the password is not updated yet, the default link should be there
         dispatch(setDefaultHome({
-          defaultHome: link
+          defaultHome: account.passwordNeedChange ? "/needs-password-update" : link
         }))
-        localStorage.setItem("defaultHome", link);
+        localStorage.setItem("defaultHome", account.passwordNeedChange ? "/needs-password-update" : link);
         //after setting the account set the token and go to the intended page
         localStorage.setItem("jwt", token);
         navigate(link, { state: state });

@@ -42,13 +42,17 @@ const userSlice = createSlice({
     setDefaultHome: (state, action) => {
       const { defaultHome } = action.payload;
       state.defaultHome = defaultHome;
+    }, 
+    setNeedPasswordChange: (state, action) => {
+      const { needPasswordChange } = action.payload;
+      state.needPasswordChange = needPasswordChange;
     }
   }
 
 });
 
 
-export const { loginSuccess, logoutSuccess, setCurrentUser, setLoggedInAs, setDefaultHome } = userSlice.actions;
+export const { loginSuccess, logoutSuccess, setCurrentUser, setLoggedInAs, setDefaultHome, setNeedPasswordChange } = userSlice.actions;
 export const selectLoggedInState = state => state.user.isLoggedIn;
 
 export default userSlice.reducer;

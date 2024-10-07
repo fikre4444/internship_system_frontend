@@ -4,6 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
 
 const checkAuthTokenAndFetchUser = async (dispatch, navigate, location) => {
+  console.log("auth util is running here");
   const token = localStorage.getItem('jwt');
  
 
@@ -36,7 +37,7 @@ const checkAuthTokenAndFetchUser = async (dispatch, navigate, location) => {
         dispatch(loginSuccess({
           currentUser: account.account,
           token: token,
-          needPasswordChange: account.needPasswordChange,
+          needPasswordChange: account.passwordNeedChange,
         }));
 
         const defaultHomeLink = localStorage.getItem("defaultHome");

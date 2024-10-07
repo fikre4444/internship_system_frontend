@@ -39,6 +39,7 @@ import DashboardDefaultPage from './pages/DashboardDefaultPage';
 import AdminDefaultPage from './pages/dashboards/AdminPages/AdminDefaultPage';
 import SearchUser from './pages/dashboards/AdminPages/SearchUser';
 import ViewAndEditAccount from './pages/dashboards/AdminPages/ViewAndEditAccount';
+import PasswordUpdate from './components/PasswordUpdate';
 
 function App() {
 
@@ -102,6 +103,7 @@ function App() {
           <Route path="/login-options" element={<ProtectedRoute><LoginOptions /></ProtectedRoute>} />
           <Route path="/reset-password" element={<ProtectedRoute><ResetPassword /></ProtectedRoute>} />
           <Route path="/no-role" element={<ProtectedRoute><NoRole /></ProtectedRoute>} />
+          <Route path="/needs-password-update" element={<ProtectedRoute><PasswordUpdate /></ProtectedRoute>} />
         </Routes>
       </Layout>
   )
