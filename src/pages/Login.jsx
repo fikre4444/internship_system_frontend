@@ -8,6 +8,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { Button } from "@material-tailwind/react";
 import { useDispatch } from 'react-redux';
 import { loginSuccess, logoutSuccess, setDefaultHome, setLoggedInAs } from '../redux/slices/userSlice';
+import { sleep, getSignedInAs, getLinkAndState } from '../utils/otherUtils';
+
 
 const Login = () => {
   console.log("login runs")
@@ -187,122 +189,5 @@ const Login = () => {
   );
 }
 
-const roleMap = {
-  "ROLE_ADVISOR" : "/advisor",
-  "ROLE_STUDENT" : "/student",
-  "ROLE_HEAD_INTERNSHIP_COORDINATOR" : "/head-coordinator",
-  "ROLE_DEPARTMENT_INTERNSHIP_COORDINATOR" : "/department-coordinator",
-  "ROLE_ADMIN" : "/admin", 
-  "ROLE_STAFF" : "/no-role"
-}
-
-const roleNamesFromLink = {
-  "/advisor" : "Advisor",
-  "/student" : "Student",
-  "/head-coordinator" : "Head Coordinator",
-  "/department-coordinator" : "Department Coordinator",
-  "/admin" : "Administrator",
-  "/login-options" : "Undetermined-Yet",
-  "/no-role" : "Undetermined"
-}
-
-const getDashboardLinkBasedOnRole = (role) => {
-  return roleMap[role];
-};
-
-const getSignedInAs = (linkName) => {
-  return roleNamesFromLink[linkName]; 
-}
-
-const getLinkAndState = (decodedToken) => {
-  const linkAndState = {
-    link : "",
-    state : null
-  };
-  const roles = decodedToken.roles;
-  if(roles.length == 1){
-    if(roles.includes("ROLE_STUDENT")){
-      linkAndState.link = getDashboardLinkBasedOnRole(roles[0]);
-    } else if(roles.includes("ROLE_STAFF")){
-      linkAndState.link = getDashboardLinkBasedOnRole(roles[0]); //assign the link no-role
-    }
-  }else if(roles.length == 2){
-    if(roles.includes("ROLE_STAFF")){ //if it is a staff member and has another role
-      const index = roles.indexOf("ROLE_STAFF");
-      const otherRole = roles[1 - index];
-      linkAndState.link = getDashboardLinkBasedOnRole(otherRole);
-    }
-    else {
-      linkAndState.link = "/no-role";
-    }
-  } else if(roles.length > 2){
-      if(roles.includes("ROLE_STAFF")){
-        linkAndState.link = "/login-options";
-        linkAndState.state = {roles: roles};
-      }else { //might change later with a more better logic
-        linkAndState.link = "/no-role";
-      }
-  }
-  return linkAndState;
-};
-
-
-
 export default Login;
-
-
-
-    // <div className="bg-red-300 flex flex-col gap-3 p-3">
-    //   <div>
-    //     <label htmlFor="username">Username</label>
-    //     <input id="username" value={username} onChange={(e) => setUsername(e.target.value)} type="text" />
-    //   </div>
-    //   <div>
-    //     <label htmlFor="password">Password</label>
-    //     <input id="password" value={password} onChange={(e) => setPassword(e.target.value)} type="password" />
-    //   </div>
-    //   <div>
-    //     <button 
-    //       className="p-2 text-xl font-bold rounded-md bg-blue-300 px-8" 
-    //       type="button"
-    //       onClick={handleLogin}
-    //     >
-    //         Login
-    //     </button>
-    //     <Link to="/forgot-password">Forgot Password</Link>
-    //   </div>
-    // </div>
-
-
-    //an option of using async with the toast promise
-  //   const loginPromise = new Promise(async (resolve, reject) => {
-  //     try {
-  //       const response = await axios.post("/api/auth/login", {
-  //         username: username,
-  //         password: password
-  //       });
-
-  //       const token = response.data;
-  //       const decodedToken = jwtDecode(token);
-
-  //       const linkAndState = getLinkAndState(decodedToken);
-  //       localStorage.setItem("jwt", token);
-
-  //       // Navigate after successful login
-  //       navigate(linkAndState.link, { state: linkAndState.state });
-
-  //       resolve();  // Resolve the promise when successful
-  //     } catch (error) {
-  //       console.error("Login failed", error);
-  //       reject(error);  // Reject the promise on error
-  //     }
-  //   });
-
-  //   // Use toast.promise for handling the toast notifications
-  //   toast.promise(loginPromise, {
-  //     pending: 'Logging in...',
-  //     success: 'Successfully logged in!',
-  //     error: 'Login failed. Please check your credentials.'
-  //   });
-  // };
 

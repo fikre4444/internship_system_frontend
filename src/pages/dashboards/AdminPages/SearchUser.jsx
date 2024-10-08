@@ -186,8 +186,15 @@ const SimpleSearch = ({ setResponse, setSearchTerms }) => {
       </div>
       <div className="ml-5 max-w-72 bg-blue-200 bg-opacity-50 rounded-md shadow-sm p-2 m-2">
         <p className="text-xs text-gray-700 font-semibold">
-          The search term can be first name, last name, username, or department.
+          The search term can be
         </p>
+        <div className="flex flex-wrap gap-2 items-start">
+          <Chip className="capitalize p-1 text-gray-50 font-medium bg-black bg-opacity-20" size="sm" variant="ghost" value="First Name" />
+          <Chip className="capitalize p-1 text-gray-50 font-medium bg-black bg-opacity-20" size="sm" variant="ghost" value="Last Name" />
+          <Chip className="capitalize p-1 text-gray-50 font-medium bg-black bg-opacity-20" size="sm" variant="ghost" value="Username" />
+          <Chip className="capitalize p-1 text-gray-50 font-medium bg-black bg-opacity-20" size="sm" variant="ghost" value="Department" />
+        </div>
+        
       </div>
     </>
   )

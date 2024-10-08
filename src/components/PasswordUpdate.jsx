@@ -1,4 +1,4 @@
-import { Button } from '@material-tailwind/react';
+import { Button, Input } from '@material-tailwind/react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
@@ -55,7 +55,7 @@ const PasswordUpdate = ({ setNeedsPasswordUpdate }) => {
       console.log("current is null or emplty")
       setErrors({
         ...errors, 
-        current: "You have to Input the Current Password Here."
+        current: "Please input your current password first."
       })
       return false;
     }
@@ -166,51 +166,71 @@ const PasswordUpdate = ({ setNeedsPasswordUpdate }) => {
   };
 
   return (
-    <div>
-      <h1 className="text-xl font-bold text-blue-400">Change Your Password</h1>
-      <div className="p-3 bg-slate-500 m-3">
-        <div className="flex gap-4 m-1 mb-3">
-          <label htmlFor="current">Current Password:</label>
-          <input
-            className={`border-2 rounded border-black ${isKeepingPassword ? "border-red-500" : ""}`}
-            id="current"
-            type="password"
-            value={current}
-            onChange={(e) => {setCurrent(e.target.value); setErrors({...errors, current: ""})}}
-            ref={currentPasswordInputRef} // Reference to focus when keeping password
-          />
+    <div className="">
+      <h1 className="m-2 p-1 text-lg md:text-2xl font-bold text-blue-400 tracking-wide">Your Password Needs to be Updated</h1>
+      <div className="m-3 ml-5 md:ml-10">
+        <div> {/* this is a whole input component */}
+          <div className="flex flex-col items-start m-1 mb-3">
+            <label className="font-bold text-gray-600" htmlFor="current">Current Password</label>
+            <div className="ml-1 mt-2 w-80">
+              <Input
+                label="Input Your Current Password"
+                color="red"
+                className={`border-2 rounded border-black ${isKeepingPassword ? "border-red-500" : ""}`}
+                id="current"
+                type="password"
+                value={current}
+                onChange={(e) => {setCurrent(e.target.value); setErrors({...errors, current: ""})}}
+                ref={currentPasswordInputRef} // Reference to focus when keeping password
+              />
+            </div>
+          </div>
+          {errors.current && (<p className="text-red-500 m-2 text-xs font-bold tracking-wide">{errors.current}</p>)}
         </div>
-        {errors.current && (<p className="text-red-500 mb-3">{errors.current}</p>)}
-        <div className="flex gap-4 m-1 mb-3">
-          <label htmlFor="newPassword">New Password:</label>
-          <input
-            className={`border-2 rounded ${isKeepingPassword ? "bg-gray-200 border-gray-400" : "border-black"}`}
-            id="newPassword"
-            type="password"
-            value={newPassword}
-            onChange={(e) => {setNewPassword(e.target.value); setErrors({...errors, newPassword: ""})}}
-            disabled={isKeepingPassword}
-          />
+        <div> {/* another input component */}
+          <div className="flex flex-col items-start m-1 mb-3">
+            <label className="font-bold text-gray-600" htmlFor="newPassword">New Password</label>
+            <div className="ml-1 mt-2 w-80">
+              <Input
+                label="Input A New Password"
+                color="blue"
+                className={`border-2 rounded ${isKeepingPassword ? "bg-gray-200 border-gray-400" : "border-black"}`}
+                id="newPassword"
+                type="password"
+                value={newPassword}
+                onChange={(e) => {setNewPassword(e.target.value); setErrors({...errors, newPassword: ""})}}
+                disabled={isKeepingPassword}
+              />
+            </div>
+          </div>
+          {errors.newPassword && (<p className="text-red-500 m-2 text-xs font-bold tracking-wide">{errors.newPassword}</p>)}
         </div>
-        {errors.newPassword && (<p className="text-red-500 mb-3">{errors.newPassword}</p>)}
-        <div className="flex gap-4 m-1 mb-3">
-          <label htmlFor="repeat">Repeat Password:</label>
-          <input
-            className={`border-2 rounded ${isKeepingPassword ? "bg-gray-200 border-gray-400" : "border-black"}`}
-            id="repeat"
-            type="password"
-            value={repeat}
-            onChange={(e) => {setRepeat(e.target.value); setErrors({...errors, repeat: ""})}}
-            disabled={isKeepingPassword}
-          />
+        <div> {/* this is the third and last input component */}
+          <div className="flex flex-col items-start m-1 mb-3">
+            <label className="font-bold text-gray-600" htmlFor="repeat">Repeat Password</label>
+            <div className="ml-1 mt-2 w-80">
+              <Input
+                label="Repeat The New Password"
+                color="green"
+                className={`border-2 rounded ${isKeepingPassword ? "bg-gray-200 border-gray-400" : "border-black"}`}
+                id="repeat"
+                type="password"
+                value={repeat}
+                onChange={(e) => {setRepeat(e.target.value); setErrors({...errors, repeat: ""})}}
+                disabled={isKeepingPassword}
+              />
+            </div>
+          </div>
+          {errors.repeat && (<p className="text-red-500 m-2 text-xs font-bold tracking-wide">{errors.repeat}</p>)}
         </div>
-        {errors.repeat && (<p className="text-red-500 mb-3">{errors.repeat}</p>)}
-        <button className="bg-red-300 p-1 px-3 rounded-md" onClick={handleUpdate}>
-          Update Password
-        </button>
-        <Button onClick={handleKeepPassword}>
-          { isKeepingPassword ? "Create New Password" : "Keep The Password" }
-        </Button>
+        <div className="m-2 mt-5 flex gap-2 items-center flex-wrap"> {/* Buttons holder div */}
+          <Button className="bg-green-400 capitalize" onClick={handleUpdate}>
+            Update Password
+          </Button>
+          <Button className="bg-blue-400 capitalize" onClick={handleKeepPassword}>
+            { isKeepingPassword ? "Create New Password" : "Keep The Password" }
+          </Button>
+        </div>
       </div>
     </div>
   );
