@@ -55,6 +55,9 @@ const Login = () => {
     setIsSubmitting(true);
 
     const loadingToastId = toast.loading("Logging in...");
+    toast.update(loadingToastId, {
+      closeButton: true
+    });
 
     const credentials = {
       username: username, password: password
@@ -131,6 +134,7 @@ const Login = () => {
           closeButton: true
         });
       } else {
+        console.log(error.response)
         toast.update(loadingToastId, { 
           render: "An unexpected error occurred. Server Might not be working", 
           type: "error", 

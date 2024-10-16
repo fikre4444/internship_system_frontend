@@ -66,6 +66,8 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+
 
           
           <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>}>
@@ -101,7 +103,6 @@ function App() {
             <Route path="departmentCoordinatorPage3" element={<DepartmentCoordinatorPage3 />} />  
           </Route>
           <Route path="/login-options" element={<ProtectedRoute><LoginOptions /></ProtectedRoute>} />
-          <Route path="/reset-password" element={<ProtectedRoute><ResetPassword /></ProtectedRoute>} />
           <Route path="/no-role" element={<ProtectedRoute><NoRole /></ProtectedRoute>} />
           <Route path="/needs-password-update" element={<ProtectedRoute><PasswordUpdate /></ProtectedRoute>} />
         </Routes>
