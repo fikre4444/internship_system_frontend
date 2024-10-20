@@ -40,6 +40,7 @@ import AdminDefaultPage from './pages/dashboards/AdminPages/AdminDefaultPage';
 import SearchUser from './pages/dashboards/AdminPages/SearchUser';
 import ViewAndEditAccount from './pages/dashboards/AdminPages/ViewAndEditAccount';
 import PasswordUpdate from './components/PasswordUpdate';
+import AddStudentInternship from './pages/dashboards/DepartmentCoordinatorPages/AddStudentInternship';
 
 function App() {
 
@@ -100,7 +101,7 @@ function App() {
             <Route index element={<DashboardDefaultPage />} />
             <Route path="departmentCoordinatorPage1" element={<DepartmentCoordinatorPage1 />} />
             <Route path="departmentCoordinatorPage2" element={<DepartmentCoordinatorPage2 />} />         
-            <Route path="departmentCoordinatorPage3" element={<DepartmentCoordinatorPage3 />} />  
+            <Route path="addStudentInternship" element={<AddStudentInternship />} />  
           </Route>
           <Route path="/login-options" element={<ProtectedRoute><LoginOptions /></ProtectedRoute>} />
           <Route path="/no-role" element={<ProtectedRoute><NoRole /></ProtectedRoute>} />

@@ -1,5 +1,5 @@
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { PiChalkboardTeacherFill } from "react-icons/pi";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useState, useEffect } from 'react';
@@ -11,6 +11,9 @@ const SidebarComp = ({className, collapsed, setCollapsed, toggled, setToggled, s
   const [key, setKey] = useState(0);
 
   const navigate = useNavigate();
+  const location = useLocation();
+  //since we have a lot of element separted by the '/' we need to get the last one.
+  const currentPath = location.pathname.split('/').pop();
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width:720px)');
@@ -55,6 +58,7 @@ const SidebarComp = ({className, collapsed, setCollapsed, toggled, setToggled, s
             {sidebarItems.map(item => {
               return (
                 <MenuItem 
+                  className={currentPath === item.itemLink ? "bg-green-900 bg-opacity-40" : ""}
                   key={item.itemId}
                   onClick={() => {setToggled(!toggled); navigate(item.itemLink)}} 
                   icon={item.itemIcon ? <item.itemIcon /> : undefined }
