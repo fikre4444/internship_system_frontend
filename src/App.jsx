@@ -41,6 +41,7 @@ import SearchUser from './pages/dashboards/AdminPages/SearchUser';
 import ViewAndEditAccount from './pages/dashboards/AdminPages/ViewAndEditAccount';
 import PasswordUpdate from './components/PasswordUpdate';
 import AddStudentInternship from './pages/dashboards/DepartmentCoordinatorPages/AddStudentInternship';
+import ViewStudent from './components/departmentCoordinatorComponents/ViewStudent';
 
 function App() {
 
@@ -102,6 +103,7 @@ function App() {
             <Route path="departmentCoordinatorPage1" element={<DepartmentCoordinatorPage1 />} />
             <Route path="departmentCoordinatorPage2" element={<DepartmentCoordinatorPage2 />} />         
             <Route path="addStudentInternship" element={<AddStudentInternship />} />  
+            <Route path="viewStudent" element={<ViewStudent />} />
           </Route>
           <Route path="/login-options" element={<ProtectedRoute><LoginOptions /></ProtectedRoute>} />
           <Route path="/no-role" element={<ProtectedRoute><NoRole /></ProtectedRoute>} />
