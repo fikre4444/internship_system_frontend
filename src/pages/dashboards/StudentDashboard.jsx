@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import SidebarComp from "../../components/Sidebar";
 import { FaRegistered, FaUserCog } from "react-icons/fa";
 import { useState } from "react";
+import { VscGitStashApply } from "react-icons/vsc";
 
 const StudentDashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -10,6 +11,7 @@ const StudentDashboard = () => {
   const sidebarItems = [
     {itemId: 1, itemTitle: "First Student page", itemLink: "studentPage1", itemIcon: FaUserCog},
     {itemId: 2, itemTitle: "Second Student page", itemLink: "studentPage2", itemIcon: FaRegistered},
+    {itemId: 3, itemTitle: "Apply Internships", itemLink: "applyInternships", itemIcon: VscGitStashApply}
   ];
 
 

@@ -42,6 +42,8 @@ import ViewAndEditAccount from './pages/dashboards/AdminPages/ViewAndEditAccount
 import PasswordUpdate from './components/PasswordUpdate';
 import AddStudentInternship from './pages/dashboards/DepartmentCoordinatorPages/AddStudentInternship';
 import ViewStudent from './components/departmentCoordinatorComponents/ViewStudent';
+import PostInternships from './pages/dashboards/HeadCoordinatorPages/PostInternships';
+import ApplyInternships from './pages/dashboards/StudentPages/ApplyInternships';
 
 function App() {
 
@@ -84,7 +86,7 @@ function App() {
             <Route index element={<DashboardDefaultPage />} />
             <Route path="studentPage1" element={<StudentPage1 />} />
             <Route path="studentPage2" element={<StudentPage2 />} />         
-            <Route path="studentPage3" element={<StudentPage3 />} />  
+            <Route path="applyInternships" element={<ApplyInternships />} />  
           </Route>
           <Route path="/advisor" element={<ProtectedRoute><AdvisorDashboard /></ProtectedRoute>}>
             <Route index element={<DashboardDefaultPage />} />
@@ -97,6 +99,7 @@ function App() {
             <Route path="headCoordinatorPage1" element={<HeadCoordinatorPage1 />} />
             <Route path="headCoordinatorPage2" element={<HeadCoordinatorPage2 />} />         
             <Route path="headCoordinatorPage3" element={<HeadCoordinatorPage3 />} />  
+            <Route path="postInternships" element={<PostInternships />} />
           </Route>
           <Route path="/department-coordinator" element={<ProtectedRoute><DepartmentCoordinator /></ProtectedRoute>}>
             <Route index element={<DashboardDefaultPage />} />

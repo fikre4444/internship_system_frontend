@@ -1,6 +1,8 @@
 import { useState } from "react";
 import SidebarComp from "../../components/Sidebar";
 import { FaRegistered, FaUserCog } from "react-icons/fa";
+import { FaSignsPost } from "react-icons/fa6";
+
 import { Outlet } from "react-router-dom";
 
 const HeadCoordinatorDashboard = () => {
@@ -10,6 +12,7 @@ const HeadCoordinatorDashboard = () => {
   const sidebarItems = [
     {itemId: 1, itemTitle: "First head Coodinator page", itemLink: "headCoordinatorPage1", itemIcon: FaUserCog},
     {itemId: 2, itemTitle: "Second head Coodinator page", itemLink: "headCoordinatorPage2", itemIcon: FaRegistered},
+    {itemId: 3, itemTitle: "Post Internships", itemLink: "postInternships", itemIcon: FaSignsPost}
   ];
 
 
