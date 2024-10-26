@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { sleep } from '../../utils/otherUtils'
 
+
 const ViewStudent = () => {
 
   const [ account, setAccount ] = useState(null);
@@ -32,7 +33,7 @@ const ViewStudent = () => {
         </>
         :
         <>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap justify-center md:justify-start gap-20">
             {/* {JSON.stringify(account)} */}
             <StudentPersonalDetails account={account} />
             <InternshipComponent account={account} setAccount={setAccount} />
@@ -45,7 +46,7 @@ const ViewStudent = () => {
 
 const StudentPersonalDetails = ({account}) => {
   return (
-    <div className="flex flex-col gap-3 md:w-min md:items-center m-3 p-2 rounded-md">
+    <div className="flex flex-col gap-3 md:w-min md:items-center m-3 p-2 lg:ml-12 rounded-md">
       <h1 className="text-lg font-bold md:text-xl">
         Student Personal Details
       </h1>
@@ -78,15 +79,59 @@ const StudentPersonalDetails = ({account}) => {
 
 const InternshipComponent = ({account, setAccount}) => {
   const [internshipInputVisible, setInternshipInputVisible] = useState(false);
+  const token = useSelector(state => state.user.token);
 
   const [editInternshipVisible, setEditInternshipVisible] = useState(false);
-
+  const [isNotifying, setIsNotifying] = useState(false);
   const [companyName, setCompanyName] = useState("");
   const [location, setLocation] = useState("");
 
 
   const handleAdd = () => {
     setInternshipInputVisible(true);
+  }
+
+  const handleNotifyStudent = async () => {
+    console.log("notifying");
+    const requestObject = {
+      username: account.username,
+      typeOfNotification: "add_internship"
+    };
+    console.log(requestObject);
+    setIsNotifying(true);
+    const notifyingToastId = toast.loading("Notifying Student...");
+    toast.update(notifyingToastId, {closeButton: true});
+    await sleep(1000);
+    try {
+      const response = await axios.post("/api/department-coordinator/notify-student-about-internship-add",
+        requestObject, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      if(response.status === 200){
+        console.log(response.data);
+        toast.update(notifyingToastId, {
+          render: "Successfully Notified the student!",
+          type: "success",
+          isLoading: false,
+          autoClose: 1000
+        });
+      }
+    }catch(error){
+      console.log(error);
+      toast.update(notifyingToastId, {
+        render: "There was an error while notifying the student!",
+        type: "error", 
+        isLoading: false,
+        autoClose: 1000
+      });
+    }finally{
+      setIsNotifying(false);
+    }
+    
+
+
   }
 
   return (
@@ -157,11 +202,18 @@ const InternshipComponent = ({account, setAccount}) => {
                     </p>
                   </div>
                 </div>
-                <Button className="bg-blue-gray-600 rounded-sm my-2"
-                  onClick={() => setEditInternshipVisible(true)}
-                >
-                  Edit Internship
-                </Button>
+                <div className="flex flex-col gap-2">
+                  <Button className="bg-blue-gray-600 rounded-sm my-2"
+                    onClick={() => setEditInternshipVisible(true)}
+                  >
+                    Edit Internship
+                  </Button>
+                  <Button loading={isNotifying} className="bg-blue-500 rounded-sm my-2 "
+                    onClick={() => {handleNotifyStudent()}}
+                  >
+                    {!isNotifying ? <>Notify Student About Internship</> : <>Notifying</> }
+                  </Button>
+                </div>
               </div>
               :
               <div>
