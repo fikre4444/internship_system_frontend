@@ -72,8 +72,6 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
 
-
-          
           <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>}>
             <Route index element={<AdminDefaultPage />} />
             <Route path="registerUser" element={<RegisterUser />} />
@@ -82,18 +80,21 @@ function App() {
             <Route path="adminPage2" element={<AdminPage2 />} />
             <Route path="deleteUser" element={<DeleteUser />} />
           </Route>
+
           <Route path="/student" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>}>
             <Route index element={<DashboardDefaultPage />} />
             <Route path="studentPage1" element={<StudentPage1 />} />
             <Route path="studentPage2" element={<StudentPage2 />} />         
             <Route path="applyInternships" element={<ApplyInternships />} />  
           </Route>
+
           <Route path="/advisor" element={<ProtectedRoute><AdvisorDashboard /></ProtectedRoute>}>
             <Route index element={<DashboardDefaultPage />} />
             <Route path="advisorPage1" element={<AdvisorPage1 />} />
             <Route path="advisorPage2" element={<AdvisorPage2 />} />         
             <Route path="advisorPage3" element={<AdvisorPage3 />} />         
           </Route>
+
           <Route path="/head-coordinator" element={<ProtectedRoute><HeadCoordinator /></ProtectedRoute>}>
             <Route index element={<DashboardDefaultPage />} />
             <Route path="headCoordinatorPage1" element={<HeadCoordinatorPage1 />} />
@@ -101,6 +102,7 @@ function App() {
             <Route path="headCoordinatorPage3" element={<HeadCoordinatorPage3 />} />  
             <Route path="postInternships" element={<PostInternships />} />
           </Route>
+
           <Route path="/department-coordinator" element={<ProtectedRoute><DepartmentCoordinator /></ProtectedRoute>}>
             <Route index element={<DashboardDefaultPage />} />
             <Route path="departmentCoordinatorPage1" element={<DepartmentCoordinatorPage1 />} />
@@ -108,6 +110,7 @@ function App() {
             <Route path="addStudentInternship" element={<AddStudentInternship />} />  
             <Route path="viewStudent" element={<ViewStudent />} />
           </Route>
+          
           <Route path="/login-options" element={<ProtectedRoute><LoginOptions /></ProtectedRoute>} />
           <Route path="/no-role" element={<ProtectedRoute><NoRole /></ProtectedRoute>} />
           <Route path="/needs-password-update" element={<ProtectedRoute><PasswordUpdate /></ProtectedRoute>} />

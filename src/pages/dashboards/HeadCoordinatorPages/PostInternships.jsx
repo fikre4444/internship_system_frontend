@@ -20,11 +20,11 @@ const PostInternships = () => {
         >
           To Post Internships, Click the + button to add a row and then fill in the blanks and click post.
         </p>   
-        <p 
+        {/* <p 
           className="my-3 text-gray-700 text-sm md:text-base bg-blue-50 border-l-4 border-green-500 px-4 py-2 rounded-md shadow-md max-w-max"
         >
           You can also send an email to the organizations, representatives and then they can fill it.
-        </p>           
+        </p>            */}
       </div>
       <PostInternshipsComponent />
     </div>
@@ -177,7 +177,7 @@ const PostInternshipsComponent = () => {
       ) : (
         <div>
           <div
-            className="w-9 h-9 cursor-pointer hover:scale-110 duration-100 transition-all bg-green-300 flex text-gray-200 justify-center items-center rounded-full text-3xl font-bold"
+            className="w-9 h-9 cursor-pointer hover:scale-110 hover:bg-gray-900 hover:text-gray-50 duration-100 transition-all bg-green-300 flex text-gray-200 justify-center items-center rounded-full text-3xl font-bold"
             onClick={addRow}
           >
             +

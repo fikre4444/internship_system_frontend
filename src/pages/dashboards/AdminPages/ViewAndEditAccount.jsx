@@ -91,29 +91,29 @@ const UserInfo = ({ account, isEditing }) => {
       <h1 className="font-inter font-bold text-lg md:text-2xl">Personal Info</h1>
       <div className="flex gap-3 items-center">
         <table className="m-2">
-          <tr className="bg-blue-gray-100 border-b-2 border-gray-100">
+          <tr className="bg-blue-100 bg-opacity-50 border-b-2 border-gray-100">
             <td className="text-right p-2 font-inter text-sm md:text-lg font-bold border-r-2 border-white">First Name</td>
             <td className="bg-green-100 bg-opacity-25 text-left p-2 font-inter text-sm md:text-lg font-bold">{account.firstName}</td>
           </tr>
-          <tr className="bg-blue-gray-100 border-b-2 border-gray-100">
+          <tr className="bg-blue-100 bg-opacity-50 border-b-2 border-gray-100">
             <td className="text-right p-2 font-inter text-sm md:text-lg font-bold border-r-2 border-white">Last Name</td>
             <td className="bg-green-100 bg-opacity-25 text-left p-2 font-inter text-sm md:text-lg font-bold">{account.lastName}</td>
           </tr>
-          <tr className="bg-blue-gray-100 border-b-2 border-gray-100">
+          <tr className="bg-blue-100 bg-opacity-50 border-b-2 border-gray-100">
             <td className="text-right p-2 font-inter text-sm md:text-lg font-bold border-r-2 border-white">Username</td>
             <td className="bg-green-100 bg-opacity-25 text-left p-2 font-inter text-sm md:text-lg font-bold">{account.username}</td>
           </tr>
-          <tr className="bg-blue-gray-100 border-b-2 border-gray-100">
+          <tr className="bg-blue-100 bg-opacity-50 border-b-2 border-gray-100">
             <td className="text-right p-2 font-inter text-sm md:text-lg font-bold border-r-2 border-white">Email</td>
             <td className="bg-green-100 bg-opacity-25 text-left p-2 font-inter text-sm md:text-lg font-bold">{account.email}</td>
           </tr>
-          <tr className="bg-blue-gray-100 border-b-2 border-gray-100">
+          <tr className="bg-blue-100 bg-opacity-50 border-b-2 border-gray-100">
             <td className="text-right p-2 font-inter text-sm md:text-lg font-bold border-r-2 border-white">Gender</td>
             <td className="bg-green-100 bg-opacity-25 text-left p-2 text-sm md:text-lg font-bold lowercase font-inter">{account.gender}</td>
           </tr>
         </table>
         { isEditing && 
-          <div className="bg-blue-400 bg-opacity-40 p-3 rounded-lg">
+          <div className="bg-blue-300 bg-opacity-30 p-3 rounded-lg">
             <p className="flex gap-3 items-center">
               <span className="bg-blue-gray-600 text-xl rounded-full p-2 animate-moveUpDown">&#128071;</span> 
               Scroll Down to Edit the parts that are editable
@@ -130,17 +130,17 @@ const OtherDetails = ({ account }) => {
     <div className="m-3">
       <h1 className="font-inter font-bold text-lg md:text-2xl">Other Details</h1>
       <table className="m-2">
-        <tr className="bg-blue-gray-100 border-b-2 border-gray-100">
+        <tr className="bg-blue-100 bg-opacity-50 border-b-2 border-gray-100">
           <td className="text-right p-2 font-inter text-sm md:text-lg font-bold border-r-2 border-white">Status</td>
           <td className="bg-green-100 bg-opacity-25 text-left p-2 font-inter text-sm md:text-lg font-bold">
             {account.enabled ? "Active" : "Disabled"}
           </td>
         </tr>
-        <tr className="bg-blue-gray-100 border-b-2 border-gray-100">
+        <tr className="bg-blue-100 bg-opacity-50 border-b-2 border-gray-100">
           <td className="text-right p-2 font-inter text-sm md:text-lg font-bold border-r-2 border-white">Department</td>
           <td className="bg-green-100 bg-opacity-25 text-left p-2 font-inter text-sm md:text-lg font-bold">{account.department.name}</td>
         </tr>
-        <tr className="bg-blue-gray-100 border-b-2 border-gray-100">
+        <tr className="bg-blue-100 bg-opacity-50 border-b-2 border-gray-100">
           <td className="text-right p-2 font-inter text-sm md:text-lg font-bold border-r-2 border-white">Roles</td>
           <td className="bg-green-100 bg-opacity-25 text-left p-2 font-inter text-sm md:text-lg font-bold">
             {
@@ -154,7 +154,7 @@ const OtherDetails = ({ account }) => {
             }
           </td>
         </tr>
-        <tr className="bg-blue-gray-100 border-b-2 border-gray-100">
+        <tr className="bg-blue-100 bg-opacity-50 border-b-2 border-gray-100">
           <td className="text-right p-2 font-inter text-sm md:text-lg font-bold border-r-2 border-white">Password</td>
           <td className="bg-green-100 bg-opacity-25 text-left p-2 font-inter text-sm md:text-lg font-bold">
             {!isBcryptHash(account.password) 
@@ -164,14 +164,14 @@ const OtherDetails = ({ account }) => {
           </td>
         </tr>
         { !!account.courseLoad &&
-          <tr className="bg-blue-gray-100 border-b-2 border-gray-100">
+          <tr className="bg-blue-100 bg-opacity-50 border-b-2 border-gray-100">
             <td className="text-right p-2 font-inter text-sm md:text-lg font-bold border-r-2 border-white">Courseload</td>
             <td className="bg-green-100 bg-opacity-25 text-left p-2 text-sm md:text-lg font-bold lowercase font-inter">{account.courseLoad}</td>
           </tr>
         }
         { !!account.grade &&
 
-          <tr className="bg-blue-gray-100 border-b-2 border-gray-100">
+          <tr className="bg-blue-100 bg-opacity-50 border-b-2 border-gray-100">
             <td className="text-right p-2 font-inter text-sm md:text-lg font-bold border-r-2 border-white">GPA</td>
             <td className="bg-green-100 bg-opacity-25 text-left p-2 text-sm md:text-lg font-bold lowercase font-inter">{account.grade}</td>
           </tr>
@@ -179,7 +179,7 @@ const OtherDetails = ({ account }) => {
         {
           !!account.stream &&
 
-          <tr className="bg-blue-gray-100 border-b-2 border-gray-100">
+          <tr className="bg-blue-100 bg-opacity-50 border-b-2 border-gray-100">
             <td className="text-right p-2 font-inter text-sm md:text-lg font-bold border-r-2 border-white">Stream</td>
             <td className="bg-green-100 bg-opacity-25 text-left p-2 text-sm md:text-lg font-bold lowercase font-inter">{account.stream}</td>
           </tr>

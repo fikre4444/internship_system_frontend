@@ -1,17 +1,25 @@
-import React from "react";
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 
-const SlideDown = ({ children }) => {
+export default function SlideDown({ children, delay = 0, duration = 0.5}) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: -15 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="overflow-hidden"
+    style={{ position: "relative", zIndex: 10, overflow: "visible" }}
+      variants={{
+        hidden: {
+          opacity: 0,
+          y: 15,
+        },
+        visible: {
+          opacity: 1,
+          y: 0,
+        },
+      }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      transition={{ delay, type: "spring", duration }}
     >
       {children}
     </motion.div>
   );
-};
-
-export default SlideDown;
+}

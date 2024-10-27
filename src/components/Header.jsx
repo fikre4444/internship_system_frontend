@@ -130,9 +130,8 @@ const Header = () => {
                 </div>
             </div>
             <div ref={navbar} className="absolute top-[-100vh] inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-linear bg-white md:mt-0 md:p-0 md:top-0 md:relative md:bg-transparent md:w-auto md:opacity-100 md:translate-x-0 md:flex md:items-center">
-                <div className="flex flex-col gap-3 md:flex-row items-center md:mx-6">
+                <div className="flex flex-col gap-8 md:flex-row items-center md:mx-6">
                     <Link to="/" className={linkStyle + (isActiveLink("/") ? activeLink : nonActiveLink)} href="#">Home</Link>
-                    <Link to="/about" className={linkStyle + (isActiveLink("/about") ? activeLink : nonActiveLink)} href="#">About</Link>
                     <Link to="/contact" className={linkStyle + (isActiveLink("/contact") ? activeLink : nonActiveLink)} href="#">Contact</Link>
                     {!loggedIn ? 
                       (<Link
@@ -148,7 +147,7 @@ const Header = () => {
                             <p className="text-xs font-semibold">Logged in as</p>
                             <Chip className="capitalize" value={loggedInAs} variant="ghost" icon={<IconComponent size="20"/>} />
                           </div>
-                          <div className="relative">
+                          <div className="relative lg:ml-8">
                             <Badge color="green" overlap="circular" placement="bottom-end" withBorder>
                               <div 
                                 className="flex items-center tracking-wide justify-center w-10 h-10 bg-blue-500 bg-opacity-90 text-white rounded-full font-bold cursor-pointer"

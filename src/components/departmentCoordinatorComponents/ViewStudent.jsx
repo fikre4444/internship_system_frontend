@@ -111,12 +111,21 @@ const InternshipComponent = ({account, setAccount}) => {
       });
       if(response.status === 200){
         console.log(response.data);
-        toast.update(notifyingToastId, {
-          render: "Successfully Notified the student!",
-          type: "success",
-          isLoading: false,
-          autoClose: 1000
-        });
+        if(response.data?.result === "success"){
+          toast.update(notifyingToastId, {
+            render: "Successfully Notified the student!",
+            type: "success",
+            isLoading: false,
+            autoClose: 1000
+          });
+        } else{
+          toast.update(notifyingToastId, {
+            render: "Only Notified through the web app and not telegram cause you're not connected to internet.",
+            type: "warning",
+            isLoading: false,
+            autoClose: 3000
+          });
+        }
       }
     }catch(error){
       console.log(error);
