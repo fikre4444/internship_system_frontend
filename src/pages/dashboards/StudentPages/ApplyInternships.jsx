@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { sleep } from '../../../utils/otherUtils';
 import { toast } from 'react-toastify';
-import BigMessage from '../../../components/BigMessage';
 import Loader from '../../../components/Loader';
 import { Button } from '@material-tailwind/react';
 
