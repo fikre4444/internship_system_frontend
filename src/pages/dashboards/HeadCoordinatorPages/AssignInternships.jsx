@@ -186,7 +186,7 @@ const AssignInternships = () => {
               <Button onClick={() => {setGotTemporaryPlacementResults(false)}} className="bg-deep-orange-500">
                 Back
               </Button>
-              <TemporaryPlacementsTable temporaryPlacements={temporaryPlacements} />
+              <TemporaryPlacementsTable temporaryPlacements={temporaryPlacements} department={department}/>
             </>
           }
         </div>
@@ -197,7 +197,8 @@ const AssignInternships = () => {
 
 export default AssignInternships
 
-const TemporaryPlacementsTable = ({ temporaryPlacements }) => {
+const TemporaryPlacementsTable = ({ temporaryPlacements, department }) => {
+  const token = useSelector(state => state.user.token);
   // Step 1: Create a map to track the number of students assigned to each internship
   const initialInternshipCounts = temporaryPlacements.reduce((acc, placement) => {
     const internshipId = placement.internshipOpportunity.uniqueIdentifier;
@@ -231,7 +232,19 @@ const TemporaryPlacementsTable = ({ temporaryPlacements }) => {
     }));
 
     // Update the placement's internshipOpportunity
+    //and the student's associated priority of that opportunity
     placement.internshipOpportunity = selectedOpportunity;
+    console.log("slelected opportunity is "+selectedOpportunity.uniqueIdentifier);
+    let priority = placement.priority;
+    for(let i = 0; i < placement.student.internshipApplications.length; i++){
+      let internshipOpportunity = placement.student.internshipApplications[i].internshipOpportunity;
+      console.log(internshipOpportunity.uniqueIdentifier);
+      if(internshipOpportunity.uniqueIdentifier === selectedOpportunity.uniqueIdentifier){
+        priority = placement.student.internshipApplications[i].priority;
+      }
+    }
+    placement.priority = priority;
+    
   };
 
   // Function to toggle edit mode and show/hide the selection column
@@ -244,130 +257,224 @@ const TemporaryPlacementsTable = ({ temporaryPlacements }) => {
     setShowEditColumn(false); // Hide edit column
   };
 
-  const handleConfirmPlacement = () => {
-    console.log("confirming!!!");
+  const [confirming, setIsConfirming] = useState(false);
+  const [notificationOption, setNotificationOption] = useState(false);
+  const handleConfirmPlacement = async () => {
+    setIsConfirming(true);
+    const confirmingToastId = toast.loading("Confirming Placements please wait....");
+    toast.update(confirmingToastId, {closeButton: true});
+    try {
+      const response = await axios.put("/api/head-coordinator/confirm-placements?department="+department, {
+        headers: {
+          'authorization': `Bearer ${token}`
+        }
+      });
+      toast.update(confirmingToastId, {
+        render: "Successfully Confirmed Placements",
+        type: "success", 
+        autoClose: 2000,
+        isLoading: false
+      })
+      setNotificationOption(true);
+    }catch(error){
+      console.log(error);
+      toast.update(confirmingToastId, {
+        render: "There was an error while, confirming",
+        type: "error", 
+        autoClose: 2000,
+        isLoading: false
+      });
+    }finally {
+      setIsConfirming(false);
+    }
+  }
+
+  const handleApplyAndConfirmPlacement = async () => {
+    console.log("apply and confirming...")
+    const extractedData = copiedPlacements.map(placement => ({
+      studentUsername: placement.student.username,
+      internshipOpportunityUniqueIdentifier: placement.internshipOpportunity.uniqueIdentifier,
+      priority: placement.priority
+    }));
+
+    let filteredData = [];
+    for(let i = 0; i < temporaryPlacements.length; i++){
+      if(extractedData[i].priority !== temporaryPlacements[i].priority){
+        filteredData.push(extractedData[i]);
+      }
+    }
+        
+    console.log("Extracted Placement Data:", extractedData);
+
+    setIsConfirming(true);
+    const confirmingToastId = toast.loading("Confirming Placements please wait....");
+    toast.update(confirmingToastId, {closeButton: true});
+    try {
+      const response = await axios.put("/api/head-coordinator/apply-changes-to-placements",filteredData, {
+        headers: {
+          'authorization': `Bearer ${token}`
+        }
+      });
+      toast.update(confirmingToastId, {
+        render: "Successfully Confirmed Placements",
+        type: "success", 
+        autoClose: 2000,
+        isLoading: false
+      })
+      setNotificationOption(true);
+    }catch(error){
+      console.log(error);
+      toast.update(confirmingToastId, {
+        render: "There was an error while, confirming",
+        type: "error", 
+        autoClose: 2000,
+        isLoading: false
+      });
+    }finally {
+      setIsConfirming(false);
+    }
+
+
   }
 
   return (
     <div className="overflow-x-auto bg-blue-50 bg-opacity-30 backdrop-blur-md rounded-lg shadow-lg p-6">
-      <div className="flex justify-between gap-2 flex-wrap">
-        <div>
-          <button onClick={handleConfirmPlacement} className="px-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-blue-600 transition duration-200">
-            Confirm Placements
-          </button>
-        </div>
-        <div className="flex justify-end mb-4">
-          {showEditColumn ? (
-            <button onClick={cancelEdit} className="px-4 py-2 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 transition duration-200">
-              Cancel Edit
-            </button>
-          ) : (
-            <button onClick={toggleEditMode} className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition duration-200">
-              Edit Placements
-            </button>
-          )}
-        </div>
-      </div>
-
-      <table className="min-w-full table-auto border-separate border-spacing-0">
-        <thead>
-          <tr className="text-left text-white bg-blue-500 bg-opacity-50">
-            <th className="px-6 py-4 border border-blue-200">Student</th>
-            <th className="px-6 py-4 border border-blue-200">Student Grade</th>
-            <th className="px-6 py-4 border border-blue-200">Matched Internship</th>
-            <th className="px-6 py-4 border border-blue-200">Student's Preference</th>
-            {showEditColumn && (
-              <th className="px-6 py-4 border border-blue-200">Select Internship</th>
-            )}
-          </tr>
-        </thead>
-        <tbody>
-          {copiedPlacements?.map((placement, index) => (
-            <tr
-              key={index}
-              className="bg-white bg-opacity-60 hover:bg-opacity-80 transition duration-200"
-            >
-              <td className="px-6 py-4 border border-blue-200">
-                <Tooltip
-                  content={
-                    <>
-                      <p>Username: {placement.student.username}</p>
-                      <p>Email: {placement.student.email}</p>
-                      <div>
-                        Student's Internship Applications:
-                        <ul>
-                          {placement.student.internshipApplications.map(
-                            (app, i) => (
-                              <li key={i}>
-                                {app.internshipOpportunity.companyName} -{" "}
-                                Priority {app.priority}
-                              </li>
-                            )
-                          )}
-                        </ul>
-                      </div>
-                    </>
-                  }
-                  placement="top"
-                  delay={1000}
-                  animate={{ mount: { scale: 1 }, unmount: { scale: 0 } }}
-                  className="rounded-lg shadow-lg p-2 bg-white text-gray-800"
-                >
-                  <span className="cursor-pointer text-black font-semibold">
-                    {placement.student.firstName} {placement.student.lastName}
-                  </span>
-                </Tooltip>
-              </td>
-
-              <td className="px-6 py-4 border border-blue-200">
-                {placement.student.grade}
-              </td>
-
-              <td className="px-6 py-4 border border-blue-200">
-                <Tooltip
-                  content={
-                    <>
-                      <p>Location: {placement.internshipOpportunity.location}</p>
-                      <p>Filled: {internshipCounts[placement.internshipOpportunity.uniqueIdentifier]}/{placement.internshipOpportunity.noOfStudents} Students</p>
-                    </>
-                  }
-                  placement="top"
-                  delay={1000}
-                  animate={{ mount: { scale: 1 }, unmount: { scale: 0 } }}
-                  className="rounded-lg shadow-lg p-2 bg-white text-gray-800"
-                >
-                  <span className="cursor-pointer text-blue-600 font-semibold">
-                    {placement.internshipOpportunity.companyName}
-                  </span>
-                </Tooltip>
-              </td>
-
-              <td className="px-6 py-4 border border-blue-200 text-center">
-                {placement.priority}
-              </td>
-
-              {showEditColumn && (
-                <td className="px-6 py-4 border border-blue-200 text-center">
-                  <select
-                    value={placement.internshipOpportunity.uniqueIdentifier}
-                    onChange={(e) => handleInternshipChange(index, e.target.value)}
-                    className="rounded-lg p-2 border border-blue-300 bg-white"
-                  >
-                    {placement.student.internshipApplications.map(app => (
-                      <option
-                        key={app.internshipOpportunity.uniqueIdentifier}
-                        value={app.internshipOpportunity.uniqueIdentifier}
-                      >
-                        {app.internshipOpportunity.companyName} ({internshipCounts[app.internshipOpportunity.uniqueIdentifier] || 0}/{app.internshipOpportunity.noOfStudents})
-                      </option>
-                    ))}
-                  </select>
-                </td>
+      {!notificationOption ?
+        <>
+          <div className="flex justify-between gap-2 flex-wrap">
+            <div>
+              { !showEditColumn ?
+                <button disabled={confirming} onClick={handleConfirmPlacement} className="px-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-blue-600 transition duration-200">
+                  Confirm Placements
+                </button>
+                :
+                <button disabled={confirming} onClick={handleApplyAndConfirmPlacement} className="px-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-blue-600 transition duration-200">
+                  Apply Changes and Confirm Placements
+                </button>
+              }
+              
+            </div>
+            <div className="flex justify-end mb-4">
+              {showEditColumn ? (
+                <button onClick={cancelEdit} className="px-4 py-2 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 transition duration-200">
+                  Cancel Edit
+                </button>
+              ) : (
+                <button onClick={toggleEditMode} className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition duration-200">
+                  Edit Placements
+                </button>
               )}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            </div>
+          </div>
+
+          <table className="min-w-full table-auto border-separate border-spacing-0">
+            <thead>
+              <tr className="text-left text-white bg-blue-500 bg-opacity-50">
+                <th className="px-6 py-4 border border-blue-200">Student</th>
+                <th className="px-6 py-4 border border-blue-200">Student Grade</th>
+                <th className="px-6 py-4 border border-blue-200">Matched Internship</th>
+                <th className="px-6 py-4 border border-blue-200">Student's Preference(Priority)</th>
+                {showEditColumn && (
+                  <th className="px-6 py-4 border border-blue-200">Change Internship</th>
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {copiedPlacements?.map((placement, index) => (
+                <tr
+                  key={index}
+                  className="bg-white bg-opacity-60 hover:bg-opacity-80 transition duration-200"
+                >
+                  <td className="px-6 py-4 border border-blue-200">
+                    <Tooltip
+                      content={
+                        <>
+                          <p>Username: {placement.student.username}</p>
+                          <p>Email: {placement.student.email}</p>
+                          <div>
+                            Student's Internship Applications:
+                            <ul>
+                              {placement.student.internshipApplications.map(
+                                (app, i) => (
+                                  <li key={i}>
+                                    {app.internshipOpportunity.companyName} -{" "}
+                                    Priority {app.priority}
+                                  </li>
+                                )
+                              )}
+                            </ul>
+                          </div>
+                        </>
+                      }
+                      placement="top"
+                      delay={1000}
+                      animate={{ mount: { scale: 1 }, unmount: { scale: 0 } }}
+                      className="rounded-lg shadow-lg p-2 bg-white text-gray-800"
+                    >
+                      <span className="cursor-pointer text-black font-semibold">
+                        {placement.student.firstName} {placement.student.lastName}
+                      </span>
+                    </Tooltip>
+                  </td>
+
+                  <td className="px-6 py-4 border border-blue-200">
+                    {placement.student.grade}
+                  </td>
+
+                  <td className="px-6 py-4 border border-blue-200">
+                    <Tooltip
+                      content={
+                        <>
+                          <p>Location: {placement.internshipOpportunity.location}</p>
+                          <p>Filled: {internshipCounts[placement.internshipOpportunity.uniqueIdentifier]}/{placement.internshipOpportunity.noOfStudents} Students</p>
+                        </>
+                      }
+                      placement="top"
+                      delay={1000}
+                      animate={{ mount: { scale: 1 }, unmount: { scale: 0 } }}
+                      className="rounded-lg shadow-lg p-2 bg-white text-gray-800"
+                    >
+                      <span className="cursor-pointer text-blue-600 font-semibold">
+                        {placement.internshipOpportunity.companyName}
+                      </span>
+                    </Tooltip>
+                  </td>
+
+                  <td className="px-6 py-4 border border-blue-200 text-center">
+                    {placement.priority}
+                  </td>
+
+                  {showEditColumn && (
+                    <td className="px-6 py-4 border border-blue-200 text-center">
+                      <select
+                        value={placement.internshipOpportunity.uniqueIdentifier}
+                        onChange={(e) => handleInternshipChange(index, e.target.value)}
+                        className="rounded-lg p-2 border border-blue-300 bg-white"
+                      >
+                        {placement.student.internshipApplications.map(app => (
+                          <option
+                            key={app.internshipOpportunity.uniqueIdentifier}
+                            value={app.internshipOpportunity.uniqueIdentifier}
+                          >
+                            {app.internshipOpportunity.companyName} ({internshipCounts[app.internshipOpportunity.uniqueIdentifier] || 0}/{app.internshipOpportunity.noOfStudents})
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+        :
+        <div>
+          <Button className="bg-green-400">
+            Notify Students About Placements
+          </Button>
+        </div>
+
+      }
     </div>
   );
 };
