@@ -77,7 +77,19 @@ const ApplyInternships = () => {
     setPriorities((prev) => ({ ...prev, [uniqueIdentifier]: newPriority }));
   };
 
+  const checkAllFilled = () => {
+    if(Object.values(priorities).includes("")){
+      return false;
+    }
+    return true;
+  }
+
   const handleSubmit = async () => {
+    if(!checkAllFilled()){ // if all of the fields are filled.
+      setError("Please Fill In All the Priorities First.")
+      return;
+    }
+
     const applications = Object.entries(priorities).map(([uniqueIdentifier, priority]) => ({
       internshipOpportunityUniqueIdentifier: uniqueIdentifier,
       priority: priority,

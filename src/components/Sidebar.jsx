@@ -58,7 +58,7 @@ const SidebarComp = ({className, collapsed, setCollapsed, toggled, setToggled, s
             {sidebarItems.map(item => {
               return (
                 <MenuItem 
-                  className={currentPath === item.itemLink ? "bg-green-900 bg-opacity-40" : ""}
+                  className={currentPath === item.itemLink ? "bg-blue-gray-600 bg-opacity-20" : ""}
                   key={item.itemId}
                   onClick={() => {setToggled(!toggled); navigate(item.itemLink)}} 
                   icon={item.itemIcon ? <item.itemIcon /> : undefined }

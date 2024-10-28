@@ -10,9 +10,8 @@ const HeadCoordinatorDashboard = () => {
   const [toggled, setToggled] = useState(false);
 
   const sidebarItems = [
-    {itemId: 1, itemTitle: "First head Coodinator page", itemLink: "headCoordinatorPage1", itemIcon: FaUserCog},
-    {itemId: 2, itemTitle: "Second head Coodinator page", itemLink: "headCoordinatorPage2", itemIcon: FaRegistered},
-    {itemId: 3, itemTitle: "Post Internships", itemLink: "postInternships", itemIcon: FaSignsPost}
+    {itemId: 1, itemTitle: "Post Internships", itemLink: "postInternships", itemIcon: FaSignsPost},
+    {itemId: 2, itemTitle: "Assign Internships", itemLink: "assignInternships", itemIcon: FaUserCog}
   ];
 
 
