@@ -18,9 +18,7 @@ import Layout from './HOCS/Layout';
 import StudentPage1 from './pages/dashboards/StudentPages/StudentPage1';
 import StudentPage2 from './pages/dashboards/StudentPages/StudentPage2';
 import StudentPage3 from './pages/dashboards/StudentPages/StudentPage3';
-import AdvisorPage1 from './pages/dashboards/AdvisorPages/AdvisorPage1';
-import AdvisorPage2 from './pages/dashboards/AdvisorPages/AdvisorPage2';
-import AdvisorPage3 from './pages/dashboards/AdvisorPages/AdvisorPage3';
+
 import HeadCoordinatorPage1 from './pages/dashboards/HeadCoordinatorPages/HeadCoordinatorPage1';
 import HeadCoordinatorPage2 from './pages/dashboards/HeadCoordinatorPages/HeadCoordinatorPage2';
 import HeadCoordinatorPage3 from './pages/dashboards/HeadCoordinatorPages/HeadCoordinatorPage3';
@@ -47,6 +45,9 @@ import ApplyInternships from './pages/dashboards/StudentPages/ApplyInternships';
 import AssignInternships from './pages/dashboards/HeadCoordinatorPages/AssignInternships';
 import SendCompanyRequest from './pages/dashboards/HeadCoordinatorPages/SendCompanyRequest';
 import CompanyPostingPage from './pages/dashboards/CompanyPostingPage';
+import ViewStudents from './pages/dashboards/AdvisorPages/ViewStudents';
+import NotifyStudents from './pages/dashboards/AdvisorPages/NotifyStudents';
+import CheckCompanyInternships from './pages/dashboards/HeadCoordinatorPages/CheckCompanyInternships';
 
 function App() {
 
@@ -94,9 +95,8 @@ function App() {
 
           <Route path="/advisor" element={<ProtectedRoute><AdvisorDashboard /></ProtectedRoute>}>
             <Route index element={<DashboardDefaultPage />} />
-            <Route path="advisorPage1" element={<AdvisorPage1 />} />
-            <Route path="advisorPage2" element={<AdvisorPage2 />} />         
-            <Route path="advisorPage3" element={<AdvisorPage3 />} />         
+            <Route path="viewStudents" element={<ViewStudents />} />
+            <Route path="notifyStudents" element={<NotifyStudents />} />         
           </Route>
 
           <Route path="/head-coordinator" element={<ProtectedRoute><HeadCoordinator /></ProtectedRoute>}>
@@ -104,6 +104,7 @@ function App() {
             <Route path="postInternships" element={<PostInternships />} />
             <Route path="assignInternships" element={<AssignInternships />} />
             <Route path="sendCompanyRequest" element={<SendCompanyRequest />} />
+            <Route path="checkCompanyInternships" element={<CheckCompanyInternships />} />
           </Route>
 
           <Route path="/department-coordinator" element={<ProtectedRoute><DepartmentCoordinator /></ProtectedRoute>}>

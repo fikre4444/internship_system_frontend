@@ -4,6 +4,7 @@ import { FaRegistered, FaUserCog } from "react-icons/fa";
 import { FaSignsPost } from "react-icons/fa6";
 import { VscGitPullRequestGoToChanges } from "react-icons/vsc";
 import { Outlet } from "react-router-dom";
+import { FaCheckDouble } from "react-icons/fa";
 
 const HeadCoordinatorDashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -12,7 +13,8 @@ const HeadCoordinatorDashboard = () => {
   const sidebarItems = [
     {itemId: 1, itemTitle: "Post Internships", itemLink: "postInternships", itemIcon: FaSignsPost},
     {itemId: 2, itemTitle: "Assign Internships", itemLink: "assignInternships", itemIcon: FaUserCog},
-    {itemId: 3, itemTitle: "Send Forms To Companies", itemLink: "sendCompanyRequest", itemIcon: VscGitPullRequestGoToChanges}
+    {itemId: 3, itemTitle: "Send Forms To Companies", itemLink: "sendCompanyRequest", itemIcon: VscGitPullRequestGoToChanges},
+    {itemId: 4, itemTitle: "Check Company Internships", itemLink: "checkCompanyInternships", itemIcon: FaCheckDouble}
   ];
 
 

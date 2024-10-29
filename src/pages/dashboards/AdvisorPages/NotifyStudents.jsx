@@ -1,4 +1,4 @@
-const AdvisorPage3 = () => {
+const NotifyStudents = () => {
   return (
     <div>
       This is Advisor Page 3.
@@ -6,4 +6,4 @@ const AdvisorPage3 = () => {
   )
 }
 
-export default AdvisorPage3;
+export default NotifyStudents;

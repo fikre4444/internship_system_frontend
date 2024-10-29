@@ -55,7 +55,6 @@ const DeleteUser = () => {
   useEffect(() => {
     const fetchAllUsers = async () => {
       setIsLoading(true);
-      await sleep(2000);
       try{
         const response = await axios.get("/api/admin/get-all-accounts");
         if(response.status === 200){
