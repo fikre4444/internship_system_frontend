@@ -2,7 +2,7 @@ import { useState } from "react";
 import SidebarComp from "../../components/Sidebar";
 import { FaRegistered, FaUserCog } from "react-icons/fa";
 import { FaSignsPost } from "react-icons/fa6";
-
+import { VscGitPullRequestGoToChanges } from "react-icons/vsc";
 import { Outlet } from "react-router-dom";
 
 const HeadCoordinatorDashboard = () => {
@@ -11,7 +11,8 @@ const HeadCoordinatorDashboard = () => {
 
   const sidebarItems = [
     {itemId: 1, itemTitle: "Post Internships", itemLink: "postInternships", itemIcon: FaSignsPost},
-    {itemId: 2, itemTitle: "Assign Internships", itemLink: "assignInternships", itemIcon: FaUserCog}
+    {itemId: 2, itemTitle: "Assign Internships", itemLink: "assignInternships", itemIcon: FaUserCog},
+    {itemId: 3, itemTitle: "Send Forms To Companies", itemLink: "sendCompanyRequest", itemIcon: VscGitPullRequestGoToChanges}
   ];
 
 

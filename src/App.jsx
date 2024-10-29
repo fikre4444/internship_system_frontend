@@ -45,6 +45,8 @@ import ViewStudent from './components/departmentCoordinatorComponents/ViewStuden
 import PostInternships from './pages/dashboards/HeadCoordinatorPages/PostInternships';
 import ApplyInternships from './pages/dashboards/StudentPages/ApplyInternships';
 import AssignInternships from './pages/dashboards/HeadCoordinatorPages/AssignInternships';
+import SendCompanyRequest from './pages/dashboards/HeadCoordinatorPages/SendCompanyRequest';
+import CompanyPostingPage from './pages/dashboards/CompanyPostingPage';
 
 function App() {
 
@@ -72,6 +74,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/companyPostingPage" element={<CompanyPostingPage />} />
 
           <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>}>
             <Route index element={<AdminDefaultPage />} />
@@ -100,6 +103,7 @@ function App() {
             <Route index element={<DashboardDefaultPage />} />
             <Route path="postInternships" element={<PostInternships />} />
             <Route path="assignInternships" element={<AssignInternships />} />
+            <Route path="sendCompanyRequest" element={<SendCompanyRequest />} />
           </Route>
 
           <Route path="/department-coordinator" element={<ProtectedRoute><DepartmentCoordinator /></ProtectedRoute>}>
