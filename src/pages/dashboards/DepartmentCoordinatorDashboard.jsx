@@ -3,15 +3,16 @@ import SidebarComp from "../../components/Sidebar";
 import { Outlet } from "react-router-dom";
 import { FaRegistered, FaUserCog } from "react-icons/fa";
 import { MdAddToPhotos } from "react-icons/md";
+import { IoIosNotifications } from "react-icons/io";
 
 const DepartmentCoordinatorDashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [toggled, setToggled] = useState(false);
 
   const sidebarItems = [
-    {itemId: 1, itemTitle: "First Depatment Coodinator page", itemLink: "departmentCoordinatorPage1", itemIcon: FaUserCog},
-    {itemId: 2, itemTitle: "Second Depatment Coodinator page", itemLink: "departmentCoordinatorPage2", itemIcon: FaRegistered},
-    {itemId: 3, itemTitle: "Add Student Internship", itemLink: "addStudentInternship", itemIcon: MdAddToPhotos}
+    {itemId: 1, itemTitle: "Add Student Internship", itemLink: "addStudentInternship", itemIcon: MdAddToPhotos},
+    {itemId: 2, itemTitle: "Match Students To Advisors", itemLink: "matchStudentsToAdvisors", itemIcon: FaRegistered},
+    {itemId: 3, itemTitle: "Notify Students Advisors", itemLink: "notifyStudentsAdvisors", itemIcon: IoIosNotifications}
   ];
 
 

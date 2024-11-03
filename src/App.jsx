@@ -15,16 +15,6 @@ import NotFound from './pages/NotFound';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Layout from './HOCS/Layout';
-import StudentPage1 from './pages/dashboards/StudentPages/StudentPage1';
-import StudentPage2 from './pages/dashboards/StudentPages/StudentPage2';
-import StudentPage3 from './pages/dashboards/StudentPages/StudentPage3';
-
-import HeadCoordinatorPage1 from './pages/dashboards/HeadCoordinatorPages/HeadCoordinatorPage1';
-import HeadCoordinatorPage2 from './pages/dashboards/HeadCoordinatorPages/HeadCoordinatorPage2';
-import HeadCoordinatorPage3 from './pages/dashboards/HeadCoordinatorPages/HeadCoordinatorPage3';
-import DepartmentCoordinatorPage1 from './pages/dashboards/DepartmentCoordinatorPages/DepartmentCoordinatorPage1';
-import DepartmentCoordinatorPage3 from './pages/dashboards/DepartmentCoordinatorPages/DepartmentCoordinatorPage3';
-import DepartmentCoordinatorPage2 from './pages/dashboards/DepartmentCoordinatorPages/DepartmentCoordinatorPage2';
 import RegisterUser from './pages/dashboards/AdminPages/RegisterUser';
 import AdminPage2 from './pages/dashboards/AdminPages/SecondAdmin';
 import DeleteUser from './pages/dashboards/AdminPages/DeleteUser';
@@ -33,21 +23,27 @@ import { checkAuthTokenAndFetchUser } from './utils/authUtils';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import ProtectedRoute from './HOCS/ProtectedRoute';
-import DashboardDefaultPage from './pages/DashboardDefaultPage';
 import AdminDefaultPage from './pages/dashboards/AdminPages/AdminDefaultPage';
 import SearchUser from './pages/dashboards/AdminPages/SearchUser';
 import ViewAndEditAccount from './pages/dashboards/AdminPages/ViewAndEditAccount';
 import PasswordUpdate from './components/PasswordUpdate';
 import AddStudentInternship from './pages/dashboards/DepartmentCoordinatorPages/AddStudentInternship';
-import ViewStudent from './components/departmentCoordinatorComponents/ViewStudent';
 import PostInternships from './pages/dashboards/HeadCoordinatorPages/PostInternships';
 import ApplyInternships from './pages/dashboards/StudentPages/ApplyInternships';
 import AssignInternships from './pages/dashboards/HeadCoordinatorPages/AssignInternships';
 import SendCompanyRequest from './pages/dashboards/HeadCoordinatorPages/SendCompanyRequest';
 import CompanyPostingPage from './pages/dashboards/CompanyPostingPage';
-import ViewStudents from './pages/dashboards/AdvisorPages/ViewStudents';
-import NotifyStudents from './pages/dashboards/AdvisorPages/NotifyStudents';
 import CheckCompanyInternships from './pages/dashboards/HeadCoordinatorPages/CheckCompanyInternships';
+import AdvisorDefaultPage from './pages/dashboards/AdvisorPages/AdvisorDefaultPage';
+import HeadCoordinatorDefaultPage from './pages/dashboards/HeadCoordinatorPages/HeadCoordinatorDefaultPage';
+import DepartmentCoordinatorDefaultPage from './pages/dashboards/DepartmentCoordinatorPages/DepartmentCoordinatorDefaultPage';
+import StudentDefaultPage from './pages/dashboards/StudentPages/StudentDefaultPage';
+import MatchStudentsToAdvisors from './pages/dashboards/DepartmentCoordinatorPages/MatchStudentsToAdvisors';
+import NotifyStudentsAdvisors from './pages/dashboards/DepartmentCoordinatorPages/NotifyStudentsAdvisors';
+import ViewAndNotifyStudents from './pages/dashboards/AdvisorPages/ViewAndNotifyStudents';
+import FillBiodataForm from './pages/dashboards/StudentPages/FillBiodataForm';
+import InternshipStatus from './pages/dashboards/StudentPages/InternshipStatus';
+import ViewStudent from './components/departmentCoordinatorComponents/ViewStudent';
 
 function App() {
 
@@ -87,20 +83,19 @@ function App() {
           </Route>
 
           <Route path="/student" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>}>
-            <Route index element={<DashboardDefaultPage />} />
-            <Route path="studentPage1" element={<StudentPage1 />} />
-            <Route path="studentPage2" element={<StudentPage2 />} />         
-            <Route path="applyInternships" element={<ApplyInternships />} />  
+            <Route index element={<StudentDefaultPage />} />      
+            <Route path="applyInternships" element={<ApplyInternships />} /> 
+            <Route path="fillBiodataForm" element={<FillBiodataForm />} /> 
+            <Route path="internshipStatus" element={<InternshipStatus />} />
           </Route>
 
           <Route path="/advisor" element={<ProtectedRoute><AdvisorDashboard /></ProtectedRoute>}>
-            <Route index element={<DashboardDefaultPage />} />
-            <Route path="viewStudents" element={<ViewStudents />} />
-            <Route path="notifyStudents" element={<NotifyStudents />} />         
+            <Route index element={<AdvisorDefaultPage />} />
+            <Route path="viewAndNotifyStudents" element={<ViewAndNotifyStudents />} />    
           </Route>
 
           <Route path="/head-coordinator" element={<ProtectedRoute><HeadCoordinator /></ProtectedRoute>}>
-            <Route index element={<DashboardDefaultPage />} />
+            <Route index element={<HeadCoordinatorDefaultPage />} />
             <Route path="postInternships" element={<PostInternships />} />
             <Route path="assignInternships" element={<AssignInternships />} />
             <Route path="sendCompanyRequest" element={<SendCompanyRequest />} />
@@ -108,10 +103,10 @@ function App() {
           </Route>
 
           <Route path="/department-coordinator" element={<ProtectedRoute><DepartmentCoordinator /></ProtectedRoute>}>
-            <Route index element={<DashboardDefaultPage />} />
-            <Route path="departmentCoordinatorPage1" element={<DepartmentCoordinatorPage1 />} />
-            <Route path="departmentCoordinatorPage2" element={<DepartmentCoordinatorPage2 />} />         
+            <Route index element={<DepartmentCoordinatorDefaultPage />} />     
             <Route path="addStudentInternship" element={<AddStudentInternship />} />  
+            <Route path="notifyStudentsAdvisors" element={<NotifyStudentsAdvisors />} />
+            <Route path="matchStudentsToAdvisors" element={<MatchStudentsToAdvisors />} />
             <Route path="viewStudent" element={<ViewStudent />} />
           </Route>
           

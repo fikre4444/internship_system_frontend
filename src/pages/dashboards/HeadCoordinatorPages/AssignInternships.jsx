@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { toast } from 'react-toastify';
 import { Tooltip } from "@material-tailwind/react";
+import { sleep } from '../../../utils/otherUtils'
 
 
 
@@ -27,6 +28,8 @@ const createNotification = async (
 };
 
 const AssignInternships = () => {
+
+  const currentUser = useSelector(state => state.user.currentUser);
 
   const token = useSelector(state => state.user.token);
 
@@ -119,6 +122,41 @@ const AssignInternships = () => {
     }
     
   }
+  const [notifying, setNotifying] = useState(false);
+
+  const handleNotifyStudentsToApply = async () => {
+    console.log("the department is "+department);
+    const notifyingToastId = toast.loading("Notifying Students...");
+    toast.update(notifyingToastId, {closeButton: true});
+    await sleep(1000);
+    try {
+      setNotifying(true);
+      const response = axios.post("/api/head-coordinator/notify-students-to-apply?department="+department+"&senderUsername="+currentUser.username, {
+        headers: {
+          "authorization": `Bearer ${token}`
+        }
+      });
+      console.log(response.data);
+      toast.update(notifyingToastId, {
+        render: "Successfully notified students",
+        type: "success", 
+        isLoading: false,
+        closeButton: true
+      })
+    }catch(error){
+      console.log(error);
+      toast.update(notifyingToastId, {
+        render: "There was an error while, processing!",
+        type: "error", 
+        autoClose: 2000,
+        isLoading: false,
+        closeButton: true
+      });
+    }finally {
+      // do somehting
+      setNotifying(false);
+    }
+  }
 
 
   return (
@@ -173,7 +211,7 @@ const AssignInternships = () => {
                 </div>
                 :
                 <div> {/* #TODO add a notification for this department to apply */}
-                  <Button className="bg-red-400">Notify Students to Apply!</Button>
+                  <Button loading={notifying} onClick={() => {handleNotifyStudentsToApply()}} className="bg-red-400">Notify Students to Apply!</Button>
                 </div>
               }
             </div>

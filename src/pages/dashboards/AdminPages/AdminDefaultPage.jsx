@@ -10,6 +10,7 @@ import { RiUserSearchFill } from "react-icons/ri";
 import { FaUserTimes } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import PulsingButtons from "../../../components/PulsingButtons";
 
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -53,7 +54,8 @@ const AdminDefaultPage = () => {
   
 
   return (
-    <div>
+    <div className="relative">
+      <PulsingButtons />
       <h1 className="text-3xl m-2 md:text-4xl lg:text-5xl font-bold text-gray-800 dark:text-gray-200 mt-4 md:mt-6 lg:mt-8">
         Hello, {currentUser.firstName}
       </h1>

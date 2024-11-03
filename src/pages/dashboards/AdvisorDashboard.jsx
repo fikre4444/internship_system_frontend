@@ -11,8 +11,7 @@ const AdvisorDashboard = () => {
   const [toggled, setToggled] = useState(false);
 
   const sidebarItems = [
-    {itemId: 1, itemTitle: "View Students", itemLink: "viewStudents", itemIcon: FaStreetView},
-    {itemId: 2, itemTitle: "Notify Students", itemLink: "notifyStudents", itemIcon: IoIosNotifications},
+    {itemId: 1, itemTitle: "View & Notify Students", itemLink: "viewAndNotifyStudents", itemIcon: IoIosNotifications},
   ];
 
   return (

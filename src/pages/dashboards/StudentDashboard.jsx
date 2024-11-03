@@ -3,15 +3,16 @@ import SidebarComp from "../../components/Sidebar";
 import { FaRegistered, FaUserCog } from "react-icons/fa";
 import { useState } from "react";
 import { VscGitStashApply } from "react-icons/vsc";
+import { FaTableCells, FaTachographDigital } from "react-icons/fa6";
 
 const StudentDashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [toggled, setToggled] = useState(false);
 
   const sidebarItems = [
-    {itemId: 1, itemTitle: "First Student page", itemLink: "studentPage1", itemIcon: FaUserCog},
-    {itemId: 2, itemTitle: "Second Student page", itemLink: "studentPage2", itemIcon: FaRegistered},
-    {itemId: 3, itemTitle: "Apply Internships", itemLink: "applyInternships", itemIcon: VscGitStashApply}
+    {itemId: 1, itemTitle: "Internship Status", itemLink: "internshipStatus", itemIcon: FaTachographDigital},
+    {itemId: 2, itemTitle: "Apply Internships", itemLink: "applyInternships", itemIcon: VscGitStashApply},
+    {itemId: 3, itemTitle: "Fill Biodata Form", itemLink: "fillBiodataForm", itemIcon: FaTableCells}
   ];
 
 

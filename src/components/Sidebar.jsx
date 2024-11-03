@@ -49,12 +49,12 @@ const SidebarComp = ({className, collapsed, setCollapsed, toggled, setToggled, s
           key={key}
         >
           <Menu>
-            <MenuItem 
-              onClick={() => isSmallScreen ? setToggled(!toggled) : setCollapsed(!collapsed)} 
-              icon={isSmallScreen ? <div>X</div> : <RxHamburgerMenu />}
-            >
-                Menu
-            </MenuItem>
+              <MenuItem 
+                onClick={() => isSmallScreen ? setToggled(!toggled) : setCollapsed(!collapsed)} 
+                icon={isSmallScreen ? <div>X</div> : <RxHamburgerMenu />}
+              >
+                  Menu
+              </MenuItem>
             {sidebarItems.map(item => {
               return (
                 <MenuItem 
