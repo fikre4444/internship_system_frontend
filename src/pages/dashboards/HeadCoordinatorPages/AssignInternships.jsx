@@ -7,6 +7,8 @@ import withReactContent from 'sweetalert2-react-content';
 import { toast } from 'react-toastify';
 import { Tooltip } from "@material-tailwind/react";
 import { sleep } from '../../../utils/otherUtils'
+import sendApiRequest from "../../../utils/apiUtils";
+import { DEPARTMENTS } from "../../../data/departments";
 
 
 
@@ -56,107 +58,70 @@ const AssignInternships = () => {
 
   const handleChecking = async () => {
     setIsChecking(true);
-    const checkingToastId = toast.loading("Checking Students of "+department+" department...");
-    toast.update(checkingToastId, {closeButton: true});
-    try{
-      const response = await axios.get("/api/head-coordinator/check-all-students-applied?department="+department, {
-        headers: {
-          'authorization' : `Bearer ${token}`
-        }
-      });
-      if(response.status === 200){
-        if(response.data === true){
-          toast.dismiss(checkingToastId);
-          await createNotification("Possible", "It possible to start the student to internship placement process.");
+  
+    await sendApiRequest({
+      url: `/api/head-coordinator/check-all-students-applied?department=${department}`,
+      method: 'GET',
+      startMessage: `Checking Students of ${department} department...`,
+      token,
+      successMessage: '',
+      errorMessage: 'There was an error while checking, please try again later.',
+      onSuccess: async (data) => {
+        if (data === true) {
+          console.log("we can do it")
+          await createNotification("Possible", "It is possible to start the student internship placement process.");
           setIsAssigningPossible(true);
-        }
-        else {
+        } else {
+          await createNotification("Not Possible", "All students haven't applied, please notify them first.");
+          console.log("we can't do it")
           setIsAssigningPossible(false);
-          toast.dismiss(checkingToastId);
-          await createNotification("Not Possible", "All Students haven't applied, please notify them first.");
         }
-      }
-      setGotCheckingResponse(true);
-    }catch(error){
-      console.log(error);
-      toast.update(checkingToastId, {
-        render: "There Was An error while checking, please try again later.",
-        type: "error", 
-        isLoading: false,
-        autoClose: 1000
-      })
-    }finally {
-      setIsChecking(false);
-    }
-  }
+        setGotCheckingResponse(true);
+      },
+      onError: (error) => console.log(error),
+      onFinally: () => setIsChecking(false),
+      sleepLength: 1000
+    });
+  };
 
   const handleStartAssignment = async () => {
     setIsAssigningStudents(true);
-    const assigningToastId = toast.loading("Processing Students and Internships...");
-    toast.update(assigningToastId, {closeButton: true});
-    try {
-      const response = await axios.post("/api/head-coordinator/apply-internships?department="+department, {
-        headers: {
-          'authorization': `Bearer ${token}`
-        }
-      });
-      toast.update(assigningToastId, {
-        render: "Successfully processed Applications",
-        type: "success", 
-        autoClose: 2000,
-        isLoading: false
-      })
-      console.log(response.data.temporaryPlacementsEssentials);
-      setGotTemporaryPlacementResults(true);
-      setTemporaryPlacements(response.data.temporaryPlacements);
-    }catch(error){
-      console.log(error);
-      toast.update(assigningToastId, {
-        render: "There was an error while, processing!",
-        type: "error", 
-        autoClose: 2000,
-        isLoading: false
-      });
-    }finally {
-      setIsAssigningStudents(false);
-    }
-    
-  }
+    await sendApiRequest({
+      url: `/api/head-coordinator/apply-internships?department=${department}`,
+      method: 'POST',
+      startMessage: "Processing Students and Internships...",
+      token, // pass the token to automatically include in headers
+      successMessage: "Successfully processed Applications",
+      errorMessage: "There was an error while processing!",
+      onSuccess: (data) => {
+        console.log(data.temporaryPlacementsEssentials);
+        setGotTemporaryPlacementResults(true);
+        setTemporaryPlacements(data.temporaryPlacements);
+      },
+      onError: (error) => console.log(error),
+      onFinally: () => setIsAssigningStudents(false)
+    });
+  };
+
   const [notifying, setNotifying] = useState(false);
 
   const handleNotifyStudentsToApply = async () => {
-    console.log("the department is "+department);
-    const notifyingToastId = toast.loading("Notifying Students...");
-    toast.update(notifyingToastId, {closeButton: true});
-    await sleep(1000);
-    try {
-      setNotifying(true);
-      const response = axios.post("/api/head-coordinator/notify-students-to-apply?department="+department+"&senderUsername="+currentUser.username, {
-        headers: {
-          "authorization": `Bearer ${token}`
-        }
-      });
-      console.log(response.data);
-      toast.update(notifyingToastId, {
-        render: "Successfully notified students",
-        type: "success", 
-        isLoading: false,
-        closeButton: true
-      })
-    }catch(error){
-      console.log(error);
-      toast.update(notifyingToastId, {
-        render: "There was an error while, processing!",
-        type: "error", 
-        autoClose: 2000,
-        isLoading: false,
-        closeButton: true
-      });
-    }finally {
-      // do somehting
-      setNotifying(false);
-    }
-  }
+    console.log("the department is " + department);
+  
+    await sendApiRequest({
+      url: `/api/head-coordinator/notify-students-to-apply?department=${department}&senderUsername=${currentUser.username}`,
+      method: "POST",
+      startMessage: "Notifying Students...",
+      token,
+      successMessage: "Successfully notified students",
+      errorMessage: "There was an error while processing!",
+      onSuccess: (data) => console.log(data),
+      onError: (error) => console.log(error),
+      onFinally: () => setNotifying(false),
+      sleepLength: 1000 // Delays the request for 1 second as in the original code
+    });
+  };
+  
 
 
   return (
@@ -187,12 +152,11 @@ const AssignInternships = () => {
                   }}
                   ref={departmentRef}
                 >
-                  <Option value="CHEMICAL">Chemical Engineering</Option>
-                  <Option value="MECHANICAL">Mechanical Engineering</Option>
-                  <Option value="INDUSTRIAL">Industrial Engineering</Option>
-                  <Option value="CIVIL">Civil Engineering</Option>
-                  <Option value="ELECTRICAL">Electrical Engineering</Option>
-                  <Option value="ARCHITECUTRE">Architecture</Option>
+                  {DEPARTMENTS.map((dept) => (
+                    <Option key={dept.value} value={dept.value}>
+                      {dept.label}
+                    </Option>
+                  ))}
                 </Select>
                 {errors.department && <span className="text-red-500 m-0 p-0 text-sm">{errors.department}</span>}
               </div>
@@ -210,7 +174,7 @@ const AssignInternships = () => {
                   </Button>
                 </div>
                 :
-                <div> {/* #TODO add a notification for this department to apply */}
+                <div>
                   <Button loading={notifying} onClick={() => {handleNotifyStudentsToApply()}} className="bg-red-400">Notify Students to Apply!</Button>
                 </div>
               }
@@ -297,35 +261,24 @@ const TemporaryPlacementsTable = ({ temporaryPlacements, department }) => {
 
   const [confirming, setIsConfirming] = useState(false);
   const [notificationOption, setNotificationOption] = useState(false);
+
   const handleConfirmPlacement = async () => {
-    setIsConfirming(true);
-    const confirmingToastId = toast.loading("Confirming Placements please wait....");
-    toast.update(confirmingToastId, {closeButton: true});
-    try {
-      const response = await axios.put("/api/head-coordinator/confirm-placements?department="+department, {
-        headers: {
-          'authorization': `Bearer ${token}`
-        }
-      });
-      toast.update(confirmingToastId, {
-        render: "Successfully Confirmed Placements",
-        type: "success", 
-        autoClose: 2000,
-        isLoading: false
-      })
-      setNotificationOption(true);
-    }catch(error){
-      console.log(error);
-      toast.update(confirmingToastId, {
-        render: "There was an error while, confirming",
-        type: "error", 
-        autoClose: 2000,
-        isLoading: false
-      });
-    }finally {
-      setIsConfirming(false);
-    }
-  }
+    setIsConfirming(true);  
+    await sendApiRequest({
+      url: `/api/head-coordinator/confirm-placements?department=${department}`,
+      method: "PUT",
+      startMessage: "Confirming Placements please wait....",
+      token,
+      successMessage: "Successfully Confirmed Placements",
+      errorMessage: "There was an error while confirming",
+      onSuccess: () => {
+        setNotificationOption(true);
+      },
+      onError: (error) => console.log(error),
+      onFinally: () => setIsConfirming(false)
+    });
+  };
+  
 
   const handleApplyAndConfirmPlacement = async () => {
     console.log("apply and confirming...")
@@ -344,35 +297,20 @@ const TemporaryPlacementsTable = ({ temporaryPlacements, department }) => {
         
     console.log("Extracted Placement Data:", extractedData);
 
-    setIsConfirming(true);
-    const confirmingToastId = toast.loading("Confirming Placements please wait....");
-    toast.update(confirmingToastId, {closeButton: true});
-    try {
-      const response = await axios.put("/api/head-coordinator/apply-changes-to-placements",filteredData, {
-        headers: {
-          'authorization': `Bearer ${token}`
-        }
-      });
-      toast.update(confirmingToastId, {
-        render: "Successfully Confirmed Placements",
-        type: "success", 
-        autoClose: 2000,
-        isLoading: false
-      })
-      setNotificationOption(true);
-    }catch(error){
-      console.log(error);
-      toast.update(confirmingToastId, {
-        render: "There was an error while, confirming",
-        type: "error", 
-        autoClose: 2000,
-        isLoading: false
-      });
-    }finally {
-      setIsConfirming(false);
-    }
-
-
+    await sendApiRequest({
+      url: "/api/head-coordinator/apply-changes-to-placements",
+      method: "PUT",
+      requestBody: filteredData,
+      startMessage: "Confirming Placements please wait....",
+      token,
+      successMessage: "Successfully Confirmed Placements",
+      errorMessage: "There was an error while confirming",
+      onSuccess: () => {
+        setNotificationOption(true);
+      },
+      onError: (error) => console.log(error),
+      onFinally: () => setIsConfirming(false)
+    });
   }
 
   return (
@@ -516,5 +454,3 @@ const TemporaryPlacementsTable = ({ temporaryPlacements, department }) => {
     </div>
   );
 };
-
-// #TODO don't forget to add instructions here because it can be confusing.

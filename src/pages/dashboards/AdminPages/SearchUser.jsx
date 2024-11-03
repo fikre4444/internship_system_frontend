@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import axios from 'axios';
 import AccountsTable from "../../../components/AccountsTable";
 import { toast } from "react-toastify";
+import { DEPARTMENTS } from "../../../data/departments";
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -383,12 +384,11 @@ const ComplexSearch = ({ setResponse, setSearchTerms }) => {
                   <div className="relative group">
                     <Select  label="Select department" value={department} onChange={(value) => setDepartment(value)}>
                       <Option value="ALL">All Departments</Option>
-                      <Option value="CHEMICAL">Chemical Engineering</Option>
-                      <Option value="MECHANICAL">Mechanical Engineering</Option>
-                      <Option value="INDUSTRIAL">Industrial Engineering</Option>
-                      <Option value="CIVIL">Civil Engineering</Option>
-                      <Option value="ELECTRICAL">Electrical Engineering</Option>
-                      <Option value="ARCHITECTURE">Architecture</Option>
+                      {DEPARTMENTS.map(department => (
+                        <Option key={department.value} value={department.value}>
+                          {department.label}
+                        </Option>
+                      ))}
                     </Select>
                   </div>
                 </div>

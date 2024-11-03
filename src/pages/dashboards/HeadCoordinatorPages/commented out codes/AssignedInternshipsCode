@@ -1,0 +1,144 @@
+// #TODO don't forget to add instructions here because it can be confusing.
+
+
+  // const handleChecking = async () => {
+
+  //   setIsChecking(true);
+  //   const checkingToastId = toast.loading("Checking Students of "+department+" department...");
+  //   toast.update(checkingToastId, {closeButton: true});
+  //   try{
+  //     // const response = await axios.get("/api/head-coordinator/check-all-students-applied?department="+department, {
+  //     //   headers: {
+  //     //     'authorization' : `Bearer ${token}`
+  //     //   }
+  //     // });
+  //     const response =  await axios({
+  //       method: "GET", 
+  //       url: "/api/head-coordinator/check-all-students-applied?department="+department,
+  //       headers: {
+  //         'authorization' : `Bearer ${token}`
+  //       }
+  //     });
+  //     if(response.status === 200){
+  //       if(response.data === true){
+  //         toast.dismiss(checkingToastId);
+  //         await createNotification("Possible", "It possible to start the student to internship placement process.");
+  //         setIsAssigningPossible(true);
+  //       }
+  //       else {
+  //         setIsAssigningPossible(false);
+  //         toast.dismiss(checkingToastId);
+  //         await createNotification("Not Possible", "All Students haven't applied, please notify them first.");
+  //       }
+  //     }
+  //     setGotCheckingResponse(true);
+  //   }catch(error){
+  //     console.log(error);
+  //     toast.update(checkingToastId, {
+  //       render: "There Was An error while checking, please try again later.",
+  //       type: "error", 
+  //       isLoading: false,
+  //       autoClose: 1000
+  //     })
+  //   }finally {
+  //     setIsChecking(false);
+  //   }
+  // }
+
+  // const handleStartAssignment = async () => {
+  //   setIsAssigningStudents(true);
+  //   const assigningToastId = toast.loading("Processing Students and Internships...");
+  //   toast.update(assigningToastId, {closeButton: true});
+  //   try {
+  //     const response = await axios.post("/api/head-coordinator/apply-internships?department="+department, {
+  //       headers: {
+  //         'authorization': `Bearer ${token}`
+  //       }
+  //     });
+  //     toast.update(assigningToastId, {
+  //       render: "Successfully processed Applications",
+  //       type: "success", 
+  //       autoClose: 2000,
+  //       isLoading: false
+  //     })
+  //     console.log(response.data.temporaryPlacementsEssentials);
+  //     setGotTemporaryPlacementResults(true);
+  //     setTemporaryPlacements(response.data.temporaryPlacements);
+  //   }catch(error){
+  //     console.log(error);
+  //     toast.update(assigningToastId, {
+  //       render: "There was an error while, processing!",
+  //       type: "error", 
+  //       autoClose: 2000,
+  //       isLoading: false
+  //     });
+  //   }finally {
+  //     setIsAssigningStudents(false);
+  //   }
+    
+  // }
+
+
+    // const handleConfirmPlacement = async () => {
+  //   setIsConfirming(true);
+  //   const confirmingToastId = toast.loading("Confirming Placements please wait....");
+  //   toast.update(confirmingToastId, {closeButton: true});
+  //   try {
+  //     const response = await axios.put("/api/head-coordinator/confirm-placements?department="+department, {
+  //       headers: {
+  //         'authorization': `Bearer ${token}`
+  //       }
+  //     });
+  //     toast.update(confirmingToastId, {
+  //       render: "Successfully Confirmed Placements",
+  //       type: "success", 
+  //       autoClose: 2000,
+  //       isLoading: false
+  //     })
+  //     setNotificationOption(true);
+  //   }catch(error){
+  //     console.log(error);
+  //     toast.update(confirmingToastId, {
+  //       render: "There was an error while, confirming",
+  //       type: "error", 
+  //       autoClose: 2000,
+  //       isLoading: false
+  //     });
+  //   }finally {
+  //     setIsConfirming(false);
+  //   }
+  // }
+
+   // const handleNotifyStudentsToApply = async () => {
+  //   console.log("the department is "+department);
+  //   const notifyingToastId = toast.loading("Notifying Students...");
+  //   toast.update(notifyingToastId, {closeButton: true});
+  //   await sleep(1000);
+  //   try {
+  //     setNotifying(true);
+  //     const response = axios.post("/api/head-coordinator/notify-students-to-apply?department="+department+"&senderUsername="+currentUser.username, {
+  //       headers: {
+  //         "authorization": `Bearer ${token}`
+  //       }
+  //     });
+  //     console.log(response.data);
+  //     toast.update(notifyingToastId, {
+  //       render: "Successfully notified students",
+  //       type: "success", 
+  //       isLoading: false,
+  //       closeButton: true
+  //     })
+  //   }catch(error){
+  //     console.log(error);
+  //     toast.update(notifyingToastId, {
+  //       render: "There was an error while, processing!",
+  //       type: "error", 
+  //       autoClose: 2000,
+  //       isLoading: false,
+  //       closeButton: true
+  //     });
+  //   }finally {
+  //     // do somehting
+  //     setNotifying(false);
+  //   }
+  // }

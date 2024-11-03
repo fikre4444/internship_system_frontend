@@ -6,8 +6,9 @@ import { validateCourseLoad, validateDepartment, validateEmail, validateFirstNam
 import { useRef } from "react";
 import axios from 'axios';
 import AccountsTable from "../AccountsTable";
+import { DEPARTMENTS } from "../../data/departments";
 
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const RegisterCustom = () => {
@@ -393,13 +394,17 @@ const RegisterCustom = () => {
               <h3 className="text-md text-gray-800 font-extrabold">Department</h3>
               <div className="w-72 m-2">
                 <div className="relative group my-4">
-                  <Select ref={departmentRef}  label="Select department" value={department} onChange={handleDepartmentChange}>
-                    <Option value="CHEMICAL">Chemical Engineering</Option>
-                    <Option value="MECHANICAL">Mechanical Engineering</Option>
-                    <Option value="INDUSTRIAL">Industrial Engineering</Option>
-                    <Option value="CIVIL">Civil Engineering</Option>
-                    <Option value="ELECTRICAL">Electrical Engineering</Option>
-                    <Option value="ARCHITECTURE">Architecture</Option>
+                  <Select
+                    ref={departmentRef}
+                    label="Select department"
+                    value={department}
+                    onChange={handleDepartmentChange}
+                  >
+                    {DEPARTMENTS.map(department => (
+                      <Option key={department.value} value={department.value}>
+                        {department.label}
+                      </Option>
+                    ))}
                   </Select>
                 </div>
                 {errors.department && <span className="text-red-500 m-0 p-0 text-sm">{errors.department}</span>}

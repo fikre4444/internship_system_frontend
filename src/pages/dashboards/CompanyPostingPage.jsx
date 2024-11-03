@@ -6,6 +6,7 @@ import { Button, Input, Option, Select } from "@material-tailwind/react";
 import { toast } from 'react-toastify';
 import { sleep } from '../../utils/otherUtils'
 import { useSelector } from "react-redux";
+import { DEPARTMENTS } from "../../data/departments";
 
 const CompanyPostingPage = () => {
   
@@ -248,12 +249,11 @@ const PostInternshipsComponent = ({token}) => {
                 value={row.department}
                 onChange={(val) => handleRowInputChange(row.id, "department", val)}
               >
-                <Option value="CHEMICAL">Chemical Engineering</Option>
-                <Option value="MECHANICAL">Mechanical Engineering</Option>
-                <Option value="INDUSTRIAL">Industrial Engineering</Option>
-                <Option value="CIVIL">Civil Engineering</Option>
-                <Option value="ELECTRICAL">Electrical Engineering</Option>
-                <Option value="ARCHITECTURE">Architecture</Option>
+                {DEPARTMENTS.map(department => (
+                  <Option key={department.value} value={department.value}>
+                    {department.label}
+                  </Option>
+                ))}
               </Select>
               {errors[row.id] && (
                 <p className="text-red-500 text-xs">{errors[row.id]}</p>

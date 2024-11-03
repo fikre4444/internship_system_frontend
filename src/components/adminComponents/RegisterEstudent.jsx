@@ -4,6 +4,7 @@ import axios from 'axios';
 import { validateUsername } from '../../utils/formatting';
 import { ToastContainer, toast } from 'react-toastify';
 import AccountsTable from '../AccountsTable';
+import { DEPARTMENTS } from '../../data/departments';
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -237,12 +238,11 @@ const RegisterEstudent = () => {
                   disabled={amount === 'SINGLE'}
                   ref={departmentRef}
                 >
-                  <Option value="CHEMICAL">Chemical Engineering</Option>
-                  <Option value="MECHANICAL">Mechanical Engineering</Option>
-                  <Option value="INDUSTRIAL">Industrial Engineering</Option>
-                  <Option value="CIVIL">Civil Engineering</Option>
-                  <Option value="ELECTRICAL">Electrical Engineering</Option>
-                  <Option value="ARCHITECUTRE">Architecture</Option>
+                  {DEPARTMENTS.map(department => (
+                    <Option key={department.value} value={department.value}>
+                      {department.label}
+                    </Option>
+                  ))}
                 </Select>
                 {errors.department && <span className="text-red-500 m-0 p-0 text-sm">{errors.department}</span>}
                 {amount === 'SINGLE' && (

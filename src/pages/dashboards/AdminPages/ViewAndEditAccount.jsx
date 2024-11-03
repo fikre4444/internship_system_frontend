@@ -4,6 +4,7 @@ import { Badge, Button, Card, Chip, Option, Select, Switch } from '@material-tai
 import { FaCheck } from "react-icons/fa6";
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { DEPARTMENTS } from '../../../data/departments';
 
 const ViewAndEditAccount = () => {
   const [ isEditing, setIsEditing ] = useState(false);
@@ -464,12 +465,11 @@ const EditingComponent = ({account, setAccount}) => {
                 value={selectedDepartment}
                 onChange={(e) => {setSelectedDepartment(e); setErrors({department: ""})}}
               >
-                <Option value="CHEMICAL">Chemical Engineering</Option>
-                <Option value="MECHANICAL">Mechanical Engineering</Option>
-                <Option value="INDUSTRIAL">Industrial Engineering</Option>
-                <Option value="CIVIL">Civil Engineering</Option>
-                <Option value="ELECTRICAL">Electrical Engineering</Option>
-                <Option value="ARCHITECTURE">Architecture</Option>
+                {DEPARTMENTS.map(department => (
+                  <Option key={department.value} value={department.value}>
+                    {department.label}
+                  </Option>
+                ))}
               </Select>
             </div>
             {errors.department && <span className="text-red-500 font-semibold m-0 p-0 text-sm">{errors.department}</span>}

@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { sleep } from '../../../utils/otherUtils';
 import { useSelector } from "react-redux";
 import SlideDown from '../../../HOCS/SlideDown';
+import { DEPARTMENTS } from '../../../data/departments';
 
 
 const PostInternships = () => {
@@ -213,12 +214,11 @@ const PostInternshipsComponent = () => {
                   value={row.department}
                   onChange={(val) => handleInputChange(row.id, "department", val)}
                 >
-                  <Option value="CHEMICAL">Chemical Engineering</Option>
-                  <Option value="MECHANICAL">Mechanical Engineering</Option>
-                  <Option value="INDUSTRIAL">Industrial Engineering</Option>
-                  <Option value="CIVIL">Civil Engineering</Option>
-                  <Option value="ELECTRICAL">Electrical Engineering</Option>
-                  <Option value="ARCHITECTURE">Architecture</Option>
+                  {DEPARTMENTS.map(department => (
+                    <Option key={department.value} value={department.value}>
+                      {department.label}
+                    </Option>
+                  ))}
                 </Select>
                 {/* Pocket Money Select Element */}
                 <Select
