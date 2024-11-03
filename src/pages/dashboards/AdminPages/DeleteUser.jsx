@@ -48,38 +48,48 @@ const DeleteUser = () => {
     department: "", typeUser: ""
   });
 
+  const [page, setPage] = useState(0); // Current page
+  const [size] = useState(10); // Number of items per page
+  const [totalPages, setTotalPages] = useState(0); // Total pages available
+
   const [TABLE_HEAD, setTABLE_HEAD] = useState(["Member", "Username", "Department", "Remove User"])
 
-
-
-
-  useEffect(() => {
-    const fetchAllUsers = async () => {
-      setIsLoading(true);
-      try{
-        const response = await axios.get("/api/admin/get-all-accounts");
-        if(response.status === 200){
-          const data = response.data;
-          console.log(data);
-          setAccountsList([...data]);
-          setUnchangeableAccountList([...data]);
-          if(data.length > 0)
-            setSuccessfulResponse(true);
+  const fetchAllUsers = async () => {
+    setIsLoading(true);
+    try {
+        const response = await axios.get(`/api/admin/get-all-accounts?page=${page}&size=${size}`);
+        if (response.status === 200) {
+            const data = response.data;
+            console.log(data);
+            setAccountsList([...data.content]); // Accessing the content of the page
+            setUnchangeableAccountList([...data.content]);
+            setSuccessfulResponse(data.content.length > 0);
+            setTotalPages(data.totalPages); // Set total pages from response
         } else {
-          setSuccessfulResponse(false);
+            setSuccessfulResponse(false);
         }
-      }catch(error){
+    } catch (error) {
         console.log("there was an error while loading");
         console.log(error);
-      }finally {
+        setSuccessfulResponse(false);
+    } finally {
         setIsLoading(false);
-      }
-      
     }
+  };
+
+  useEffect(() => {
+    
     console.log("hello doing something");
     fetchAllUsers();
-  }, [])
+}, [page, size]);
 
+const handlePreviousPage = () => {
+  if (page > 0) setPage(page - 1);
+};
+
+const handleNextPage = () => {
+  if (page < totalPages - 1) setPage(page + 1);
+};
 
   const handleDepartmentChange = (value) => {
     console.log("the value is "+value);
@@ -304,13 +314,48 @@ const DeleteUser = () => {
                   </div>
                 </div>
               </div>
-              <Button className="my-2 capitalize bg-red-400"
+              <Button 
+                className="my-2 capitalize bg-red-400"
                 onClick={() => {deleteUser("GROUP", "", department, typeUserDelete)}}
               >
                 Remove Accounts
               </Button>
             </div>
           </div>
+          {/* <div className="container mx-auto p-4 text-center"> */}
+            {/* Pagination Controls */}
+            <div className="flex justify-center mb-6 space-x-2">
+              <button
+                onClick={handlePreviousPage}
+                disabled={page === 0}
+                className="px-4 py-2 rounded-lg shadow-md bg-white bg-opacity-30 hover:bg-opacity-50 backdrop-blur-md border border-blue-300 text-blue-500 font-semibold transition duration-200"
+              >
+                Previous
+              </button>
+
+              {/* Page Numbers */}
+              {[...Array(totalPages)].map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setPage(index)}
+                  className={`px-4 py-2 rounded-lg shadow-md backdrop-blur-md ${
+                    page === index
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-white bg-opacity-30 hover:bg-opacity-50 border border-blue-300 text-blue-500'
+                  } font-semibold transition duration-200`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+
+              <button
+                onClick={handleNextPage}
+                disabled={page === totalPages - 1}
+                className="px-4 py-2 rounded-lg shadow-md bg-white bg-opacity-30 hover:bg-opacity-50 backdrop-blur-md border border-blue-300 text-blue-500 font-semibold transition duration-200"
+              >
+                Next
+              </button>
+            </div>
           <DeleteAccountsTable TABLE_ROWS = {accountsList} TABLE_HEAD={TABLE_HEAD} deleteUser={deleteUser} searchTerms={searchTerms}/>
         </div>
         :
