@@ -17,8 +17,9 @@ const AdminDashboard = () => {
 
   const sidebarItems = [
     {itemId: 1, itemTitle: "Register Users", itemLink: "registerUser", itemIcon: FaUserPlus},
-    {itemId: 2, itemTitle: "Search Users", itemLink: "searchUser", itemIcon: FaSearch},
-    {itemId: 3, itemTitle: "Delete Users", itemLink: "deleteUser", itemIcon: FaUserTimes},
+    {itemId: 2, itemTitle: "Upload Users", itemLink: "uploadRegister", itemIcon: FaRegistered},
+    {itemId: 3, itemTitle: "Search Users", itemLink: "searchUser", itemIcon: FaSearch},
+    {itemId: 4, itemTitle: "Delete Users", itemLink: "deleteUser", itemIcon: FaUserTimes},
   ];
 
 

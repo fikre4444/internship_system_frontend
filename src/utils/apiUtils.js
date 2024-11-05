@@ -30,8 +30,6 @@ const sendApiRequest = async ({
 
     const response = await axios(config);
 
-    console.log(response);
-
     if (response.status === 200) {
       toast.update(toastId, {
         render: successMessage,

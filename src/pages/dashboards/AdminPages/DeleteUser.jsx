@@ -1,4 +1,4 @@
-import { Button, Input, Option, Radio, Select } from "@material-tailwind/react";
+import { Button, Chip, Input, Option, Radio, Select } from "@material-tailwind/react";
 import { useState, useEffect,useRef } from 'react';
 import axios from 'axios';
 import Loader from '../../../components/Loader';
@@ -51,6 +51,7 @@ const DeleteUser = () => {
   const [page, setPage] = useState(0); // Current page
   const [size] = useState(10); // Number of items per page
   const [totalPages, setTotalPages] = useState(0); // Total pages available
+  const [paginationControlsVisible, setPaginationControlsVisible] = useState(true);
 
   const [TABLE_HEAD, setTABLE_HEAD] = useState(["Member", "Username", "Department", "Remove User"])
 
@@ -101,27 +102,39 @@ const handleNextPage = () => {
     setTypeUserDelete(newTypeUser);
   }
 
-  const changeAccountsList = (filterValue) => {
-    const newAccountList = unchangeableAccountList.filter((account) => {
-      if(account.firstName.toLowerCase().includes(filterValue.toLowerCase())) return true;
-      if(account.lastName.toLowerCase().includes(filterValue.toLowerCase())) return true;
-      if(account.username.toLowerCase().includes(filterValue.toLowerCase())) return true;
-      if(account.department.name.toLowerCase().includes(filterValue.toLowerCase())) return true;
+
+  const [ searchError, setSearchError ] = useState('');
+  const validateInput = () => {
+    if(filter === null || filter === ''){
+      setSearchError("Please Input something first.");
       return false;
-    });
-    setSearchTerms([filterValue]);
-    setAccountsList(newAccountList);
+    }
+    return true;
+  }  
+
+  const handleSearch = () => {
+    if(!validateInput()){
+      return;
+    }
+    setSearchError("");
+
+    setIsLoading(true);
+    const requestUrl = "/api/admin/simple-search?searchTerm="+filter;
+    axios.get(requestUrl).then((response) => {
+      console.log(response.data);
+      const result = response.data;
+      setSearchTerms([filter]);
+      setUnchangeableAccountList(result);
+      setAccountsList(result);
+      setPaginationControlsVisible(false);
+    }).catch(error => {
+      console.log(error);
+      toast.error("some Error occured");
+    }).finally(() => {
+      setIsLoading(false);
+    })
   }
 
-  const handleFilterChange = (filterValue) => {
-    console.log("doing something")
-    setFilter(filterValue);
-    if(debouncingRef.current){
-      clearTimeout(debouncingRef.current)
-    }
-    debouncingRef.current = setTimeout(() => changeAccountsList(filterValue) , 1000);
-    console.log("done");
-  }
 
   const deleteUser = useCallback(async (type, username, department, typeUserDelete) => {
     // the reason i am passing the 3 arguments here instead of using the states above is because of 
@@ -254,6 +267,16 @@ const handleNextPage = () => {
     setUnchangeableAccountList(newAccountsList);
   }
 
+  const handleShowAll = () => {
+    console.log("hello");
+    setFilter("");
+    setSearchError("");
+    setSearchTerms([]);
+    setPage(prev => prev + 1);
+    setPage(prev => prev - prev);
+    setPaginationControlsVisible(true);
+  }
+
   return (
     <div>
       { isLoading ?
@@ -273,16 +296,25 @@ const handleNextPage = () => {
                     label="Input Something"
                     value={filter}
                     onChange={(e) => {
-                      handleFilterChange(e.target.value);
+                      setFilter(e.target.value)
                     }}
                   />
                 </div>
+                <Button className="bg-blue-500" onClick={() => {handleSearch()}}>
+                  Search
+                </Button>
               </div>
+              {searchError && <span className="text-red-500 m-0 p-0 text-sm">{searchError}</span>}
               <div className="max-w-72 bg-blue-200 bg-opacity-50 rounded-md shadow-sm p-2 m-2">
                 <p className="text-xs text-gray-700 font-semibold">
-                  Please Input a first name, last name, username, or department to filter the table below.
+                  Please Input a first name, last name, username, or department to search accounts.
                 </p>
               </div>
+              { !paginationControlsVisible &&
+                <div className="flex ml-2">
+                  <Chip onClick={() => {handleShowAll()}} className="cursor-pointer hover:bg-gray-900 transition-all duration-150" color="cyan" value="Show All" />
+                </div>
+              }
             </div>
             <div className="m-3 ml-4">
               <div className="flex gap-2 mb-2">
@@ -324,38 +356,40 @@ const handleNextPage = () => {
           </div>
           {/* <div className="container mx-auto p-4 text-center"> */}
             {/* Pagination Controls */}
-            <div className="flex justify-center mb-6 space-x-2">
-              <button
-                onClick={handlePreviousPage}
-                disabled={page === 0}
-                className="px-4 py-2 rounded-lg shadow-md bg-white bg-opacity-30 hover:bg-opacity-50 backdrop-blur-md border border-blue-300 text-blue-500 font-semibold transition duration-200"
-              >
-                Previous
-              </button>
-
-              {/* Page Numbers */}
-              {[...Array(totalPages)].map((_, index) => (
+            { !!paginationControlsVisible &&
+              <div className="flex justify-center mb-6 space-x-2">
                 <button
-                  key={index}
-                  onClick={() => setPage(index)}
-                  className={`px-4 py-2 rounded-lg shadow-md backdrop-blur-md ${
-                    page === index
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-white bg-opacity-30 hover:bg-opacity-50 border border-blue-300 text-blue-500'
-                  } font-semibold transition duration-200`}
+                  onClick={handlePreviousPage}
+                  disabled={page === 0}
+                  className="px-4 py-2 rounded-lg shadow-md bg-white bg-opacity-30 hover:bg-opacity-50 backdrop-blur-md border border-blue-300 text-blue-500 font-semibold transition duration-200"
                 >
-                  {index + 1}
+                  Previous
                 </button>
-              ))}
 
-              <button
-                onClick={handleNextPage}
-                disabled={page === totalPages - 1}
-                className="px-4 py-2 rounded-lg shadow-md bg-white bg-opacity-30 hover:bg-opacity-50 backdrop-blur-md border border-blue-300 text-blue-500 font-semibold transition duration-200"
-              >
-                Next
-              </button>
-            </div>
+                {/* Page Numbers */}
+                {[...Array(totalPages)].map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setPage(index)}
+                    className={`px-4 py-2 rounded-lg shadow-md backdrop-blur-md ${
+                      page === index
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-white bg-opacity-30 hover:bg-opacity-50 border border-blue-300 text-blue-500'
+                    } font-semibold transition duration-200`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+
+                <button
+                  onClick={handleNextPage}
+                  disabled={page === totalPages - 1}
+                  className="px-4 py-2 rounded-lg shadow-md bg-white bg-opacity-30 hover:bg-opacity-50 backdrop-blur-md border border-blue-300 text-blue-500 font-semibold transition duration-200"
+                >
+                  Next
+                </button>
+              </div>
+            }
           <DeleteAccountsTable TABLE_ROWS = {accountsList} TABLE_HEAD={TABLE_HEAD} deleteUser={deleteUser} searchTerms={searchTerms}/>
         </div>
         :
@@ -370,3 +404,27 @@ const handleNextPage = () => {
 
 export default DeleteUser;
 
+  // const changeAccountsList = (filterValue) => {
+  //   const newAccountList = unchangeableAccountList.filter((account) => {
+  //     if(account.firstName.toLowerCase().includes(filterValue.toLowerCase())) return true;
+  //     if(account.lastName.toLowerCase().includes(filterValue.toLowerCase())) return true;
+  //     if(account.username.toLowerCase().includes(filterValue.toLowerCase())) return true;
+  //     if(account.department.name.toLowerCase().includes(filterValue.toLowerCase())) return true;
+  //     return false;
+  //   });
+  //   setSearchTerms([filterValue]);
+  //   setAccountsList(newAccountList);
+  // }
+
+  // const handleFilterChange = (filterValue) => {
+
+      // const handleFilterChange = () => {
+  //   // console.log("doing something")
+  //   // setFilter(filterValue);
+  //   // if(debouncingRef.current){
+  //   //   clearTimeout(debouncingRef.current)
+  //   // }
+  //   // debouncingRef.current = setTimeout(() => changeAccountsList(filterValue) , 1000);
+  //   // console.log("done");
+
+  // }

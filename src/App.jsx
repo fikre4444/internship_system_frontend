@@ -44,6 +44,8 @@ import ViewAndNotifyStudents from './pages/dashboards/AdvisorPages/ViewAndNotify
 import FillBiodataForm from './pages/dashboards/StudentPages/FillBiodataForm';
 import InternshipStatus from './pages/dashboards/StudentPages/InternshipStatus';
 import ViewStudent from './components/departmentCoordinatorComponents/ViewStudent';
+import ViewPlacements from './pages/dashboards/HeadCoordinatorPages/ViewPlacements';
+import UploadRegister from './pages/dashboards/AdminPages/UploadRegister';
 
 function App() {
 
@@ -78,7 +80,7 @@ function App() {
             <Route path="registerUser" element={<RegisterUser />} />
             <Route path="searchUser" element={<SearchUser />} />
             <Route path="viewAndEditAccount" element={<ViewAndEditAccount />} />
-            <Route path="adminPage2" element={<AdminPage2 />} />
+            <Route path="uploadRegister" element={<UploadRegister />} />
             <Route path="deleteUser" element={<DeleteUser />} />
           </Route>
 
@@ -100,6 +102,7 @@ function App() {
             <Route path="assignInternships" element={<AssignInternships />} />
             <Route path="sendCompanyRequest" element={<SendCompanyRequest />} />
             <Route path="checkCompanyInternships" element={<CheckCompanyInternships />} />
+            <Route path="viewPlacements" element={<ViewPlacements />} />
           </Route>
 
           <Route path="/department-coordinator" element={<ProtectedRoute><DepartmentCoordinator /></ProtectedRoute>}>

@@ -13,8 +13,9 @@ const HeadCoordinatorDashboard = () => {
   const sidebarItems = [
     {itemId: 1, itemTitle: "Post Internships", itemLink: "postInternships", itemIcon: FaSignsPost},
     {itemId: 2, itemTitle: "Assign Internships", itemLink: "assignInternships", itemIcon: FaUserCog},
-    {itemId: 3, itemTitle: "Send Forms To Companies", itemLink: "sendCompanyRequest", itemIcon: VscGitPullRequestGoToChanges},
-    {itemId: 4, itemTitle: "Check Company Internships", itemLink: "checkCompanyInternships", itemIcon: FaCheckDouble}
+    {itemId: 3, itemTitle: "View Placements", itemLink: "viewPlacements", itemIcon: FaRegistered},
+    {itemId: 4, itemTitle: "Send Forms To Companies", itemLink: "sendCompanyRequest", itemIcon: VscGitPullRequestGoToChanges},
+    {itemId: 5, itemTitle: "Check Company Internships", itemLink: "checkCompanyInternships", itemIcon: FaCheckDouble}
   ];
 
 
